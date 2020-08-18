@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import logo from '../logo.svg'
+// import logo from '../logo.svg'
 
 const Header = styled.nav`
     background:#fff;
@@ -72,6 +72,11 @@ const Header = styled.nav`
                 height:32px;
             }
         }
+
+        & .app-logo{
+            color: #3e474f;
+            font-weight:700;
+        }
     }
 
     & .nav-block {
@@ -87,8 +92,8 @@ export default function App(){
                     <ul className="nav-list">
                     <li className="nav-item nav-item-logo">
                             <h6 className="nav-item-logo-container">
-                            <a>
-                                <img className="treehouse-icon" src={logo} alt="treehouse Logo" />
+                            <a className="app-logo">
+                                SUPERMICRO ME
                             </a>
                             </h6>
                         </li>
