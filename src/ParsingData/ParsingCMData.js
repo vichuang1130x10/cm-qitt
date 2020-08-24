@@ -142,7 +142,9 @@ export function parseForYieldRate(updatedJson) {
   /* 7. calling transformToArray to make all models into an array to be easily rendered in the list*/
   const result = transformToArray(n)
 
-  /* 8. */
+  /* 8. 
+        Construct app state object
+  */
   
   const { startDate, endDate, models,vendor,BPN,MB,Other } = result;
   const BPNData = calculateSMT2AndFctYieldByGroup(BPN,vendor);
@@ -158,6 +160,7 @@ export function parseForYieldRate(updatedJson) {
   // const smt2PieData = { BPNSMT2Total, MBSMT2Total, OtherSMT2Total };
   // const fct2PieData = { BPNFCTTotal, MBFCTTotal, OtherFCTTotal };
   const piesData = { BPNFCTTotal, MBFCTTotal, OtherFCTTotal };
+  
 
   return {
     vendor,
