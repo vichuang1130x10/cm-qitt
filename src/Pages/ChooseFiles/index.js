@@ -57,8 +57,8 @@ function App(props) {
     <div>
       <Header />
       <Container>
-        <h6 className="text-left m-auot mt-5">
-          Pick The Files For Generating The Quality Data
+        <h6 className="text-center main-section">
+          <p className="p-4">Pick The Files For Generating The Quality Data</p>
         </h6>
         <Row>
           <Col>

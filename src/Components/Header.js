@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
 import styled from "styled-components";
 // import logo from '../logo.svg'
@@ -53,7 +54,7 @@ const Header = styled.nav`
   & .nav-item-logo {
     position: absolute;
     left: 0;
-    top: 17px;
+    top: 26px;
   }
 
   & .nav-item-logo-container {
@@ -74,6 +75,7 @@ const Header = styled.nav`
     & .app-logo {
       color: #3e474f;
       font-weight: 700;
+      cursor: pointer;
     }
   }
 
@@ -90,7 +92,7 @@ export default function App() {
         <ul className="nav-list">
           <li className="nav-item nav-item-logo">
             <h6 className="nav-item-logo-container">
-              <a className="app-logo">SUPERMICRO ME</a>
+              <a className="app-logo">SMC-QA DASHBOARD</a>
             </h6>
           </li>
           <div className="nav-block">
