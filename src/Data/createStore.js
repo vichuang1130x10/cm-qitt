@@ -1,6 +1,6 @@
 import { createStore, combineReducers, applyMiddleware, compose } from "redux";
 import { createLogger } from "redux-logger";
-import reducer from "./appState";
+import reducer from "./AppState";
 
 
 const initialState = {};

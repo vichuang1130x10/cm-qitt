@@ -4,7 +4,7 @@ import Header from '../../Components/Header'
 import connect from './connect'
 // import Footer from '../Components/Footer'
 
-export default function App(props){
+ function App(props){
     return (
         <>
         <Header/>
@@ -23,3 +23,5 @@ export default function App(props){
         </>
     )
 }
+
+export default connect(App)

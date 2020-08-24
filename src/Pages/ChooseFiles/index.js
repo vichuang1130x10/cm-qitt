@@ -3,11 +3,11 @@ import { Container, Row, Col } from "react-bootstrap";
 import { navigate } from "@reach/router";
 import { FaHourglass, FaThinkPeaks } from "react-icons/fa";
 /* From Helper & Components */
-import { parsingErrorList } from "../Utils/CmShopFloorParsing/RawDataParsing";
-import { mappingErrorListAndRepairList } from "../ParsingData/MappingErrorListAndRepariList";
-import Header from "../Component/Header";
+import { parsingErrorList } from "../../ParsingData/ParsingCMData";
+import { mappingErrorListAndRepairList } from "../../ParsingData/MappingErrorListAndRepairList";
+import Header from "../../Components/Header";
 import SubmitButton from "../../Components/SubmitButton";
-import DragCard from "../Component/DragCard";
+import DragCard from "../../Components/DragCard";
 import connect from './connect'
 
  function App(props) {
