@@ -9,6 +9,7 @@ import "./App.scss";
 import Dashboard from './Pages/Dashboard'
 import Models from './Pages/Models'
 import RepairData from './Pages/RepairData'
+import ChooseFiles from './Pages/ChooseFiles'
 
 
 
@@ -16,7 +17,8 @@ function App() {
   return (
     <>
       <Router>
-          <Dashboard path="/" />
+          <ChooseFiles path="/" />
+          <Dashboard path="/dashboard" />
           <Models path="models" />
           <RepairData path="repairs"/>
       </Router>
