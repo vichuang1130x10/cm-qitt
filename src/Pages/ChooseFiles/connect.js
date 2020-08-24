@@ -1,14 +1,8 @@
 import { connect } from "react-redux";
-import {
-  saveAppState
-} from "../../Data/AppState";
- 
+import { saveAppState } from "../../Data/AppState";
 
 const mapDispatchToProps = {
-    saveAppState,
+  saveAppState,
 };
 
-export default connect(
-  null,
-  mapDispatchToProps
-);
+export default connect(null, mapDispatchToProps);

@@ -8,9 +8,9 @@ import { mappingErrorListAndRepairList } from "../../ParsingData/MappingErrorLis
 import Header from "../../Components/Header";
 import SubmitButton from "../../Components/SubmitButton";
 import DragCard from "../../Components/DragCard";
-import connect from './connect'
+import connect from "./connect";
 
- function App(props) {
+function App(props) {
   const [yieldRate, setYieldRate] = useState({});
   const [errorList, setErrorList] = useState({});
   const [repairList, setRepairList] = useState({});
@@ -36,16 +36,19 @@ import connect from './connect'
       }
       return ele;
     });
-    console.log("repair list",repairList.RepairList)
+    console.log("repair list", repairList.RepairList);
     let parsedErrorList;
-    if(repairList.RepairList[0].Vendor === "USI" || repairList.RepairList[0].Vendor === "USISZ"){
-      parsedErrorList = parsingErrorList(udpatedErrorList)
-    } else{
-      parsedErrorList = repairList
+    if (
+      repairList.RepairList[0].Vendor === "USI" ||
+      repairList.RepairList[0].Vendor === "USISZ"
+    ) {
+      parsedErrorList = parsingErrorList(udpatedErrorList);
+    } else {
+      parsedErrorList = repairList;
     }
 
-    props.saveAppState({yieldRate,parsedErrorList})
-    
+    props.saveAppState({ yieldRate, parsedErrorList });
+
     // const parsedErrorList = parsingErrorList(udpatedErrorList);
     navigate(`/dashboard`);
   };
@@ -101,4 +104,4 @@ import connect from './connect'
   );
 }
 
-export default connect(App)
+export default connect(App);

@@ -1,37 +1,48 @@
-import { getWeek, MBKEYWORD, BPNKEYWORD,pickUpStationByCMVendor,pickUpStationByCMVendorForPie } from "./ParsingHelpFunction";
+import {
+  getWeek,
+  MBKEYWORD,
+  BPNKEYWORD,
+  pickUpStationByCMVendor,
+  pickUpStationByCMVendorForPie,
+} from "./ParsingHelpFunction";
 
-// Main function to parsing yieldRate json to specfic format for each models and some meta data 
+// Main function to parsing yieldRate json to specfic format for each models and some meta data
 export function parseForYieldRate(updatedJson) {
   /* Start Parsing */
 
   /* 1. Initial n ( new object ) for the output object format */
-  let n = { 
-            vendor:updatedJson.YieldRate[0]["Vendor"],
-            startDate : updatedJson.YieldRate.reduce((a,b) => a.Date > b.Date ? b : a).Date || new Date(),
-            endDate :updatedJson.YieldRate.reduce((a,b) => a.Date > b.Date ? a: b).Date || new Date(),
-             MB: [],
-             BPN: [],
-             Other: [] };   
+  let n = {
+    vendor: updatedJson.YieldRate[0]["Vendor"],
+    startDate:
+      updatedJson.YieldRate.reduce((a, b) => (a.Date > b.Date ? b : a)).Date ||
+      new Date(),
+    endDate:
+      updatedJson.YieldRate.reduce((a, b) => (a.Date > b.Date ? a : b)).Date ||
+      new Date(),
+    MB: [],
+    BPN: [],
+    Other: [],
+  };
 
-  // 2. loop through {YieldRate:[{...},....]}    
+  // 2. loop through {YieldRate:[{...},....]}
   // Date: Wed Jun 10 2020 00:00:00 GMT+0800 (台北標準時間) {}
   // each obj would be: { Fail: 0,Line: "PD2-H",MO: "6005130-UG",Model: "2701-004240-00(BPN-SAS3-833A)",Month: 6,
   // Pass: 44,Refail: 0,Repass: 0,Start_date: Sat Jun 06 2020 00:00:00 GMT+0800 (台北標準時間) {},
-  // Total: 44,Type: "ASM",Vendor: "USI",Version: 1, YR: 1  }      
+  // Total: 44,Type: "ASM",Vendor: "USI",Version: 1, YR: 1  }
   updatedJson.YieldRate.forEach((obj) => {
     /* 
       3.Seperate raw data for MB, BPN ,and Other groups 
     */
-    let proName = ""
+    let proName = "";
 
-    if(obj.Vendor === "RISECOM"){
+    if (obj.Vendor === "RISECOM") {
       proName = obj.Model.split("(")[0] || obj.Model.split("-")[0];
-    }else if(obj.Vendor === "WIH" || obj.Vendor === "WZS"){
-      proName = obj.Model
-    }else {
+    } else if (obj.Vendor === "WIH" || obj.Vendor === "WZS") {
+      proName = obj.Model;
+    } else {
       proName = obj.Model.split("(")[1] || obj.Model.split("-")[0];
     }
-  
+
     if (BPNKEYWORD.includes(proName.substring(0, 3).toUpperCase())) {
       n.BPN.push(obj);
     } else if (MBKEYWORD.includes(proName.substring(0, 3).toUpperCase())) {
@@ -40,7 +51,7 @@ export function parseForYieldRate(updatedJson) {
       n.Other.push(obj);
     }
     /* 4. get the correspond station types by CM vendor  */
-    const station = pickUpStationByCMVendor(obj.Vendor)
+    const station = pickUpStationByCMVendor(obj.Vendor);
 
     /* 5. 
           collect data for each model as 
@@ -49,12 +60,20 @@ export function parseForYieldRate(updatedJson) {
     if (n[obj.Model] === undefined || n[obj.Model] === null) {
       n[obj.Model] = {};
       n[obj.Model]["RowData"] = [obj];
-    
-      for (let s of station){
-          // e.g. X11QPH+ : { SMT1:{Pass,Fail,....},SMT2:{...},ASM:{...},FCT:{...}}
-          // data:[{Date,Pass,Fail,Total},...] ,mo:[{MO,PASS,FAIL,TOTAL,STARTDATE},...]
-          // weekly:[{Week,PASS,FAIL,TOTAL},...],month:[{Month,PASS,FAIL,TOTAL},...]
-          n[obj.Model][s] = { Pass: 0, Fail: 0, Total: 0, data: [], mo: [],weekly:[],monthly:[] }
+
+      for (let s of station) {
+        // e.g. X11QPH+ : { SMT1:{Pass,Fail,....},SMT2:{...},ASM:{...},FCT:{...}}
+        // data:[{Date,Pass,Fail,Total},...] ,mo:[{MO,PASS,FAIL,TOTAL,STARTDATE},...]
+        // weekly:[{Week,PASS,FAIL,TOTAL},...],month:[{Month,PASS,FAIL,TOTAL},...]
+        n[obj.Model][s] = {
+          Pass: 0,
+          Fail: 0,
+          Total: 0,
+          data: [],
+          mo: [],
+          weekly: [],
+          monthly: [],
+        };
       }
       if (
         // if the station is what we need, grab it; Otherwise, ignore this row
@@ -64,13 +83,13 @@ export function parseForYieldRate(updatedJson) {
         n[obj.Model][obj.Type].Fail += obj.Fail;
         n[obj.Model][obj.Type].Total += obj.Total;
         // forming data by Data(Date)/MO/Weekly/Monthly
-        const { Date, Pass, Fail, Total, MO, Start_date,Month } = obj;
-        const weekNumber = getWeek(Date)
-    
+        const { Date, Pass, Fail, Total, MO, Start_date, Month } = obj;
+        const weekNumber = getWeek(Date);
+
         n[obj.Model][obj.Type].data = [{ Date, Pass, Fail, Total }];
         n[obj.Model][obj.Type].mo = [{ MO, Pass, Fail, Total, Start_date }];
-        n[obj.Model][obj.Type].weekly = [{weekNumber,Pass,Fail,Total}]
-        n[obj.Model][obj.Type].monthly = [{Month,Pass,Fail,Total}]
+        n[obj.Model][obj.Type].weekly = [{ weekNumber, Pass, Fail, Total }];
+        n[obj.Model][obj.Type].monthly = [{ Month, Pass, Fail, Total }];
       }
     } else {
       n[obj.Model]["RowData"].push(obj);
@@ -81,9 +100,9 @@ export function parseForYieldRate(updatedJson) {
         n[obj.Model][obj.Type].Pass += obj.Pass;
         n[obj.Model][obj.Type].Fail += obj.Fail;
         n[obj.Model][obj.Type].Total += obj.Total;
-        const { Date, Pass, Fail, Total, MO, Start_date,Month } = obj;
-        const weekNumber = getWeek(Date)
-        // gather same date/mo/weekly/monthly 
+        const { Date, Pass, Fail, Total, MO, Start_date, Month } = obj;
+        const weekNumber = getWeek(Date);
+        // gather same date/mo/weekly/monthly
         // for same date:
         const sameDateObje = n[obj.Model][obj.Type].data.find(
           (elem) => elem.Date.toString() === Date.toString()
@@ -106,8 +125,8 @@ export function parseForYieldRate(updatedJson) {
         } else {
           n[obj.Model][obj.Type].mo.push({ MO, Pass, Fail, Total, Start_date });
         }
-         // for same weekly:
-         const sameWeeklyObj = n[obj.Model][obj.Type].weekly.find(
+        // for same weekly:
+        const sameWeeklyObj = n[obj.Model][obj.Type].weekly.find(
           (elem) => elem.weekNumber === weekNumber
         );
         if (sameWeeklyObj) {
@@ -117,8 +136,8 @@ export function parseForYieldRate(updatedJson) {
         } else {
           n[obj.Model][obj.Type].weekly.push({ weekNumber, Pass, Fail, Total });
         }
-         // for same monthly:
-         const sameMonthObj = n[obj.Model][obj.Type].monthly.find(
+        // for same monthly:
+        const sameMonthObj = n[obj.Model][obj.Type].monthly.find(
           (elem) => elem.Month === Month
         );
         if (sameMonthObj) {
@@ -126,7 +145,7 @@ export function parseForYieldRate(updatedJson) {
           sameMonthObj.Fail += Fail;
           sameMonthObj.Total += Total;
         } else {
-          n[obj.Model][obj.Type].monthly.push({ Month, Pass, Fail, Total});
+          n[obj.Model][obj.Type].monthly.push({ Month, Pass, Fail, Total });
         }
       }
     }
@@ -138,21 +157,21 @@ export function parseForYieldRate(updatedJson) {
   //ASM: {Pass: 5001, Fail: 0, Total: 5001, data: Array(10)}
   */
   // Since we no longer FE/BE/FTY data, ignore generateFTY feature.
-  // const result = transformToArray(generateFTY(n)); 
+  // const result = transformToArray(generateFTY(n));
   /* 7. calling transformToArray to make all models into an array to be easily rendered in the list*/
-  const result = transformToArray(n)
+  const result = transformToArray(n);
 
   /* 8. 
         Construct app state object
   */
-  
-  const { startDate, endDate, models,vendor,BPN,MB,Other } = result;
-  const BPNData = calculateSMT2AndFctYieldByGroup(BPN,vendor);
-  const MBData = calculateSMT2AndFctYieldByGroup(MB,vendor);
-  const OtherData = calculateSMT2AndFctYieldByGroup(Other,vendor);
+
+  const { startDate, endDate, models, vendor, BPN, MB, Other } = result;
+  const BPNData = calculateSMT2AndFctYieldByGroup(BPN, vendor);
+  const MBData = calculateSMT2AndFctYieldByGroup(MB, vendor);
+  const OtherData = calculateSMT2AndFctYieldByGroup(Other, vendor);
   // const BPNSMT2Total = BPNData.SMT2.reduce((acc, elem) => acc + elem.Total, 0);
   // const BPNSMT2Total = calculateTotal(BPNData, "SMT2");
-  const BPNFCTTotal = calculateTotal(BPNData,vendor);
+  const BPNFCTTotal = calculateTotal(BPNData, vendor);
   // const MBSMT2Total = calculateTotal(MBData, "SMT2");
   const MBFCTTotal = calculateTotal(MBData, vendor);
   // const OtherSMT2Total = calculateTotal(OtherData, "SMT2");
@@ -160,7 +179,6 @@ export function parseForYieldRate(updatedJson) {
   // const smt2PieData = { BPNSMT2Total, MBSMT2Total, OtherSMT2Total };
   // const fct2PieData = { BPNFCTTotal, MBFCTTotal, OtherFCTTotal };
   const piesData = { BPNFCTTotal, MBFCTTotal, OtherFCTTotal };
-  
 
   return {
     vendor,
@@ -170,20 +188,20 @@ export function parseForYieldRate(updatedJson) {
     BPNData,
     MBData,
     OtherData,
-    piesData
+    piesData,
   };
 }
 
 const calculateTotal = (obj, cm) => {
-  const station = pickUpStationByCMVendorForPie(cm) 
+  const station = pickUpStationByCMVendorForPie(cm);
   return obj[station].monthly.reduce((acc, elem) => acc + elem.Total, 0);
-}
-  
+};
+
 // transform yieldRate object into array for result page easy to render
 /* Just optimize the data structure */
 function transformToArray(obj) {
-  const { startDate, endDate, MB, BPN, Other,vendor } = obj;
-  const o = { vendor,startDate, endDate, MB, BPN, Other, models: [] };
+  const { startDate, endDate, MB, BPN, Other, vendor } = obj;
+  const o = { vendor, startDate, endDate, MB, BPN, Other, models: [] };
   const keys = Object.keys(obj).filter(
     (item) =>
       item !== "startDate" &&
@@ -244,7 +262,10 @@ const calculateMonthlyData = (arr, type) => {
 
   const finalResult = {};
   data.forEach((obj) => {
-    if (finalResult[obj.Month] === undefined || finalResult[obj.Month] === null) {
+    if (
+      finalResult[obj.Month] === undefined ||
+      finalResult[obj.Month] === null
+    ) {
       finalResult[obj.Month] = {
         Month: obj.Month,
         Pass: obj.Pass,
@@ -264,14 +285,15 @@ const calculateMonthlyData = (arr, type) => {
 };
 
 // pass group raw data array and return an obj {SMT2 :[{Week:1,Total:100,Pass:99,Yield:99%}...],FCT:[{Week:1,Total:100,Pass:99,Yield:99%}...]}
-const calculateSMT2AndFctYieldByGroup = (arr,vendor) => {
-  const station = pickUpStationByCMVendor(vendor)
-  const resultObj = {}
-  station.forEach(s => {
-      resultObj[s] = {weekly: calculateData(arr,s).sort(sortByWeek) ,
-         monthly:calculateMonthlyData(arr,s).sort(sortByMonth)
-       }
-  })
+const calculateSMT2AndFctYieldByGroup = (arr, vendor) => {
+  const station = pickUpStationByCMVendor(vendor);
+  const resultObj = {};
+  station.forEach((s) => {
+    resultObj[s] = {
+      weekly: calculateData(arr, s).sort(sortByWeek),
+      monthly: calculateMonthlyData(arr, s).sort(sortByMonth),
+    };
+  });
   return resultObj;
 };
 
@@ -294,19 +316,17 @@ function sortByMonth(a, b) {
 // parsing errorlist json to specfic format for each station failure symptom
 export function parsingErrorList(errorList) {
   let n = {};
-  const station = pickUpStationByCMVendor(errorList[0].Vendor)
+  const station = pickUpStationByCMVendor(errorList[0].Vendor);
 
   errorList.forEach((obj) => {
     if (n[obj.Model] === undefined || n[obj.Model] === null) {
       n[obj.Model] = {};
 
-      for (let s of station){
-        n[obj.Model][s] = { ErorrDescriptions: [] }
+      for (let s of station) {
+        n[obj.Model][s] = { ErorrDescriptions: [] };
       }
-      
-      if (
-        station.includes(obj.Type)
-      ) {
+
+      if (station.includes(obj.Type)) {
         n[obj.Model][obj.Type].ErorrDescriptions = [
           {
             description: obj["Error_Description"],
@@ -316,9 +336,7 @@ export function parsingErrorList(errorList) {
         ];
       }
     } else {
-      if (
-        station.includes(obj.Type)
-      ) {
+      if (station.includes(obj.Type)) {
         n[obj.Model][obj.Type].ErorrDescriptions.push({
           description: obj["Error_Description"],
           reasons: [{ reason: obj.Reason, item: obj.item, date: obj.Date }],

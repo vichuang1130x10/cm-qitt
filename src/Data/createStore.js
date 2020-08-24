@@ -2,13 +2,11 @@ import { createStore, combineReducers, applyMiddleware, compose } from "redux";
 import { createLogger } from "redux-logger";
 import reducer from "./AppState";
 
-
 const initialState = {};
 const logger = createLogger();
 
 const rootReducer = combineReducers({
   app: reducer,
-
 });
 
 const composeEnhancers =
@@ -24,6 +22,6 @@ const enhancer = composeEnhancers(
 );
 
 // const store = createStore(rootReducer, initialState, enhancer); develop only
-const store = createStore(rootReducer, initialState,enhancer);
+const store = createStore(rootReducer, initialState, enhancer);
 
 export default store;
