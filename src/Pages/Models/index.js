@@ -5,8 +5,8 @@ export default function App() {
     return (
         <>
             <Header />
+            <div className="main-section">Models</div>
             <Footer />
-            Models
         </>
     )
 }

@@ -6,8 +6,8 @@ export default function App() {
     return (
         <>
             <Header />
+            <div className="main-section">Repairs</div>
             <Footer />
-            Dashboard
         </>
     )
 }
