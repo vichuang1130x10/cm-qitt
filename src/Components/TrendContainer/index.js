@@ -12,14 +12,20 @@ const ChartContainer = styled.div`
     margin: 0 auto;
 `
 
-function App(props) {
-    console.log(props)
+const timeUnitDictionary = { Week: 'weekly', Month: 'monthly' }
 
-    // const [station, setStation] = useState('SMT2')
-    // const [chartData, setChartData] = useState([])
-    // useEffect(() => {
-    //     setChartData(data[station])
-    // }, [data, station])
+function App(props) {
+    const { vendor, MBData, BPNData, OtherData } = props.appState
+    const stations = pickUpStationByCMVendor(vendor)
+
+    const [station, setStation] = useState([stations[stations.length - 1]])
+    const [category, setCategory] = useState(category[0].value)
+    const [timeUnit, setTimeUnit] = useState('weekly')
+    const [chartData, setChartData] = useState([])
+    useEffect(() => {
+        const chartData = MBData[station][timeUnit]
+        setChartData(chartData)
+    }, [])
 
     // const updateStation = (str) => {
     //     setStation(str)
@@ -29,6 +35,9 @@ function App(props) {
     return (
         <div>
             <label htmlFor="station">
+                <pre>
+                    <code>{JSON.stringify(chartData, null, 4)}</code>
+                </pre>
                 {/* <ChartContainer>
                     <h4>
                         <span style={{ color: '#6FA4E3' }}>{title}</span> last

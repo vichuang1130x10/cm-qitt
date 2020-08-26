@@ -34,9 +34,9 @@ export function milToMiliMeter(mil) {
 }
 
 export const category = [
-    { value: 'MB', label: 'MB' },
-    { value: 'BPN', label: 'BPN' },
-    { value: 'OTHER', label: 'OTHER' },
+    { value: 'MB', label: 'MBData' },
+    { value: 'BPN', label: 'BPNData' },
+    { value: 'OTHER', label: 'OtherData' },
 ]
 
 export const MBKEYWORD = [
