@@ -10,8 +10,8 @@ function App(props) {
         <>
             <Header />
             <section className="main-section">
-                <Container className="border">
-                    <Row className="border">
+                <Container>
+                    <Row>
                         <div className="first-row-container">
                             <div className="component component-1">
                                 Component-1

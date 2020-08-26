@@ -8,6 +8,7 @@ const Footer = styled.footer`
     position: relative;
     height: 70px;
     margin-top: 500px;
+    background: #fcfcfc;
 
     padding: 30px 110px;
     border: 1px solid #e9e9eb;

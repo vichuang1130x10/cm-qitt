@@ -8,7 +8,7 @@ import HeaderLink from './HeaderLink'
 // import logo from '../logo.svg'
 
 const Header = styled.nav`
-    background: #fff;
+    background: #fcfcfc;
     box-shadow: 0 0 1px rgba(0, 65, 94, 0.2);
     z-index: 102;
     transition: height 600ms 0s ease;
