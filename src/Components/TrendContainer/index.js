@@ -17,15 +17,15 @@ const timeUnitDictionary = { Week: 'weekly', Month: 'monthly' }
 function App(props) {
     const { vendor, MBData, BPNData, OtherData } = props.appState
     const stations = pickUpStationByCMVendor(vendor)
-
     const [station, setStation] = useState([stations[stations.length - 1]])
-    const [category, setCategory] = useState(category[0].value)
+    const [category, setCategory] = useState('MB')
     const [timeUnit, setTimeUnit] = useState('weekly')
     const [chartData, setChartData] = useState([])
     useEffect(() => {
         const chartData = MBData[station][timeUnit]
+        console.log(chartData)
         setChartData(chartData)
-    }, [])
+    }, [station, category, timeUnit])
 
     // const updateStation = (str) => {
     //     setStation(str)
