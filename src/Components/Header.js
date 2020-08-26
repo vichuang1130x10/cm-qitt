@@ -1,7 +1,10 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react'
 import styled from 'styled-components'
-import { Link } from '@reach/router'
+// import { Link } from '@reach/router'
+
+import { SetFilters } from '../Data/SetHeaderLink'
+import HeaderLink from './HeaderLink'
 // import logo from '../logo.svg'
 
 const Header = styled.nav`
@@ -98,14 +101,30 @@ export default function App() {
                         </h6>
                     </li>
                     <div className="nav-block">
-                        <li className="nav-item nav-item-second current">
-                            <Link to="/dashboard">Dashboard</Link>
+                        <li className="nav-item">
+                            <HeaderLink
+                                className="nav-link"
+                                filter={SetFilters.SELECT_DASHBOARD}
+                                to={'/dashboard'}
+                            >
+                                Dashboard
+                            </HeaderLink>
                         </li>
-                        <li className="nav-item nav-item-second">
-                            <Link to="/models">Models</Link>
+                        <li className="nav-item">
+                            <HeaderLink
+                                filter={SetFilters.SELECT_MODELS}
+                                to={'/models'}
+                            >
+                                Models
+                            </HeaderLink>
                         </li>
-                        <li className="nav-item nav-item-second">
-                            <Link to="/repairs">Repairs</Link>
+                        <li className="nav-item">
+                            <HeaderLink
+                                filter={SetFilters.SELECT_REPAIRS}
+                                to={'/repairs'}
+                            >
+                                Repairs
+                            </HeaderLink>
                         </li>
                     </div>
                 </ul>

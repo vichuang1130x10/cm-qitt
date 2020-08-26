@@ -1,27 +1,29 @@
-import { createStore, combineReducers, applyMiddleware, compose } from "redux";
-import { createLogger } from "redux-logger";
-import reducer from "./AppState";
+import { createStore, combineReducers, applyMiddleware, compose } from 'redux'
+import { createLogger } from 'redux-logger'
+import reducer from './AppState'
+import setHeaderLink from './SetHeaderLink'
 
-const initialState = {};
-const logger = createLogger();
+const initialState = {}
+const logger = createLogger()
 
 const rootReducer = combineReducers({
-  app: reducer,
-});
+    app: reducer,
+    filter: setHeaderLink,
+})
 
 const composeEnhancers =
-  typeof window === "object" && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
-    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
-        // Specify extension’s options like name, actionsBlacklist, actionsCreators, serialize...
-      })
-    : compose;
+    typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+        ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
+              // Specify extension’s options like name, actionsBlacklist, actionsCreators, serialize...
+          })
+        : compose
 
 const enhancer = composeEnhancers(
-  applyMiddleware(logger)
-  // other store enhancers if any
-);
+    applyMiddleware(logger)
+    // other store enhancers if any
+)
 
 // const store = createStore(rootReducer, initialState, enhancer); develop only
-const store = createStore(rootReducer, initialState, enhancer);
+const store = createStore(rootReducer, initialState, enhancer)
 
-export default store;
+export default store
