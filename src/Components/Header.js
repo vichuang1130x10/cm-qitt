@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react'
 import styled from 'styled-components'
-// import { Link } from '@reach/router'
+import { Link } from '@reach/router'
 
 import { SetFilters } from '../Data/SetHeaderLink'
 import HeaderLink from './HeaderLink'
@@ -97,7 +97,9 @@ export default function App() {
                 <ul className="nav-list">
                     <li className="nav-item nav-item-logo">
                         <h6 className="nav-item-logo-container">
-                            <a className="app-logo">QA DASHBOARD</a>
+                            <Link to="/" className="app-logo">
+                                QA DASHBOARD
+                            </Link>
                         </h6>
                     </li>
                     <div className="nav-block">
