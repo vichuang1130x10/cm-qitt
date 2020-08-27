@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import * as d3 from 'd3'
 
-/* set the svg size to 500 * 300 and the margin for drawing beauty */
+/* set the svg size to 360 * 240 and the margin for drawing beauty */
 const width = 360
 const height = 240
 const margin = { top: 20, right: 5, bottom: 20, left: 35 }
@@ -22,6 +22,7 @@ class DashboardTrend extends Component {
         /* trimming for last 10 weeks/months */
         const trimData =
             data.length > 10 ? data.slice(data.length - 10, data.length) : data
+        /* parsing & update for plotting */
         const updateData = trimData
             .filter((d) => d.Pass > 5 && d.Total > 5)
             .map((d) => ({
@@ -30,26 +31,25 @@ class DashboardTrend extends Component {
                 yield: parseFloat(((d.Pass / d.Total) * 100).toFixed(1)),
             }))
 
-        // console.log("dash trend chart start");
-        // console.log(updateData);
+        /* find the x axis scale */
         const x = updateData.map((d) => d.week)
-        // console.log(x);
         const xScale = d3
             .scaleBand()
             .domain(x)
             .range([margin.left, width - margin.left])
+        /* find the y axis scale */
         const [min, max] = d3.extent(updateData, (d) => d.yield)
         const yScale = d3
             .scaleLinear()
             .domain([Math.min(min, 90), max])
             .range([height - margin.bottom, margin.top])
-
+        /* find the right y axis scale */
         const [yMin, yMax] = d3.extent(updateData, (d) => d.total)
         const yScaleRight = d3
             .scaleLinear()
             .domain([Math.min(100, yMin), yMax + 1000])
             .range([height - margin.bottom, margin.top])
-
+        /* calculate the path data by using d3 line() */
         const trend = d3
             .line()
             .x((d) => xScale(d.week) + 20)
@@ -57,6 +57,7 @@ class DashboardTrend extends Component {
 
         const line = trend(updateData)
 
+        /* calculate yield rate text */
         const labels = updateData.map((d) => ({
             x: xScale(d.week) + 20,
             y: yScale(d.yield),
@@ -64,19 +65,20 @@ class DashboardTrend extends Component {
             text: `${d.yield}%`,
         }))
 
+        /* calculate production output total text */
         const textLabels = updateData.map((d) => ({
             x: xScale(d.week) + 7,
             y: yScaleRight(d.total),
-            fill: '#6eae3e',
             text: d.total,
         }))
 
+        /* calculate the bar for plotting*/
         const bars = updateData.map((d) => {
             return {
                 x: xScale(d.week) + 7,
                 y: yScaleRight(d.total),
                 height: height - yScaleRight(d.total) - margin.bottom,
-                width: width / updateData.length - 25,
+                width: width / updateData.length, // the width could be optimized a bit
                 fill: '#6FA4E3',
                 // text: `${d.yield}%`,
             }
@@ -94,12 +96,12 @@ class DashboardTrend extends Component {
         this.createAxis()
     }
 
-    /* */
+    /* generate axis by using react ref() */
     createAxis = () => {
         let xAxisD3 = d3.axisBottom()
         let yAxisD3 = d3.axisLeft().tickFormat((d) => `${d}%`)
-
         let yAxisRight = d3.axisRight().tickFormat((d) => d)
+
         xAxisD3.scale(this.state.xScale)
 
         if (this.xAxis.current) {
