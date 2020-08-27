@@ -3,16 +3,17 @@ import styled from 'styled-components'
 import connect from './connect'
 import DashboardTrendChart from '../../Visualization/DashboardTrend'
 import {
-    category,
+    categoryArray,
     pickUpStationByCMVendor,
 } from '../../ParsingData/ParsingHelpFunction'
 const ChartContainer = styled.div`
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
     margin: 0 auto;
 `
 
-const timeUnitDictionary = { Week: 'weekly', Month: 'monthly' }
+const timeUnits = ['Week', 'Month']
 
 function App(props) {
     const { vendor, MBData, BPNData, OtherData } = props.appState
@@ -23,37 +24,68 @@ function App(props) {
     const [chartData, setChartData] = useState([])
     useEffect(() => {
         const chartData = MBData[station][timeUnit]
-        console.log(chartData)
+        console.log('use effect is called')
         setChartData(chartData)
     }, [station, category, timeUnit])
 
+    const updateCategory = (str) => {
+        setCategory(str)
+    }
+
     const updateStation = (str) => {
-        // setStation(str)
+        setStation(str)
         // setChartData(data[str])
+    }
+
+    const updateTimeUnit = (str) => {
+        setTimeUnit(str)
     }
 
     return (
         <div>
             <label htmlFor="station">
                 <ChartContainer>
-                    <h4>
-                        <span style={{ color: '#6FA4E3' }}>title here</span>{' '}
-                        last 10 weeks trend
-                    </h4>
-                    <select
-                        id="station"
-                        value={station}
-                        onChange={(e) => updateStation(e.target.value)}
-                        onBlur={(e) => updateStation(e.target.value)}
-                        style={{ marginBottom: '0px' }}
-                    >
-                        {['SMT2', 'FCT'].map((station) => (
-                            <option value={station} key={station}>
-                                {station}
-                            </option>
-                        ))}
-                    </select>
-                </ChartContainer>{' '}
+                    <h6>last 10 {timeUnit} trend</h6>
+                    <div>
+                        <select
+                            id="category"
+                            value={category}
+                            onChange={(e) => updateCategory(e.target.value)}
+                            onBlur={(e) => updateCategory(e.target.value)}
+                        >
+                            {categoryArray.map((cat) => (
+                                <option value={cat} key={cat}>
+                                    {cat}
+                                </option>
+                            ))}
+                        </select>
+                        <select
+                            id="station"
+                            value={station}
+                            onChange={(e) => updateStation(e.target.value)}
+                            onBlur={(e) => updateStation(e.target.value)}
+                            style={{ marginBottom: '0px' }}
+                        >
+                            {stations.map((station) => (
+                                <option value={station} key={station}>
+                                    {station}
+                                </option>
+                            ))}
+                        </select>
+                        <select
+                            id="timeUnit"
+                            value={timeUnit}
+                            onChange={(e) => updateTimeUnit(e.target.value)}
+                            onBlur={(e) => updateTimeUnit(e.target.value)}
+                        >
+                            {timeUnits.map((t) => (
+                                <option value={t} key={t}>
+                                    {t}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                </ChartContainer>
             </label>
             <DashboardTrendChart data={chartData} />
         </div>
