@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import * as d3 from 'd3'
 
 /* set the svg size to 500 * 300 and the margin for drawing beauty */
-const width = 500
-const height = 300
+const width = 360
+const height = 240
 const margin = { top: 20, right: 5, bottom: 20, left: 35 }
 
 class DashboardTrend extends Component {
@@ -86,7 +86,99 @@ class DashboardTrend extends Component {
         return { bars, xScale, yScale, yScaleRight, line, labels, textLabels }
     }
 
+    componentDidMount() {
+        this.createAxis()
+    }
+
+    componentDidUpdate() {
+        this.createAxis()
+    }
+
+    /* */
+    createAxis = () => {
+        let xAxisD3 = d3.axisBottom()
+        let yAxisD3 = d3.axisLeft().tickFormat((d) => `${d}%`)
+
+        let yAxisRight = d3.axisRight().tickFormat((d) => d)
+        xAxisD3.scale(this.state.xScale)
+
+        if (this.xAxis.current) {
+            d3.select(this.xAxis.current).call(xAxisD3)
+        }
+        yAxisD3.scale(this.state.yScale)
+        if (this.yAxis.current) {
+            d3.select(this.yAxis.current).call(yAxisD3)
+        }
+
+        yAxisRight.scale(this.state.yScaleRight)
+        if (this.yAxisVolume.current) {
+            d3.select(this.yAxisVolume.current).call(yAxisRight)
+        }
+    }
+
     render() {
-        return <div>render chart here</div>
+        return this.state.bars.length ? (
+            <svg width={width} height={height}>
+                {this.state.bars.map((d, i) => (
+                    <rect
+                        key={i}
+                        width={d.width}
+                        height={d.height}
+                        x={d.x}
+                        y={d.y}
+                        fill={d.fill}
+                    />
+                ))}
+                {this.state.textLabels.map((d, i) => (
+                    <text
+                        key={i}
+                        x={d.x + 4}
+                        y={d.y + 8}
+                        stroke="#fff"
+                        fontSize="8px"
+                    >
+                        {d.text}
+                    </text>
+                ))}
+
+                <g>
+                    {this.state.labels.map((d, i) => (
+                        <text key={i} x={d.x + 2} y={d.y - 5} fontSize="8px">
+                            {d.text}
+                        </text>
+                    ))}
+                    {this.state.labels.map((d, i) => (
+                        <circle
+                            key={i}
+                            cx={d.x}
+                            cy={d.y}
+                            r={4}
+                            fill={'#e58582'}
+                        />
+                    ))}
+                </g>
+                <path
+                    d={this.state.line}
+                    fill={'none'}
+                    stroke={'#e58582'}
+                    strokeWidth={'3px'}
+                />
+
+                <g
+                    ref={this.xAxis}
+                    transform={`translate(0, ${height - margin.bottom})`}
+                />
+                <g
+                    ref={this.yAxis}
+                    transform={`translate(${margin.left}, 0)`}
+                />
+                <g
+                    ref={this.yAxisVolume}
+                    transform={`translate(${width - margin.right * 7}, 0)`}
+                />
+            </svg>
+        ) : null
     }
 }
+
+export default DashboardTrend

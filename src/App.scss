@@ -29,6 +29,24 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
+// global select tag setting
+select {
+    text-align: center;
+    margin-bottom: 30px;
+    margin-left: 10px;
+    font-size: 18px;
+    height: 30px;
+    width: 80px;
+    color: #fff;
+    background-color: #6fa4e3;
+    cursor: pointer;
+}
+// global svg tag setting
+svg {
+    border: 1px solid #666;
+    margin: 5px;
+    vertical-align: top;
+}
 
 // get space away the header
 .main-section {

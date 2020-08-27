@@ -27,21 +27,18 @@ function App(props) {
         setChartData(chartData)
     }, [station, category, timeUnit])
 
-    // const updateStation = (str) => {
-    //     setStation(str)
-    //     setChartData(data[str])
-    // }
+    const updateStation = (str) => {
+        // setStation(str)
+        // setChartData(data[str])
+    }
 
     return (
         <div>
             <label htmlFor="station">
-                <pre>
-                    <code>{JSON.stringify(chartData, null, 4)}</code>
-                </pre>
-                {/* <ChartContainer>
+                <ChartContainer>
                     <h4>
-                        <span style={{ color: '#6FA4E3' }}>{title}</span> last
-                        10 weeks trend
+                        <span style={{ color: '#6FA4E3' }}>title here</span>{' '}
+                        last 10 weeks trend
                     </h4>
                     <select
                         id="station"
@@ -56,9 +53,9 @@ function App(props) {
                             </option>
                         ))}
                     </select>
-                </ChartContainer> */}
+                </ChartContainer>{' '}
             </label>
-            {/* <DashboardTrendChart data={chartData} /> */}
+            <DashboardTrendChart data={chartData} />
         </div>
     )
 }
