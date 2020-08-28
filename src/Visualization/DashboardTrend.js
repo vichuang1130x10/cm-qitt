@@ -78,9 +78,8 @@ class DashboardTrend extends Component {
                 x: xScale(d.week) + 7,
                 y: yScaleRight(d.total),
                 height: height - yScaleRight(d.total) - margin.bottom,
-                width: width / updateData.length, // the width could be optimized a bit
+                width: width / updateData.length - 20, // the width could be optimized a bit
                 fill: '#6FA4E3',
-                // text: `${d.yield}%`,
             }
         })
 

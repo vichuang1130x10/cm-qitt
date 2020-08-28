@@ -39,13 +39,25 @@ function App(props) {
     }
 
     const updateTimeUnit = (str) => {
-        setTimeUnit(str)
+        let unit = ''
+        console.log('str', str)
+        if (str === 'Week') {
+            unit = 'weekly'
+        } else {
+            unit = 'monthly'
+        }
+        setTimeUnit(unit)
     }
 
     return (
         <div>
             <ChartContainer>
-                <h6>last 10 {timeUnit} trend</h6>
+                {/* <h6>last 10 {timeUnit} trend</h6> */}
+                <h6>
+                    {timeUnit === 'weekly'
+                        ? `last 10 Weeks trend`
+                        : `Monthly trend`}
+                </h6>
                 <div>
                     <label htmlFor="category">
                         <select
