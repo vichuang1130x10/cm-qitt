@@ -14,6 +14,7 @@ const ChartContainer = styled.div`
 `
 
 const timeUnits = ['Week', 'Month']
+const cates = ['MB', 'BPN', 'OTHER']
 
 function App(props) {
     const { vendor, MBData, BPNData, OtherData } = props.appState
@@ -43,22 +44,24 @@ function App(props) {
 
     return (
         <div>
-            <label htmlFor="station">
-                <ChartContainer>
-                    <h6>last 10 {timeUnit} trend</h6>
-                    <div>
+            <ChartContainer>
+                <h6>last 10 {timeUnit} trend</h6>
+                <div>
+                    <label htmlFor="category">
                         <select
                             id="category"
                             value={category}
                             onChange={(e) => updateCategory(e.target.value)}
                             onBlur={(e) => updateCategory(e.target.value)}
                         >
-                            {categoryArray.map((cat) => (
+                            {cates.map((cat) => (
                                 <option value={cat} key={cat}>
                                     {cat}
                                 </option>
                             ))}
                         </select>
+                    </label>
+                    <label htmlFor="station">
                         <select
                             id="station"
                             value={station}
@@ -72,6 +75,8 @@ function App(props) {
                                 </option>
                             ))}
                         </select>
+                    </label>
+                    <label htmlFor="timeUnit">
                         <select
                             id="timeUnit"
                             value={timeUnit}
@@ -84,9 +89,10 @@ function App(props) {
                                 </option>
                             ))}
                         </select>
-                    </div>
-                </ChartContainer>
-            </label>
+                    </label>
+                </div>
+            </ChartContainer>
+
             <DashboardTrendChart data={chartData} />
         </div>
     )
