@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Container, Row, Col } from 'react-bootstrap'
 import Header from '../../Components/Header'
 import Footer from '../../Components/Footer'
@@ -6,6 +6,9 @@ import connect from './connect'
 import TrendContainer from '../../Components/TrendContainer'
 
 function App(props) {
+    useEffect(() => {
+        window.scrollTo(0, 0)
+    }, [])
     return (
         <>
             <Header />

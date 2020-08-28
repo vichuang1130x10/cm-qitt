@@ -30,6 +30,9 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 // global select tag setting
+a:hover {
+    text-decoration: none;
+}
 select {
     text-align: center;
     margin-bottom: 0px;

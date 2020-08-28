@@ -19,7 +19,7 @@ const cates = ['MB', 'BPN', 'OTHER']
 function App(props) {
     const { vendor, MBData, BPNData, OtherData } = props.appState
     const stations = pickUpStationByCMVendor(vendor)
-    const [station, setStation] = useState([stations[stations.length - 1]])
+    const [station, setStation] = useState(stations[stations.length - 1])
     const [category, setCategory] = useState('MB')
     const [timeUnit, setTimeUnit] = useState('weekly')
     const [chartData, setChartData] = useState([])
@@ -67,13 +67,14 @@ function App(props) {
                             value={station}
                             onChange={(e) => updateStation(e.target.value)}
                             onBlur={(e) => updateStation(e.target.value)}
-                            style={{ marginBottom: '0px' }}
                         >
-                            {stations.map((station) => (
-                                <option value={station} key={station}>
-                                    {station}
-                                </option>
-                            ))}
+                            {stations
+                                ? stations.map((station) => (
+                                      <option value={station} key={station}>
+                                          {station}
+                                      </option>
+                                  ))
+                                : null}
                         </select>
                     </label>
                     <label htmlFor="timeUnit">
