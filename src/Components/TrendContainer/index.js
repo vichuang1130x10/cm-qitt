@@ -13,7 +13,7 @@ const ChartContainer = styled.div`
     margin: 0 auto;
 `
 
-const timeUnits = ['Week', 'Month']
+const timeUnits = ['weekly', 'monthly']
 const cates = ['MB', 'BPN', 'OTHER']
 
 function App(props) {
@@ -39,14 +39,7 @@ function App(props) {
     }
 
     const updateTimeUnit = (str) => {
-        let unit = ''
-        console.log('str', str)
-        if (str === 'Week') {
-            unit = 'weekly'
-        } else {
-            unit = 'monthly'
-        }
-        setTimeUnit(unit)
+        setTimeUnit(str)
     }
 
     return (
