@@ -26,6 +26,7 @@ const timeUnits = ['weekly', 'monthly']
 const cates = ['MB', 'BPN', 'OTHER']
 
 function App(props) {
+    // here need to be reconstructor
     const { vendor, MBData, BPNData, OtherData } = props.appState
     const stations = pickUpStationByCMVendor(vendor)
     const [station, setStation] = useState(stations[stations.length - 1])
@@ -54,7 +55,7 @@ function App(props) {
     return (
         <div>
             <ChartContainer>
-                <h6> className="content-category" {category}</h6>
+                <h6 className="content-category">{category}</h6>
                 <h6 className="content-title">
                     {timeUnit === 'weekly'
                         ? `last 10 Weeks trend`
