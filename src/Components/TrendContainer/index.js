@@ -13,6 +13,10 @@ const ChartContainer = styled.div`
     justify-content: space-between;
     align-items: center;
     margin: 0 auto;
+    & .content-category {
+        font-size: 14px;
+        color: #641130;
+    }
     & .content-title {
         font-size: 12px;
     }
@@ -50,7 +54,7 @@ function App(props) {
     return (
         <div>
             <ChartContainer>
-                <h6>{category}</h6>
+                <h6> className="content-category" {category}</h6>
                 <h6 className="content-title">
                     {timeUnit === 'weekly'
                         ? `last 10 Weeks trend`

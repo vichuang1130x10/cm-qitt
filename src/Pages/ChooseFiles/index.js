@@ -46,7 +46,6 @@ function App(props) {
         } else {
             parsedErrorList = repairList
         }
-
         props.saveAppState({ yieldRate, parsedErrorList })
 
         // const parsedErrorList = parsingErrorList(udpatedErrorList);
