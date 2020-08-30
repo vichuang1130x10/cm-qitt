@@ -7,10 +7,15 @@ import {
     pickUpStationByCMVendor,
 } from '../../ParsingData/ParsingHelpFunction'
 const ChartContainer = styled.div`
+    padding: 0 10px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
     margin: 0 auto;
+    & .content-title {
+        font-size: 12px;
+    }
 `
 
 const timeUnits = ['weekly', 'monthly']
@@ -27,7 +32,7 @@ function App(props) {
         const chartData = MBData[station][timeUnit]
         console.log('use effect is called')
         setChartData(chartData)
-    }, [station, category, timeUnit])
+    }, [station, category, timeUnit, MBData])
 
     const updateCategory = (str) => {
         setCategory(str)
@@ -45,8 +50,8 @@ function App(props) {
     return (
         <div>
             <ChartContainer>
-                {/* <h6>last 10 {timeUnit} trend</h6> */}
-                <h6>
+                <h6>{category}</h6>
+                <h6 className="content-title">
                     {timeUnit === 'weekly'
                         ? `last 10 Weeks trend`
                         : `Monthly trend`}
