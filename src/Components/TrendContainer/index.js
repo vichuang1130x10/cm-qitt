@@ -6,7 +6,7 @@ import {
     categoryArray,
     pickUpStationByCMVendor,
 } from '../../ParsingData/ParsingHelpFunction'
-const ChartContainer = styled.div`
+const ChartContainerTitle = styled.div`
     padding: 0 10px;
     display: flex;
     flex-direction: row;
@@ -21,23 +21,51 @@ const ChartContainer = styled.div`
         font-size: 12px;
     }
 `
+const ChartContainerContent = styled.div`
+    margin: 0 auto;
+    padding: 0;
+    width: 360px;
+    height: 240px;
+`
 
-const timeUnits = ['weekly', 'monthly']
+const timeUnits = ['Week', 'Month']
 const cates = ['MB', 'BPN', 'OTHER']
 
 function App(props) {
     // here need to be reconstructor
-    const { vendor, MBData, BPNData, OtherData } = props.appState
+    const { vendor } = props.appState
     const stations = pickUpStationByCMVendor(vendor)
+
     const [station, setStation] = useState(stations[stations.length - 1])
     const [category, setCategory] = useState('MB')
-    const [timeUnit, setTimeUnit] = useState('weekly')
+    const [timeUnit, setTimeUnit] = useState('Week')
     const [chartData, setChartData] = useState([])
     useEffect(() => {
-        const chartData = MBData[station][timeUnit]
+        // fetch data from props( redux store) and set the value for each state
         console.log('use effect is called')
+        const { MBData, BPNData, OtherData } = props.appState
+
+        const unit = timeUnit === 'Week' ? 'weekly' : 'monthly'
+
+        let chartData = {}
+        switch (category) {
+            case 'MB':
+                chartData = (MBData[station] && MBData[station][unit]) || {}
+                break
+            case 'BPN':
+                chartData = (BPNData[station] && BPNData[station][unit]) || {}
+                break
+            case 'OTHER':
+                chartData =
+                    (OtherData[station] && OtherData[station][unit]) || {}
+                break
+            default:
+                break
+        }
+        // const chartData = MBData[station][timeUnit]
+
         setChartData(chartData)
-    }, [station, category, timeUnit, MBData])
+    }, [station, category, timeUnit])
 
     const updateCategory = (str) => {
         setCategory(str)
@@ -45,7 +73,6 @@ function App(props) {
 
     const updateStation = (str) => {
         setStation(str)
-        // setChartData(data[str])
     }
 
     const updateTimeUnit = (str) => {
@@ -54,7 +81,7 @@ function App(props) {
 
     return (
         <div>
-            <ChartContainer>
+            <ChartContainerTitle>
                 <h6 className="content-category">{category}</h6>
                 <h6 className="content-title">
                     {timeUnit === 'weekly'
@@ -107,9 +134,10 @@ function App(props) {
                         </select>
                     </label>
                 </div>
-            </ChartContainer>
-
-            <DashboardTrendChart data={chartData} />
+            </ChartContainerTitle>
+            <ChartContainerContent>
+                <DashboardTrendChart data={chartData} unit={timeUnit}/>
+            </ChartContainerContent>
         </div>
     )
 }

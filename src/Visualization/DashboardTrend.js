@@ -17,7 +17,7 @@ class DashboardTrend extends Component {
 
     static getDerivedStateFromProps(nextProps, prevState) {
         /* <DashboardTrend data={whatever data is}/>*/
-        const { data } = nextProps
+        const { data, unit } = nextProps
         if (!data) return {}
         /* trimming for last 10 weeks/months */
         const trimData =
@@ -26,13 +26,13 @@ class DashboardTrend extends Component {
         const updateData = trimData
             .filter((d) => d.Pass > 5 && d.Total > 5)
             .map((d) => ({
-                week: d.Week,
+                unit: unit === 'Week' ? d.Week : d.Month,
                 total: d.Total,
                 yield: parseFloat(((d.Pass / d.Total) * 100).toFixed(1)),
             }))
 
         /* find the x axis scale */
-        const x = updateData.map((d) => d.week)
+        const x = updateData.map((d) => d.unit)
         const xScale = d3
             .scaleBand()
             .domain(x)
@@ -52,14 +52,14 @@ class DashboardTrend extends Component {
         /* calculate the path data by using d3 line() */
         const trend = d3
             .line()
-            .x((d) => xScale(d.week) + 20)
+            .x((d) => xScale(d.unit) + 20)
             .y((d) => yScale(d.yield))
 
         const line = trend(updateData)
 
         /* calculate yield rate text */
         const labels = updateData.map((d) => ({
-            x: xScale(d.week) + 20,
+            x: xScale(d.unit) + 20,
             y: yScale(d.yield),
             fill: '#6eae3e',
             text: `${d.yield}%`,
@@ -67,7 +67,7 @@ class DashboardTrend extends Component {
 
         /* calculate production output total text */
         const textLabels = updateData.map((d) => ({
-            x: xScale(d.week) + 7,
+            x: xScale(d.unit) + 7,
             y: yScaleRight(d.total),
             text: d.total,
         }))
@@ -75,7 +75,7 @@ class DashboardTrend extends Component {
         /* calculate the bar for plotting*/
         const bars = updateData.map((d) => {
             return {
-                x: xScale(d.week) + 7,
+                x: xScale(d.unit) + 7,
                 y: yScaleRight(d.total),
                 height: height - yScaleRight(d.total) - margin.bottom,
                 width: width / updateData.length - 20, // the width could be optimized a bit
