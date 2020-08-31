@@ -14,8 +14,10 @@ const ChartContainerTitle = styled.div`
     align-items: center;
     margin: 0 auto;
     & .content-category {
+        margin-left: 4px;
         font-size: 14px;
-        color: #641130;
+        color: #6fa4e3;
+        font-weight: 700;
     }
     & .content-title {
         font-size: 12px;
@@ -84,7 +86,7 @@ function App(props) {
             <ChartContainerTitle>
                 <h6 className="content-category">{category}</h6>
                 <h6 className="content-title">
-                    {timeUnit === 'weekly'
+                    {timeUnit === 'Week'
                         ? `last 10 Weeks trend`
                         : `Monthly trend`}
                 </h6>
@@ -136,7 +138,7 @@ function App(props) {
                 </div>
             </ChartContainerTitle>
             <ChartContainerContent>
-                <DashboardTrendChart data={chartData} unit={timeUnit}/>
+                <DashboardTrendChart data={chartData} unit={timeUnit} />
             </ChartContainerContent>
         </div>
     )

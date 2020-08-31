@@ -78,13 +78,23 @@ class DashboardTrend extends Component {
                 x: xScale(d.unit) + 7,
                 y: yScaleRight(d.total),
                 height: height - yScaleRight(d.total) - margin.bottom,
-                width: width / updateData.length - 20, // the width could be optimized a bit
+                width: width / updateData.length - 18, // the width could be optimized a bit
                 fill: '#6FA4E3',
             }
         })
 
-        console.log(bars)
-        return { bars, xScale, yScale, yScaleRight, line, labels, textLabels }
+        const passedLineHight = yScale(98)
+
+        return {
+            bars,
+            xScale,
+            yScale,
+            yScaleRight,
+            line,
+            labels,
+            textLabels,
+            passedLineHight,
+        }
     }
 
     componentDidMount() {
@@ -120,6 +130,7 @@ class DashboardTrend extends Component {
     render() {
         return this.state.bars.length ? (
             <svg width={width} height={height}>
+                {/* bar */}
                 {this.state.bars.map((d, i) => (
                     <rect
                         key={i}
@@ -130,41 +141,59 @@ class DashboardTrend extends Component {
                         fill={d.fill}
                     />
                 ))}
+                {/* bar text */}
                 {this.state.textLabels.map((d, i) => (
                     <text
                         key={i}
                         x={d.x + 4}
                         y={d.y + 8}
-                        stroke="#fff"
+                        stroke="#888"
                         fontSize="8px"
+                        fontFamily="sans-serif"
                     >
                         {d.text}
                     </text>
                 ))}
-
-                <g>
-                    {this.state.labels.map((d, i) => (
-                        <text key={i} x={d.x + 2} y={d.y - 5} fontSize="8px">
-                            {d.text}
-                        </text>
-                    ))}
-                    {this.state.labels.map((d, i) => (
-                        <circle
-                            key={i}
-                            cx={d.x}
-                            cy={d.y}
-                            r={4}
-                            fill={'#e58582'}
-                        />
-                    ))}
-                </g>
+                {/* trend path */}
                 <path
                     d={this.state.line}
                     fill={'none'}
                     stroke={'#e58582'}
                     strokeWidth={'3px'}
                 />
+                {/* text and node */}
+                <g>
+                    {this.state.labels.map((d, i) => (
+                        <circle
+                            key={i}
+                            cx={d.x}
+                            cy={d.y}
+                            r={4}
+                            fill={'#fff'}
+                            stroke={'#e58582'}
+                            strokeWidth={'3px'}
+                        />
+                    ))}
+                    {this.state.labels.map((d, i) => (
+                        <text key={i} x={d.x + 2} y={d.y - 5} fontSize="8px">
+                            {d.text}
+                        </text>
+                    ))}
+                </g>
+                {/* 98% yield line */}
+                <g>
+                    <line
+                        x1={margin.right * 7}
+                        y1={this.state.passedLineHight}
+                        x2={width - margin.left}
+                        y2={this.state.passedLineHight}
+                        stroke={'#1029dd'}
+                        strokeWidth={1}
+                        strokeDasharray={(5, 5)}
+                    />
+                </g>
 
+                {/* axis: */}
                 <g
                     ref={this.xAxis}
                     transform={`translate(0, ${height - margin.bottom})`}
