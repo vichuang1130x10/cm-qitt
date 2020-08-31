@@ -18,7 +18,7 @@ import { store, persistor } from './Data/createStore'
 function App() {
     return (
         <Provider store={store}>
-            <PersistGate loading={null} persistor={persistor}>
+            <PersistGate loading={1} persistor={persistor}>
                 <Router>
                     <ChooseFiles path="/" />
                     <Dashboard path="/dashboard" />
