@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import * as d3 from 'd3'
 
-const width = 500
-const height = 300
+const width = 360
+const height = 240
 
 class DashboardPieChart extends Component {
     state = {

@@ -3,7 +3,7 @@ import * as d3 from 'd3'
 import { translateToMonthCharater } from '../ParsingData/ParsingHelpFunction'
 
 /* set the svg size to 360 * 240 and the margin for drawing beauty */
-const width = 360
+const width = 440
 const height = 240
 const barPadding = 1
 const margin = { top: 20, right: 5, bottom: 20, left: 35 }
@@ -152,7 +152,7 @@ class DashboardTrend extends Component {
                         key={i}
                         x={d.x + 4}
                         y={d.y + 8}
-                        stroke="#EB6816"
+                        stroke="#fff"
                         fontSize="8px"
                         fontFamily="sans-serif"
                     >

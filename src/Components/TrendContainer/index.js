@@ -14,19 +14,19 @@ const ChartContainerTitle = styled.div`
     align-items: center;
     margin: 0 auto;
     & .content-category {
-        margin-left: 4px;
-        font-size: 14px;
+        margin-left: 8px;
+        font-size: 18px;
         color: #6fa4e3;
         font-weight: 700;
     }
     & .content-title {
-        font-size: 12px;
+        font-size: 18px;
     }
 `
 const ChartContainerContent = styled.div`
     margin: 0 auto;
     padding: 0;
-    width: 360px;
+    width: 440px;
     height: 240px;
 `
 

@@ -2,10 +2,9 @@ import React, { useEffect } from 'react'
 import { Container, Row, Col } from 'react-bootstrap'
 import Header from '../../Components/Header'
 import Footer from '../../Components/Footer'
-import connect from './connect'
 import TrendContainer from '../../Components/TrendContainer'
 
-function App(props) {
+function App() {
     useEffect(() => {
         window.scrollTo(0, 0)
     }, [])
@@ -24,9 +23,7 @@ function App(props) {
                                 <TrendContainer />
                             </div>
 
-                            <div className="component component-3">
-                                Component-3
-                            </div>
+                            <div className="component component-3"></div>
                         </div>
                     </Row>
                     <Row>
@@ -43,4 +40,4 @@ function App(props) {
     )
 }
 
-export default connect(App)
+export default App
