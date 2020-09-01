@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
 import * as d3 from 'd3'
+import { translateToMonthCharater } from '../ParsingData/ParsingHelpFunction'
 
 /* set the svg size to 360 * 240 and the margin for drawing beauty */
 const width = 360
 const height = 240
+const barPadding = 1
 const margin = { top: 20, right: 5, bottom: 20, left: 35 }
 
 class DashboardTrend extends Component {
@@ -26,7 +28,10 @@ class DashboardTrend extends Component {
         const updateData = trimData
             .filter((d) => d.Pass > 5 && d.Total > 5)
             .map((d) => ({
-                unit: unit === 'Week' ? d.Week : d.Month,
+                unit:
+                    unit === 'Week'
+                        ? d.Week
+                        : translateToMonthCharater(d.Month - 1),
                 total: d.Total,
                 yield: parseFloat(((d.Pass / d.Total) * 100).toFixed(1)),
             }))
@@ -67,7 +72,7 @@ class DashboardTrend extends Component {
 
         /* calculate production output total text */
         const textLabels = updateData.map((d) => ({
-            x: xScale(d.unit) + 7,
+            x: xScale(d.unit) + 7 - barPadding,
             y: yScaleRight(d.total),
             text: d.total,
         }))
@@ -147,7 +152,7 @@ class DashboardTrend extends Component {
                         key={i}
                         x={d.x + 4}
                         y={d.y + 8}
-                        stroke="#888"
+                        stroke="#EB6816"
                         fontSize="8px"
                         fontFamily="sans-serif"
                     >
@@ -158,7 +163,7 @@ class DashboardTrend extends Component {
                 <path
                     d={this.state.line}
                     fill={'none'}
-                    stroke={'#e58582'}
+                    stroke={'#ACC5DA'}
                     strokeWidth={'3px'}
                 />
                 {/* text and node */}
@@ -170,7 +175,7 @@ class DashboardTrend extends Component {
                             cy={d.y}
                             r={4}
                             fill={'#fff'}
-                            stroke={'#e58582'}
+                            stroke={'#ACC5DA'}
                             strokeWidth={'3px'}
                         />
                     ))}
