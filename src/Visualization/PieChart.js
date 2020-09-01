@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import * as d3 from 'd3'
 
-const width = 360
+const width = 240
 const height = 240
 
 class DashboardPieChart extends Component {
@@ -61,13 +61,13 @@ class DashboardPieChart extends Component {
                         <path key={i} d={d.path} fill={d.fill} />
                     ))}
                 </g>
-                <text x="50" y="50" style={{ fontSize: '11px' }}>
+                <text x="10" y="45" style={{ fontSize: '11px' }}>
                     {this.state.labelData[0]}
                 </text>
-                <text x="50" y="240" style={{ fontSize: '11px' }}>
+                <text x="5" y="200" style={{ fontSize: '11px' }}>
                     {this.state.labelData[1]}
                 </text>
-                <text x="370" y="150" style={{ fontSize: '11px' }}>
+                <text x={width / 2} y={height / 2} style={{ fontSize: '11px' }}>
                     {this.state.labelData[2]}
                 </text>
             </svg>

@@ -3,6 +3,7 @@ import { Container, Row, Col } from 'react-bootstrap'
 import Header from '../../Components/Header'
 import Footer from '../../Components/Footer'
 import TrendContainer from '../../Components/TrendContainer'
+import PieContainer from '../../Components/PieContainer'
 
 function App() {
     useEffect(() => {
@@ -23,7 +24,9 @@ function App() {
                                 <TrendContainer />
                             </div>
 
-                            <div className="component component-3"></div>
+                            <div className="component component-3">
+                                <PieContainer />
+                            </div>
                         </div>
                     </Row>
                     <Row>
