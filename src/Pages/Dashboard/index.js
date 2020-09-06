@@ -4,6 +4,7 @@ import Header from '../../Components/Header'
 import Footer from '../../Components/Footer'
 import TrendContainer from '../../Components/TrendContainer'
 import PieContainer from '../../Components/PieContainer'
+import InfoContainer from '../../Components/InfoContainer'
 
 function App() {
     useEffect(() => {
@@ -17,7 +18,7 @@ function App() {
                     <Row>
                         <div className="first-row-container">
                             <div className="component component-1">
-                                Component-1
+                                <InfoContainer />
                             </div>
 
                             <div className="component component-2">

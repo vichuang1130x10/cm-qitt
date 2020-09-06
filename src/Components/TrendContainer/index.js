@@ -2,10 +2,7 @@ import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import connect from './connect'
 import DashboardTrendChart from '../../Visualization/DashboardTrend'
-import {
-    categoryArray,
-    pickUpStationByCMVendor,
-} from '../../ParsingData/ParsingHelpFunction'
+import { pickUpStationByCMVendor } from '../../ParsingData/ParsingHelpFunction'
 const ChartContainerTitle = styled.div`
     padding: 0 10px;
     display: flex;
@@ -67,7 +64,7 @@ function App(props) {
         // const chartData = MBData[station][timeUnit]
 
         setChartData(chartData)
-    }, [station, category, timeUnit])
+    }, [station, category, timeUnit, props.appState])
 
     const updateCategory = (str) => {
         setCategory(str)

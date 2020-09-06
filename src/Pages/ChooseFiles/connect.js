@@ -1,8 +1,10 @@
-import { connect } from "react-redux";
-import { saveAppState } from "../../Data/AppState";
+import { connect } from 'react-redux'
+import { saveAppState } from '../../Data/AppState'
+import { setHeaderLinkFilters } from '../../Data/SetHeaderLink'
 
 const mapDispatchToProps = {
-  saveAppState,
-};
+    saveAppState,
+    setHeaderLinkFilters,
+}
 
-export default connect(null, mapDispatchToProps);
+export default connect(null, mapDispatchToProps)

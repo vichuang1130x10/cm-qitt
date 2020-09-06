@@ -128,7 +128,9 @@ class DashboardTrend extends Component {
 
         yAxisRight.scale(this.state.yScaleRight)
         if (this.yAxisVolume.current) {
-            d3.select(this.yAxisVolume.current).call(yAxisRight)
+            d3.select(this.yAxisVolume.current)
+                .style('font-size', '8px')
+                .call(yAxisRight)
         }
     }
 
