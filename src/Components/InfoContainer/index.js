@@ -1,7 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
 import connect from './connect'
-import { getCurrentMonth } from '../../ParsingData/ParsingHelpFunction'
+import {
+    getCurrentMonth,
+    getCurrentYear,
+} from '../../ParsingData/ParsingHelpFunction'
 
 const InfoContainer = styled.div`
     padding: 0 10px;
@@ -9,10 +12,26 @@ const InfoContainer = styled.div`
     flex-direction: column;
     justify-content: flex-start;
     height: 100%;
+
+    & .dummy-line {
+        width: 95%;
+        margin: 0 auto;
+        height: 2px;
+        background-color: #ccc;
+        margin-top: 5px;
+    }
 `
 const BoxContainer = styled.div`
     padding: 5px;
     height: 150px;
+    & .box-title-content {
+        display: flex;
+    }
+
+    & .box-title-date {
+        font-size: 8px;
+        margin: 5px 10px;
+    }
 
     & .small-tag {
         display: inline-block;
@@ -60,7 +79,11 @@ function App(props) {
             <InfoContainer>
                 <BoxContainer>
                     <BoxTitle>
-                        <h4>{props.appData.vendor}</h4>
+                        <div className="box-title-content">
+                            <h4>{props.appData.vendor}</h4>
+                            <p className="box-title-date">1/1~9/7</p>
+                        </div>
+
                         <h6>{getCurrentMonth()}</h6>
                     </BoxTitle>
                     <div className="small-tag">MB</div>
@@ -69,9 +92,10 @@ function App(props) {
                         <h6>290/399</h6>
                     </BoxContent>
                 </BoxContainer>
+                <div className="dummy-line"></div>
                 <BoxContainer>
                     <BoxTitle>
-                        <h6>2020</h6>
+                        <h6>{getCurrentYear()}</h6>
                     </BoxTitle>
                     <div className="small-tag">MB</div>
                     <BoxContent>

@@ -32,9 +32,13 @@ function App() {
                     </Row>
                     <Row>
                         <div className="second-row-container">
-                            <div>Component-4</div>
+                            <div className="component component-4">
+                                component-4
+                            </div>
 
-                            <div>Component-5</div>
+                            <div className="component component-5">
+                                component-5
+                            </div>
                         </div>
                     </Row>
                 </Container>

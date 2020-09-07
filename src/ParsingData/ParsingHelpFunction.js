@@ -98,12 +98,23 @@ const VENDOR_CODE_WITH_STATION = {
 
 const VENDOR_CODE_WITH_STATION_FUNCTION = {
     USI: 'FCT',
-    WZS: 'DIP_Function_A',
-    WIH: 'DIP Function A',
+    WZS: 'DIP_AOI',
+    WIH: 'DIP Final Inspection',
     VPS: 'First & Function TEST',
     USISZ: 'FCT',
     RISECOM: 'FCT',
     OSE: 'First & Function TEST',
+    CPW: '34_FT_1',
+}
+
+const VENDOR_CODE_WITH_STATION_PIE = {
+    USI: 'FCT',
+    WZS: 'DIP_Function_A',
+    WIH: 'DIP Function A',
+    VPS: 'DIP-VI',
+    USISZ: 'FCT',
+    RISECOM: 'FCT',
+    OSE: 'DIP-VI',
     CPW: '34_FT_1',
 }
 
@@ -112,7 +123,7 @@ export function pickUpStationByCMVendor(cm) {
 }
 
 export function pickUpStationByCMVendorForPie(cm) {
-    return VENDOR_CODE_WITH_STATION_FUNCTION[cm]
+    return VENDOR_CODE_WITH_STATION_PIE[cm]
 }
 
 export function generateLabelValueSelectionByCM(cm) {
@@ -120,6 +131,10 @@ export function generateLabelValueSelectionByCM(cm) {
         value: station,
         label: station,
     }))
+}
+
+export function getCurrentYear() {
+    return new Date().toLocaleDateString().split('/')[0]
 }
 
 export function getCurrentMonth() {

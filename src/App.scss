@@ -93,7 +93,8 @@ svg {
 
 // for the Dashboard second row
 .second-row-container {
-    height: 880px;
+    width: 100%;
+    height: 400px;
     display: flex;
     margin-top: 50px;
 }
@@ -117,4 +118,12 @@ svg {
 }
 .component-3 {
     flex: 32%;
+}
+
+.component-4 {
+    flex: 45%;
+}
+
+.component-5 {
+    flex: 45%;
 }
