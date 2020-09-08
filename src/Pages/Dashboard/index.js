@@ -5,6 +5,7 @@ import Footer from '../../Components/Footer'
 import TrendContainer from '../../Components/TrendContainer'
 import PieContainer from '../../Components/PieContainer'
 import InfoContainer from '../../Components/InfoContainer'
+import PrimaryModelContainer from '../../Components/PrimaryModelContainer'
 
 function App() {
     useEffect(() => {
@@ -33,7 +34,7 @@ function App() {
                     <Row>
                         <div className="second-row-container">
                             <div className="component component-4">
-                                component-4
+                                <PrimaryModelContainer />
                             </div>
 
                             <div className="component component-5">
