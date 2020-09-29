@@ -28,6 +28,8 @@ body {
     );
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+
+    overflow: auto;
 }
 // global select tag setting
 a:hover {
@@ -44,6 +46,7 @@ select {
     background-color: #6fa4e3;
     cursor: pointer;
     border: none;
+    border-radius: 3px;
 }
 // global svg tag setting
 svg {

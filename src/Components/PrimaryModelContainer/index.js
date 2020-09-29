@@ -2,7 +2,6 @@ import React from 'react'
 import styled from 'styled-components'
 import connect from './connect'
 import ModelCardForDashboard from '../ModelCardForDashboard'
-import direction from '../../images/direction.png'
 
 const CardContainer = styled.div`
     padding: 0 10px;
@@ -49,11 +48,9 @@ function App(props) {
                 <HeaderBlock>
                     <p>SMT1</p>
                 </HeaderBlock>
-
                 <HeaderBlock>
                     <p>SMT2</p>
                 </HeaderBlock>
-
                 <HeaderBlock>
                     <p>ASM</p>
                 </HeaderBlock>
