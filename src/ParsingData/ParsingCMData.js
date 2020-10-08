@@ -4,6 +4,7 @@ import {
     BPNKEYWORD,
     pickUpStationByCMVendor,
     pickUpStationByCMVendorForPie,
+    extractModelName,
 } from './ParsingHelpFunction'
 
 // Main function to parsing yieldRate json to specfic format for each models and some meta data
@@ -33,15 +34,7 @@ export function parseForYieldRate(updatedJson) {
         /* 
       3.Seperate raw data for MB, BPN ,and Other groups 
     */
-        let proName = ''
-
-        if (obj.Vendor === 'RISECOM') {
-            proName = obj.Model.split('(')[0] || obj.Model.split('-')[0]
-        } else if (obj.Vendor === 'WIH' || obj.Vendor === 'WZS') {
-            proName = obj.Model
-        } else {
-            proName = obj.Model.split('(')[1] || obj.Model.split('-')[0]
-        }
+        const proName = extractModelName(obj.Vendor, obj.Model)
 
         if (BPNKEYWORD.includes(proName.substring(0, 3).toUpperCase())) {
             n.BPN.push(obj)

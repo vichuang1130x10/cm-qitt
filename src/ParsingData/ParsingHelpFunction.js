@@ -185,3 +185,23 @@ export function translateToMonthCharater(num) {
             break
     }
 }
+
+export function extractModelName(vendor, model) {
+    switch (vendor) {
+        case 'RISECOM':
+            return model.split('(')[0] || model.split('-')[0]
+        case 'WIH':
+        case 'WZS':
+            return model.split(' ')[0]
+        case 'OSE':
+        case 'VPS':
+        case 'CPW':
+            return model
+        case 'USI':
+        case 'USISZ':
+            return model.split('(')[1] || model.split('-')[0]
+
+        default:
+            return model
+    }
+}
