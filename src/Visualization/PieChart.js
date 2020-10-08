@@ -22,13 +22,13 @@ class DashboardPieChart extends Component {
             let title = ''
             switch (i) {
                 case 0:
-                    title = 'BPN'
+                    title = 'BPN:'
                     break
                 case 1:
-                    title = 'MB'
+                    title = 'MB:'
                     break
                 default:
-                    title = 'OTHER'
+                    title = 'OTHER:'
             }
             const percentage =
                 parseFloat(((data / total) * 100).toFixed(1)) || 0
@@ -56,18 +56,18 @@ class DashboardPieChart extends Component {
     render() {
         return (
             <svg width={width} height={height}>
-                <g transform={`translate(${width / 2}, ${height / 2})`}>
+                <g transform={`translate(${width / 2}, ${height / 2 + 15})`}>
                     {this.state.slices.map((d, i) => (
                         <path key={i} d={d.path} fill={d.fill} />
                     ))}
                 </g>
-                <text x="10" y="45" style={{ fontSize: '11px' }}>
+                <text x="0" y="10" style={{ fontSize: '10px' }}>
                     {this.state.labelData[0]}
                 </text>
-                <text x="5" y="200" style={{ fontSize: '11px' }}>
+                <text x="100" y="10" style={{ fontSize: '10px' }}>
                     {this.state.labelData[1]}
                 </text>
-                <text x={width / 2} y={height / 2} style={{ fontSize: '11px' }}>
+                <text x="0" y="25" style={{ fontSize: '10px' }}>
                     {this.state.labelData[2]}
                 </text>
             </svg>
