@@ -60,10 +60,10 @@ const ModelContainer = styled.div`
     grid-template-columns: 20% 18% 18% 18% 18%;
     grid-gap: 10px;
     margin: 3px;
-    border: 1px solid rgba(0, 0, 0, 0.0975);
+
     border-radius: 5px;
 `
-
+// border: 1px solid rgba(0, 0, 0, 0.0975);
 const ModelBlock = styled.div`
     display: flex;
     flex-direction: column;
@@ -75,41 +75,6 @@ const ModelBlock = styled.div`
         margin-left: 6px;
     }
 `
-
-// .progress-control {
-//     width: 100%;
-//     display: grid;
-//     grid-template-columns: 20% 20% 20% 20%;
-//     grid-gap: 12px;
-//     margin: 0 128px;
-//   }
-
-//   .progress-control-div {
-//     display: flex;
-//     justify-content: center;
-//     align-items: center;
-//     margin: 0;
-//   }
-
-//   .progress-control-outer {
-//     display: flex;
-//     flex-direction: column;
-//     justify-content: center;
-//     align-items: center;
-//     margin: 0;
-//   }
-
-//   .progress-control div img {
-//     width: 15px;
-//     margin-left: 6px;
-//   }
-
-//   .progress-control div p {
-//     color: #666;
-//     font-size: 12px;
-//     margin-top: 0;
-//     margin-bottom: 0;
-//   }
 
 export default function SearchHeader(props) {
     const [value, setValue] = useState('')
@@ -135,6 +100,9 @@ export default function SearchHeader(props) {
                 <NavTitle>
                     <h3>Select Primary Model</h3>
                 </NavTitle>
+                <DataRange>
+                    <h6>Date Range : {date}</h6>
+                </DataRange>
                 <NavSubTitle>
                     <h6>models: </h6>
                 </NavSubTitle>
@@ -156,7 +124,7 @@ export default function SearchHeader(props) {
                     </ModelBlock>
 
                     <ModelBlock>
-                        {stationss[0]}
+                        {stations[0]}
                         <img
                             src={direction}
                             alt="direction"
@@ -166,7 +134,7 @@ export default function SearchHeader(props) {
                     </ModelBlock>
 
                     <ModelBlock>
-                        {stationss[1]}
+                        {stations[1]}
                         <img
                             src={direction}
                             alt="direction"
@@ -175,7 +143,7 @@ export default function SearchHeader(props) {
                         />
                     </ModelBlock>
                     <ModelBlock>
-                        {stationss[2]}
+                        {stations[2]}
                         <img
                             src={direction}
                             alt="direction"
@@ -184,7 +152,7 @@ export default function SearchHeader(props) {
                         />
                     </ModelBlock>
                     <ModelBlock>
-                        {stationss[3]}
+                        {stations[3]}
                         <img
                             src={direction}
                             alt="direction"

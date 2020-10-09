@@ -13,6 +13,7 @@ function App(props) {
     console.log('primary selection page start')
     const { models, vendor, startDate, endDate } = props.appState
     const stations = pickUpStationByCMVendor(vendor)
+    const mBModelList = models.filter((model) => model.productType === 'MB')
     const [modelList, setModelList] = useState([])
     const [sortModelNameFlag, setSortModelNameFlag] = useState(false)
     const [sortStation0Flag, setSortStation0Flag] = useState(false)
@@ -20,19 +21,12 @@ function App(props) {
     const [sortStation2Flag, setSortStation2Flag] = useState(false)
     const [sortStation3Flag, setSortStation3Flag] = useState(false)
 
-    //productType: "MB"
-    // station0FTY: 99.7
-    // station1FTY: 100
-    // station2FTY: 99.7
-    // station3FTY: 96.8
-
     useEffect(() => {
-        const mBModelList = models.filter((model) => model.productType === 'MB')
         setModelList(mBModelList)
-    })
+    }, [models])
 
     const keywordSearch = (value) => {
-        const searchList = modelList.filter((model) =>
+        const searchList = mBModelList.filter((model) =>
             model.model.toLowerCase().includes(value.toLowerCase())
         )
         setModelList(searchList)
@@ -105,14 +99,14 @@ function App(props) {
             })
         }
         setModelList(sortList)
-        setSortStation0Flag(!sortStation2Flag)
+        setSortStation2Flag(!sortStation2Flag)
     }
 
     const setSortStation3 = () => {
         let sortList = []
         if (sortStation3Flag) {
             sortList = modelList.sort((a, b) => {
-                return a.station3FTY - b, station3FTY
+                return a.station3FTY - b.station3FTY
             })
         } else {
             sortList = modelList.sort((a, b) => {
@@ -120,7 +114,7 @@ function App(props) {
             })
         }
         setModelList(sortList)
-        setSortStation0Flag(!sortStation3Flag)
+        setSortStation3Flag(!sortStation3Flag)
     }
 
     // const goToDetailByCard = (modelName) => {
@@ -144,37 +138,33 @@ function App(props) {
             <SearchHeader
                 stations={stations}
                 sortModelName={() => sortByModelName()}
-                sortStation0Flag={() => sortStation0Flag()}
-                sortStation1Flag={() => sortStation1Flag()}
-                sortStation2Flag={() => sortStation2Flag()}
-                sortStation3Flag={() => sortStation3Flag()}
+                sortStation0Flag={() => setSortStation0()}
+                sortStation1Flag={() => setSortStation1()}
+                sortStation2Flag={() => setSortStation2()}
+                sortStation3Flag={() => setSortStation3()}
                 searchBarOnchanged={(v) => keywordSearch(v)}
                 date={`${outputDate(startDate)} ~ ${outputDate(endDate)}`}
             />
             <Container>
                 <Row>
                     <div className="model-list-container">
-                        {modelList
-                            // .filter(
-                            //     (model) =>
-                            //         model.FE.Pass !== 0 && model.BE.Pass !== 0
-                            // )
-                            .map((model) => (
-                                <ModelCards
-                                    key={model.model}
-                                    model={model.model}
-                                    FE={model.FE}
-                                    BE={model.BE}
-                                    FTY={model.FTY}
-                                    onCardClick={(modelName) =>
-                                        goToDetailByCard(modelName)
-                                    }
-                                />
-                            ))}
+                        {modelList.map((model) => (
+                            <ModelCards
+                                key={model.model}
+                                modelObj={model}
+                                stations={stations}
+                                onCardClick={
+                                    (modelName) => {}
+                                    //   goToDetailByCard(modelName)
+                                }
+                            />
+                        ))}
                     </div>
                 </Row>
             </Container>
         </>
-    ) : null
+    ) : (
+        <h1>Loading...</h1>
+    )
 }
 export default connect(App)

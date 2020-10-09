@@ -49,7 +49,7 @@ function App(props) {
         props.saveAppState({ yieldRate, parsedErrorList })
 
         // const parsedErrorList = parsingErrorList(udpatedErrorList);
-        navigate(`/dashboard`)
+        navigate(`/selectPrimary`)
     }
 
     return (
