@@ -15,13 +15,24 @@ function App(props) {
     const stations = pickUpStationByCMVendor(vendor)
     const [modelList, setModelList] = useState([])
     const [sortModelNameFlag, setSortModelNameFlag] = useState(false)
-    const [sortStation0, setSortStation0] = useState(false)
-    const [sortStation1, setSortStation1] = useState(false)
-    const [sortStation2, setSortStation2] = useState(false)
-    const [sortStation3, setSortStation3] = useState(false)
+    const [sortStation0Flag, setSortStation0Flag] = useState(false)
+    const [sortStation1Flag, setSortStation1Flag] = useState(false)
+    const [sortStation2Flag, setSortStation2Flag] = useState(false)
+    const [sortStation3Flag, setSortStation3Flag] = useState(false)
+
+    //productType: "MB"
+    // station0FTY: 99.7
+    // station1FTY: 100
+    // station2FTY: 99.7
+    // station3FTY: 96.8
+
+    useEffect(() => {
+        const mBModelList = models.filter((model) => model.productType === 'MB')
+        setModelList(mBModelList)
+    })
 
     const keywordSearch = (value) => {
-        const searchList = models.filter((model) =>
+        const searchList = modelList.filter((model) =>
             model.model.toLowerCase().includes(value.toLowerCase())
         )
         setModelList(searchList)
@@ -38,7 +49,7 @@ function App(props) {
                 }
             })
         } else {
-            sortList = yieldRate.sort((a, b) => {
+            sortList = modelList.sort((a, b) => {
                 if (a.model < b.model) {
                     return 1
                 } else {
@@ -46,92 +57,108 @@ function App(props) {
                 }
             })
         }
-        setYieldRate(sortList)
-        const reverse = !sortModelNameFlag
-        setSortModelNameFlag(reverse)
+        setModelList(sortList)
+        setSortModelNameFlag(!sortModelNameFlag)
     }
+
+    /* Below repeat code is the worst coding, must be refactor if have time*/
 
     const setSortStation0 = () => {
         let sortList = []
-        if (sortFEFlag) {
-            sortList = yieldRate.sort((a, b) => {
-                return a.FE.Yield - b.FE.Yield
+        if (sortStation0Flag) {
+            sortList = modelList.sort((a, b) => {
+                return a.station0FTY - b.station0FTY
             })
         } else {
-            sortList = yieldRate.sort((a, b) => {
-                return b.FE.Yield - a.FE.Yield
+            sortList = modelList.sort((a, b) => {
+                return b.station0FTY - a.station0FTY
             })
         }
-        setYieldRate(sortList)
-        setSortFEFlag(!sortFEFlag)
+        setModelList(sortList)
+        setSortStation0Flag(!sortStation0Flag)
     }
 
     const setSortStation1 = () => {
         let sortList = []
-        if (sortBEFlag) {
-            sortList = yieldRate.sort((a, b) => {
-                return a.BE.Yield - b.BE.Yield
+        if (sortStation1Flag) {
+            sortList = modelList.sort((a, b) => {
+                return a.station1FTY - b.station1FTY
             })
         } else {
-            sortList = yieldRate.sort((a, b) => {
-                return b.BE.Yield - a.BE.Yield
+            sortList = modelList.sort((a, b) => {
+                return b.station1FTY - a.station1FTY
             })
         }
-        setYieldRate(sortList)
-        setSortBEFlag(!sortBEFlag)
+        setModelList(sortList)
+        setSortStation1Flag(!sortStation1Flag)
     }
 
     const setSortStation2 = () => {
         let sortList = []
-        if (sortFTYFlag) {
-            sortList = yieldRate.sort((a, b) => {
-                return a.FTY - b.FTY
+        if (sortStation2Flag) {
+            sortList = modelList.sort((a, b) => {
+                return a.station2FTY - b.station2FTY
             })
         } else {
-            sortList = yieldRate.sort((a, b) => {
-                return b.FTY - a.FTY
+            sortList = modelList.sort((a, b) => {
+                return b.station2FTY - a.station2FTY
             })
         }
-        setYieldRate(sortList)
-        setSortFTYFlag(!sortFTYFlag)
+        setModelList(sortList)
+        setSortStation0Flag(!sortStation2Flag)
     }
 
-    const goToDetailByCard = (modelName) => {
-        const modelDetail =
-            yieldRate.filter((model) => model.model === modelName)[0] || {}
-        navigate(`/detail`, {
-            state: {
-                modelName,
-                modelDetail,
-                startDate: outputDate(YieldRate.startDate),
-                endDate: outputDate(YieldRate.endDate),
-                errorAnalysis: errorAnalysis[modelName],
-            },
-        })
+    const setSortStation3 = () => {
+        let sortList = []
+        if (sortStation3Flag) {
+            sortList = modelList.sort((a, b) => {
+                return a.station3FTY - b, station3FTY
+            })
+        } else {
+            sortList = modelList.sort((a, b) => {
+                return b.station3FTY - a.station3FTY
+            })
+        }
+        setModelList(sortList)
+        setSortStation0Flag(!sortStation3Flag)
     }
+
+    // const goToDetailByCard = (modelName) => {
+    //     const modelDetail =
+    //         yieldRate.filter((model) => model.model === modelName)[0] || {}
+    //     navigate(`/detail`, {
+    //         state: {
+    //             modelName,
+    //             modelDetail,
+    //             startDate: outputDate(YieldRate.startDate),
+    //             endDate: outputDate(YieldRate.endDate),
+    //             errorAnalysis: errorAnalysis[modelName],
+    //         },
+    //     })
+    // }
     // console.log(ErrorAnalysis);
     // console.log(YieldRate);
 
-    return YieldRate.startDate ? (
+    return modelList.length ? (
         <>
             <SearchHeader
+                stations={stations}
                 sortModelName={() => sortByModelName()}
-                sortFE={() => sortByFE()}
-                sortBE={() => sortByBE()}
-                sortFTY={() => sortByFTY()}
+                sortStation0Flag={() => sortStation0Flag()}
+                sortStation1Flag={() => sortStation1Flag()}
+                sortStation2Flag={() => sortStation2Flag()}
+                sortStation3Flag={() => sortStation3Flag()}
                 searchBarOnchanged={(v) => keywordSearch(v)}
-                date={`${outputDate(YieldRate.startDate)} ~ ${outputDate(
-                    YieldRate.endDate
-                )}`}
+                date={`${outputDate(startDate)} ~ ${outputDate(endDate)}`}
             />
             <Container>
                 <Row>
                     <div className="model-list-container">
-                        {yieldRate
-                            .filter(
-                                (model) =>
-                                    model.FE.Pass !== 0 && model.BE.Pass !== 0
-                            )
+                        {modelList
+                            // .filter(
+                            //     (model) =>
+                            //         model.FE.Pass !== 0 && model.BE.Pass !== 0
+                            // )
                             .map((model) => (
                                 <ModelCards
                                     key={model.model}

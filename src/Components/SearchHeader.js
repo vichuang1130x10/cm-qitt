@@ -53,12 +53,80 @@ const Input = styled.input`
     }
 `
 
-export default function HeaderWithSearchBar(props) {
+const ModelContainer = styled.div`
+    width: 100%;
+    height: 62px;
+    display: grid;
+    grid-template-columns: 20% 18% 18% 18% 18%;
+    grid-gap: 10px;
+    margin: 3px;
+    border: 1px solid rgba(0, 0, 0, 0.0975);
+    border-radius: 5px;
+`
+
+const ModelBlock = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 6px;
+    > img {
+        width: 15px;
+        margin-left: 6px;
+    }
+`
+
+// .progress-control {
+//     width: 100%;
+//     display: grid;
+//     grid-template-columns: 20% 20% 20% 20%;
+//     grid-gap: 12px;
+//     margin: 0 128px;
+//   }
+
+//   .progress-control-div {
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//     margin: 0;
+//   }
+
+//   .progress-control-outer {
+//     display: flex;
+//     flex-direction: column;
+//     justify-content: center;
+//     align-items: center;
+//     margin: 0;
+//   }
+
+//   .progress-control div img {
+//     width: 15px;
+//     margin-left: 6px;
+//   }
+
+//   .progress-control div p {
+//     color: #666;
+//     font-size: 12px;
+//     margin-top: 0;
+//     margin-bottom: 0;
+//   }
+
+export default function SearchHeader(props) {
     const [value, setValue] = useState('')
+    const {
+        stations,
+        sortModelName,
+        sortStation0Flag,
+        sortStation1Flag,
+        sortStation2Flag,
+        sortStation3Flag,
+        searchBarOnchanged,
+        date,
+    } = props
 
     const onValueChanged = (v) => {
         setValue(v)
-        props.searchBarOnchanged(v)
+        searchBarOnchanged(v)
     }
 
     return (
@@ -68,7 +136,7 @@ export default function HeaderWithSearchBar(props) {
                     <h3>Select Primary Model</h3>
                 </NavTitle>
                 <NavSubTitle>
-                    <h6>pick up atleast one but not greater than 5 models</h6>
+                    <h6>models: </h6>
                 </NavSubTitle>
                 <Input
                     Input
@@ -76,41 +144,55 @@ export default function HeaderWithSearchBar(props) {
                     onChange={(e) => onValueChanged(e.target.value)}
                     placeholder="Model Search"
                 />
-                <div className="progress-control">
-                    <div className="progress-control-div">
+                <ModelContainer>
+                    <ModelBlock>
                         Model
                         <img
                             src={direction}
                             alt="direction"
                             width="15px"
-                            onClick={() => props.sortModelName()}
+                            onClick={() => sortModelName()}
                         />
-                    </div>
-                    <div className="progress-control-outer">
-                        <div className="progress-control-div">
-                            F/E Yield
-                            <img
-                                src={direction}
-                                alt="direction"
-                                width="15px"
-                                onClick={() => props.sortFE()}
-                            />
-                        </div>
-                        <p>(SMT1 + SMT2)</p>
-                    </div>
-                    <div className="progress-control-outer">
-                        <div className="progress-control-div">
-                            B/E Yield
-                            <img
-                                src={direction}
-                                alt="direction"
-                                width="15px"
-                                onClick={() => props.sortBE()}
-                            />
-                        </div>
-                        <p>(ASM + FCT)</p>
-                    </div>
-                </div>
+                    </ModelBlock>
+
+                    <ModelBlock>
+                        {stationss[0]}
+                        <img
+                            src={direction}
+                            alt="direction"
+                            width="15px"
+                            onClick={() => sortStation0Flag}
+                        />
+                    </ModelBlock>
+
+                    <ModelBlock>
+                        {stationss[1]}
+                        <img
+                            src={direction}
+                            alt="direction"
+                            width="15px"
+                            onClick={() => sortStation1Flag}
+                        />
+                    </ModelBlock>
+                    <ModelBlock>
+                        {stationss[2]}
+                        <img
+                            src={direction}
+                            alt="direction"
+                            width="15px"
+                            onClick={() => sortStation2Flag}
+                        />
+                    </ModelBlock>
+                    <ModelBlock>
+                        {stationss[3]}
+                        <img
+                            src={direction}
+                            alt="direction"
+                            width="15px"
+                            onClick={() => sortStation3Flag}
+                        />
+                    </ModelBlock>
+                </ModelContainer>
             </NavHeader>
         </Nav>
     )
