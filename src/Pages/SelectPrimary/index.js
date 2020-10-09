@@ -13,7 +13,7 @@ function App(props) {
     console.log('primary selection page start')
     const { models, vendor, startDate, endDate } = props.appState
     const stations = pickUpStationByCMVendor(vendor)
-    const [yieldRate, setYieldRate] = useState([])
+    const [modelList, setModelList] = useState([])
     const [sortModelNameFlag, setSortModelNameFlag] = useState(false)
     const [sortStation0, setSortStation0] = useState(false)
     const [sortStation1, setSortStation1] = useState(false)
@@ -24,13 +24,13 @@ function App(props) {
         const searchList = models.filter((model) =>
             model.model.toLowerCase().includes(value.toLowerCase())
         )
-        setYieldRate(searchList)
+        setModelList(searchList)
     }
 
     const sortByModelName = () => {
         let sortList = []
         if (sortModelNameFlag) {
-            sortList = yieldRate.sort((a, b) => {
+            sortList = modelList.sort((a, b) => {
                 if (a.model > b.model) {
                     return 1
                 } else {

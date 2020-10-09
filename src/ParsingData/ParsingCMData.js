@@ -398,13 +398,22 @@ function generateFTY(obj) {
         const station1FTY = calculateStationFTY(model, stations[1])
         const station2FTY = calculateStationFTY(model, stations[2])
         const station3FTY = calculateStationFTY(model, stations[3])
-
+        const proName = extractModelName(obj.vendor, key)
+        let productType = ''
+        if (BPNKEYWORD.includes(proName.substring(0, 3).toUpperCase())) {
+            productType = 'BPN'
+        } else if (MBKEYWORD.includes(proName.substring(0, 3).toUpperCase())) {
+            productType = 'MB'
+        } else {
+            productType = 'Other'
+        }
         obj[key] = {
             ...obj[key],
             station0FTY,
             station1FTY,
             station2FTY,
             station3FTY,
+            productType,
         }
     })
 
