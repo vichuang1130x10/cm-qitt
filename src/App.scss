@@ -130,3 +130,14 @@ svg {
 .component-5 {
     flex: 45%;
 }
+
+.model-list-container {
+    padding: 20px 20px 5px 20px;
+    max-width: 1000px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+}

@@ -54,19 +54,18 @@ const Input = styled.input`
 `
 
 const ModelContainer = styled.div`
-    width: 100%;
+    max-width: 1000px;
     height: 62px;
     display: grid;
     grid-template-columns: 20% 18% 18% 18% 18%;
     grid-gap: 10px;
-    margin: 3px;
-
+    margin-left: 80px;
     border-radius: 5px;
 `
 // border: 1px solid rgba(0, 0, 0, 0.0975);
 const ModelBlock = styled.div`
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
     padding: 6px;

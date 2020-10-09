@@ -11,6 +11,15 @@ const ModelContainer = styled.div`
     margin: 3px;
     border: 1px solid rgba(0, 0, 0, 0.0975);
     border-radius: 5px;
+    box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s;
+    &:hover {
+        background-color: #123abc;
+        color: #fff;
+    }
+    &:active {
+        background-color: #bada55;
+    }
 `
 
 const ModelBlock = styled.div`
@@ -19,6 +28,7 @@ const ModelBlock = styled.div`
     justify-content: center;
     align-items: center;
     padding: 6px;
+    font-size: 12px;
 `
 
 export default function ModelCard({ modelObj, stations, onCardClick }) {

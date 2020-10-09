@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react'
+import styled from 'styled-components'
+import { css } from '@emotion/core'
+import RotateLoader from 'react-spinners/RotateLoader'
 import SearchHeader from '../../Components/SearchHeader'
 import { Container, Row } from 'react-bootstrap'
 import {
@@ -8,6 +11,22 @@ import {
 import ModelCards from '../../Components/ModelCard'
 import { navigate } from '@reach/router'
 import connect from './connect'
+
+const override = css`
+    display: block;
+    margin: 0 auto;
+`
+
+const SpinnerWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    > h3 {
+        color: #123abc;
+    }
+`
 
 function App(props) {
     console.log('primary selection page start')
@@ -164,7 +183,10 @@ function App(props) {
             </Container>
         </>
     ) : (
-        <h1>Loading...</h1>
+        <SpinnerWrapper>
+            <RotateLoader size={50} color={'#123abc'} loading={true} />
+            <h3>Loading...</h3>
+        </SpinnerWrapper>
     )
 }
 export default connect(App)
