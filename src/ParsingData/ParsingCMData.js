@@ -174,10 +174,10 @@ export function parseForYieldRate(updatedJson) {
   //2701-001520-65(AOC-STGN-i2S): {RowData: Array(312), SMT1: {…}, SMT2: {…}, ASM: {…}, FCT: {…}, …}
   //ASM: {Pass: 5001, Fail: 0, Total: 5001, data: Array(10)}
   */
-    // Since we no longer FE/BE/FTY data, ignore generateFTY feature.
-    // const result = transformToArray(generateFTY(n));
+
+    const result = transformToArray(generateFTY(n))
     /* 7. calling transformToArray to make all models into an array to be easily rendered in the list*/
-    const result = transformToArray(n)
+    // const result = transformToArray(n)
 
     /* 8. 
         Construct app state object
@@ -376,4 +376,44 @@ export function parsingErrorList(errorList) {
     })
 
     return n
+}
+
+/* generate FTY for each main stattion of model */
+function generateFTY(obj) {
+    /* extract non-model obj*/
+    const keys = Object.keys(obj).filter(
+        (item) =>
+            item !== 'vendor' &&
+            item !== 'startDate' &&
+            item !== 'endDate' &&
+            item !== 'MB' &&
+            item !== 'BPN' &&
+            item !== 'Other'
+    )
+    const stations = pickUpStationByCMVendor(obj.vendor)
+    /* iterate each model to add station 0 -3 FTY*/
+    keys.forEach((key) => {
+        let model = obj[key]
+        const station0FTY = calculateStationFTY(model, stations[0])
+        const station1FTY = calculateStationFTY(model, stations[1])
+        const station2FTY = calculateStationFTY(model, stations[2])
+        const station3FTY = calculateStationFTY(model, stations[3])
+
+        obj[key] = {
+            ...obj[key],
+            station0FTY,
+            station1FTY,
+            station2FTY,
+            station3FTY,
+        }
+    })
+
+    console.log('generateFTY', obj)
+    return obj
+}
+
+const calculateStationFTY = (model, station) => {
+    const pass = model[station].Pass || 0
+    const total = model[station].Total || 0
+    return parseFloat(((pass / total) * 100).toFixed(1)) || 0
 }

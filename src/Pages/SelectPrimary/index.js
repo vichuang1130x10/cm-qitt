@@ -1,36 +1,27 @@
 import React, { useState, useEffect } from 'react'
-import HeaderWithSearchBar from '../Component/HeaderWithSearchBar'
+import SearchHeader from '../../Components/SearchHeader'
 import { Container, Row } from 'react-bootstrap'
-import { outputDate } from '../Utils/helperFunction'
-import ModelCards from '../Component/ModelCard'
+import {
+    outputDate,
+    pickUpStationByCMVendor,
+} from '../../ParsingData/ParsingHelpFunction'
+import ModelCards from '../../Components/ModelCard'
 import { navigate } from '@reach/router'
+import connect from './connect'
 
-export default function ResultPresent(props) {
-    console.log('result page start')
-
+function App(props) {
+    console.log('primary selection page start')
+    const { models, vendor, startDate, endDate } = props.appState
+    const stations = pickUpStationByCMVendor(vendor)
     const [yieldRate, setYieldRate] = useState([])
-    const [errorAnalysis, setErrorAnalysis] = useState({})
     const [sortModelNameFlag, setSortModelNameFlag] = useState(false)
-    const [sortFEFlag, setSortFEFlag] = useState(false)
-    const [sortBEFlag, setSortBEFlag] = useState(false)
-    const [sortFTYFlag, setSortFTYFlag] = useState(false)
-
-    const YieldRate = props.location.state.YieldRate
-    console.log(YieldRate)
-    useEffect(() => {
-        const ErrorAnalysis = props.location.state.ErrorAnalysis
-        // const YieldRate = props.location.state.YieldRate;
-        console.log(ErrorAnalysis)
-        setYieldRate(YieldRate.models)
-        setErrorAnalysis(ErrorAnalysis)
-    }, [
-        YieldRate.models,
-        props.location.state.ErrorAnalysis,
-        props.location.state.YieldRate,
-    ])
+    const [sortStation0, setSortStation0] = useState(false)
+    const [sortStation1, setSortStation1] = useState(false)
+    const [sortStation2, setSortStation2] = useState(false)
+    const [sortStation3, setSortStation3] = useState(false)
 
     const keywordSearch = (value) => {
-        const searchList = YieldRate.models.filter((model) =>
+        const searchList = models.filter((model) =>
             model.model.toLowerCase().includes(value.toLowerCase())
         )
         setYieldRate(searchList)
@@ -60,7 +51,7 @@ export default function ResultPresent(props) {
         setSortModelNameFlag(reverse)
     }
 
-    const sortByFE = () => {
+    const setSortStation0 = () => {
         let sortList = []
         if (sortFEFlag) {
             sortList = yieldRate.sort((a, b) => {
@@ -75,7 +66,7 @@ export default function ResultPresent(props) {
         setSortFEFlag(!sortFEFlag)
     }
 
-    const sortByBE = () => {
+    const setSortStation1 = () => {
         let sortList = []
         if (sortBEFlag) {
             sortList = yieldRate.sort((a, b) => {
@@ -90,7 +81,7 @@ export default function ResultPresent(props) {
         setSortBEFlag(!sortBEFlag)
     }
 
-    const sortByFTY = () => {
+    const setSortStation2 = () => {
         let sortList = []
         if (sortFTYFlag) {
             sortList = yieldRate.sort((a, b) => {
@@ -123,7 +114,7 @@ export default function ResultPresent(props) {
 
     return YieldRate.startDate ? (
         <>
-            <HeaderWithSearchBar
+            <SearchHeader
                 sortModelName={() => sortByModelName()}
                 sortFE={() => sortByFE()}
                 sortBE={() => sortByBE()}
@@ -159,3 +150,4 @@ export default function ResultPresent(props) {
         </>
     ) : null
 }
+export default connect(App)
