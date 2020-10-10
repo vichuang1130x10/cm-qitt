@@ -54,7 +54,7 @@ function App(props) {
     useEffect(() => {
         setModelList(mBModelList)
         setIsLoading(false)
-    }, [models])
+    }, [mBModelList, models])
 
     const keywordSearch = (value) => {
         const searchList = mBModelList.filter((model) =>
@@ -199,7 +199,7 @@ function App(props) {
         </Wrapper>
     ) : (
         <SpinnerWrapper>
-            <RotateLoader size={50} color={'#123abc'} loading={isLoading} />
+            <RotateLoader size={25} color={'#123abc'} loading={isLoading} />
             <h3>Loading...</h3>
         </SpinnerWrapper>
     )

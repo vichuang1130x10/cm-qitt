@@ -378,7 +378,16 @@ export function parsingErrorList(errorList) {
     return n
 }
 
-/* generate FTY for each main stattion of model */
+/* 
+   generate FTY for each main station of model 
+   Because each cm has different station name in the model object
+   therefore, i use station 0~ 3 to replace the original name
+
+   another attribute to add for each model:
+   1. productType: "MB","BPN","Other" for easy data sort
+   2. isSelect: this attribute for Redux for UI control
+
+*/
 function generateFTY(obj) {
     /* extract non-model obj*/
     const keys = Object.keys(obj).filter(
@@ -414,6 +423,7 @@ function generateFTY(obj) {
             station2FTY,
             station3FTY,
             productType,
+            isSelect: false,
         }
     })
 

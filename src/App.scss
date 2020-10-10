@@ -20,21 +20,21 @@ body {
     position: relative;
     color: #202020;
     background: rgb(197, 222, 218);
-    background: linear-gradient(
-        126deg,
-        rgba(197, 222, 218, 1) 0%,
-        rgba(190, 213, 230, 1) 39%,
-        rgba(220, 240, 255, 1) 86%
-    );
+    background: linear-gradient(126deg,
+            rgba(197, 222, 218, 1) 0%,
+            rgba(190, 213, 230, 1) 39%,
+            rgba(220, 240, 255, 1) 86%);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 
     overflow: auto;
 }
+
 // global select tag setting
 a:hover {
     text-decoration: none;
 }
+
 select {
     text-align: center;
     margin-bottom: 0px;
@@ -48,6 +48,7 @@ select {
     border: none;
     border-radius: 3px;
 }
+
 // global svg tag setting
 svg {
     // border: 1px solid #666;
@@ -116,9 +117,11 @@ svg {
 .component-1 {
     flex: 24%;
 }
+
 .component-2 {
     flex: 44%;
 }
+
 .component-3 {
     flex: 32%;
 }
