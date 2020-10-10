@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import React from 'react'
+import connect from './connect'
 // import { separateString } from '../ParsingData/ParsingHelpFunction'
 
 const ModelContainer = styled.div`
@@ -20,6 +21,8 @@ const ModelContainer = styled.div`
     &:active {
         background-color: #bada55;
     }
+
+    background-color: ${(props) => (props.isSelected ? '#ccc' : '#fff')};
 `
 
 const ModelBlock = styled.div`
@@ -31,7 +34,7 @@ const ModelBlock = styled.div`
     font-size: 12px;
 `
 
-export default function ModelCard({ modelObj, stations, onCardClick }) {
+function App({ modelObj, stations, primaryState, togglePrimaryModel }) {
     const {
         model,
         station0FTY,
@@ -45,8 +48,9 @@ export default function ModelCard({ modelObj, stations, onCardClick }) {
     const station3 = modelObj[stations[3]]
     return (
         <ModelContainer
+            isSelected={primaryState.includes(model)}
             onClick={() => {
-                onCardClick(model)
+                togglePrimaryModel(model)
             }}
         >
             <ModelBlock>
@@ -85,3 +89,5 @@ export default function ModelCard({ modelObj, stations, onCardClick }) {
         </ModelContainer>
     )
 }
+
+export default connect(App)

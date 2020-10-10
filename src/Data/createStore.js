@@ -5,6 +5,7 @@ import storage from 'redux-persist/lib/storage' // defaults to localStorage for 
 import createCompressor from 'redux-persist-transform-compress'
 import reducer from './AppState'
 import setHeaderLink from './SetHeaderLink'
+import primaryState from './PrimaryState'
 
 const compressor = createCompressor()
 
@@ -20,6 +21,7 @@ const logger = createLogger()
 const rootReducer = combineReducers({
     app: reducer,
     filter: setHeaderLink,
+    primaryState,
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

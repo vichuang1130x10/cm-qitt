@@ -66,6 +66,7 @@ function App(props) {
         //     parsedErrorList = repairList
         // }
         props.saveAppState({ yieldRate, parsedErrorList })
+        props.resetPrimaryModel()
 
         // const parsedErrorList = parsingErrorList(udpatedErrorList);
         navigate(`/selectPrimary`)

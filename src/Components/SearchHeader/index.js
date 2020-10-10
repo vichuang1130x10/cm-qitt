@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import direction from '../images/direction.png'
+import direction from '../../images/direction.png'
+import connect from './connect'
 
 const Nav = styled.div`
     background-color: #fff;
@@ -25,11 +26,43 @@ const NavTitle = styled.div`
     margin: 20px 0 10px 0;
     padding: 0 64px;
     font-family: 'Oswald', sans-serif;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    > button {
+        padding: 10px 20px;
+        outline: none;
+        background-color: transparent;
+        border-radius: 5px;
+        border: 1px solid black;
+        transition: all 0.5s;
+        &:hover {
+            background-color: #123abc;
+            color: #fff;
+            transform: translateY(-5px);
+            border: 1px solid transparent;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        &:active {
+            transform: translateY(2px);
+        }
+    }
 `
 
 const NavSubTitle = styled.div`
     color: #606060;
     padding: 0 64px;
+    margin-bottom: 40px;
+    > .models {
+        display: flex;
+        justify-content: flex-start;
+
+        > p {
+            margin-left: 15px;
+            color: #123abc;
+        }
+    }
 `
 
 const DataRange = styled.div`
@@ -80,18 +113,29 @@ const ModelBlock = styled.div`
     }
 `
 
-export default function SearchHeader(props) {
+function App({
+    completeSelection,
+    stations,
+    sortModelName,
+    setSortStation0,
+    setSortStation1,
+    setSortStation2,
+    setSortStation3,
+    searchBarOnchanged,
+    date,
+    primaryState,
+}) {
     const [value, setValue] = useState('')
-    const {
-        stations,
-        sortModelName,
-        setSortStation0,
-        setSortStation1,
-        setSortStation2,
-        setSortStation3,
-        searchBarOnchanged,
-        date,
-    } = props
+    // const {
+    //     stations,
+    //     sortModelName,
+    //     setSortStation0,
+    //     setSortStation1,
+    //     setSortStation2,
+    //     setSortStation3,
+    //     searchBarOnchanged,
+    //     date,
+    // } = props
 
     const onValueChanged = (v) => {
         setValue(v)
@@ -103,12 +147,21 @@ export default function SearchHeader(props) {
             <NavHeader>
                 <NavTitle>
                     <h3>Select Primary Model</h3>
+                    <button onClick={() => completeSelection()}>
+                        {' '}
+                        Complete Primary Selection
+                    </button>
                 </NavTitle>
                 <DataRange>
                     <h6>Date Range : {date}</h6>
                 </DataRange>
                 <NavSubTitle>
-                    <h6>models: </h6>
+                    <div className="models">
+                        <h6>models: </h6>
+                        {primaryState.map((model) => (
+                            <p key={model}>{model}</p>
+                        ))}
+                    </div>
                 </NavSubTitle>
                 <Input
                     Input
@@ -169,3 +222,5 @@ export default function SearchHeader(props) {
         </Nav>
     )
 }
+
+export default connect(App)

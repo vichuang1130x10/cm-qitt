@@ -1,18 +1,37 @@
 const createActionWithName = (name) => `app/tasks/${name}`
 
-export const SAVE_APP_STATE = createActionWithName('SAVE_APP_STATE')
+export const TOGGLE_PRIMARY_MODEL = createActionWithName('TOGGLE_PRIMARY_MODEL')
+export const RESET_PRIMARY_MODEL = createActionWithName('RESET_PRIMARY_MODEL')
 
-export const saveAppState = (appState) => {
+export const togglePrimaryModel = (modelName) => {
     return {
-        type: SAVE_APP_STATE,
-        appState,
+        type: TOGGLE_PRIMARY_MODEL,
+        modelName,
     }
 }
 
-export default function reducer(state = {}, action = {}) {
+export const resetPrimaryModel = () => {
+    return {
+        type: RESET_PRIMARY_MODEL,
+    }
+}
+
+const initialState = []
+
+export default function reducer(state = initialState, action = {}) {
     switch (action.type) {
-        case SAVE_APP_STATE:
-            return action.appState
+        case TOGGLE_PRIMARY_MODEL:
+            let updatePrimaryState = []
+            if (state.includes(action.modelName)) {
+                updatePrimaryState = state.filter((x) => x !== action.modelName)
+            } else {
+                updatePrimaryState = [...state, action.modelName]
+            }
+
+            return updatePrimaryState
+
+        case RESET_PRIMARY_MODEL:
+            return []
 
         //Object
         // app:

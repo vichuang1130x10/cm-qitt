@@ -23,7 +23,7 @@ const ListContainer = styled.div`
     width: 100%;
     margin: 0;
     padding: 0;
-    margin-top: 300px;
+    margin-top: 340px;
     background-color: #fefefe;
 `
 
@@ -150,25 +150,14 @@ function App(props) {
         setSortStation3Flag(!sortStation3Flag)
     }
 
-    // const goToDetailByCard = (modelName) => {
-    //     const modelDetail =
-    //         yieldRate.filter((model) => model.model === modelName)[0] || {}
-    //     navigate(`/detail`, {
-    //         state: {
-    //             modelName,
-    //             modelDetail,
-    //             startDate: outputDate(YieldRate.startDate),
-    //             endDate: outputDate(YieldRate.endDate),
-    //             errorAnalysis: errorAnalysis[modelName],
-    //         },
-    //     })
-    // }
-    // console.log(ErrorAnalysis);
-    // console.log(YieldRate);
+    const completeSelection = () => {
+        navigate(`/dashboard`)
+    }
 
     return !isLoading ? (
         <Wrapper>
             <SearchHeader
+                completeSelection={() => completeSelection()}
                 stations={stations}
                 sortModelName={() => sortByModelName()}
                 setSortStation0={() => setSortStation0()}
@@ -187,10 +176,6 @@ function App(props) {
                                     key={model.model}
                                     modelObj={model}
                                     stations={stations}
-                                    onCardClick={
-                                        (modelName) => {}
-                                        //   goToDetailByCard(modelName)
-                                    }
                                 />
                             ))}
                         </div>
