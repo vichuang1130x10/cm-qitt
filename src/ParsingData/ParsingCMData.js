@@ -5,6 +5,7 @@ import {
     pickUpStationByCMVendor,
     pickUpStationByCMVendorForPie,
     extractModelName,
+    getSevenDayBoundary,
 } from './ParsingHelpFunction'
 
 // Main function to parsing yieldRate json to specfic format for each models and some meta data
@@ -337,6 +338,7 @@ function sortByMonth(a, b) {
 // parsing errorlist json to specfic format for each station failure symptom
 export function parsingErrorList(errorList) {
     let n = {}
+    console.log('error list here', errorList)
     const station = pickUpStationByCMVendor(errorList[0].Vendor)
 
     errorList.forEach((obj) => {
@@ -400,6 +402,7 @@ function generateFTY(obj) {
             item !== 'Other'
     )
     const stations = pickUpStationByCMVendor(obj.vendor)
+
     /* iterate each model to add station 0 -3 FTY*/
     keys.forEach((key) => {
         let model = obj[key]
@@ -416,6 +419,28 @@ function generateFTY(obj) {
         } else {
             productType = 'Other'
         }
+
+        const inTheSevenDaysData = model[stations[3]].data.filter(
+            (fctData) =>
+                new Date(fctData.Date) > getSevenDayBoundary(obj.endDate)
+        )
+
+        let sevenDayPass = 0
+        let sevenDayTotal = 0
+        let sevenDayFty = 0
+
+        if (inTheSevenDaysData.length) {
+            sevenDayPass =
+                inTheSevenDaysData.reduce((accu, ele) => accu + ele.Pass, 0) ||
+                0
+            sevenDayTotal =
+                inTheSevenDaysData.reduce((accu, ele) => accu + ele.Total, 0) ||
+                1
+            sevenDayFty = parseFloat(
+                ((sevenDayPass / sevenDayTotal) * 100).toFixed(2)
+            )
+        }
+
         obj[key] = {
             ...obj[key],
             station0FTY,
@@ -424,6 +449,10 @@ function generateFTY(obj) {
             station3FTY,
             productType,
             isSelect: false,
+            inTheSevenDaysData,
+            sevenDayPass,
+            sevenDayTotal,
+            sevenDayFty,
         }
     })
 

@@ -54,7 +54,8 @@ function App(props) {
     useEffect(() => {
         setModelList(mBModelList)
         setIsLoading(false)
-    }, [mBModelList, models])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [models])
 
     const keywordSearch = (value) => {
         const searchList = mBModelList.filter((model) =>

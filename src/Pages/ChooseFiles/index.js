@@ -29,23 +29,42 @@ function App(props) {
     const receivedRepairList = (obj) => setRepairList(obj)
 
     const transferData = (e) => {
-        mappingErrorListAndRepairList(errorList, repairList)
-        const udpatedErrorList = errorList.ErrorList.map((ele) => {
-            if (ele['Reason'] === null || ele['Reason'] === undefined) {
-                ele['Reason'] = '待修'
-            }
-            return ele
-        })
-        console.log('repair list', repairList.RepairList)
-        let parsedErrorList
+        let parsedErrorList = null
         if (
             repairList.RepairList[0].Vendor === 'USI' ||
             repairList.RepairList[0].Vendor === 'USISZ'
         ) {
+            mappingErrorListAndRepairList(errorList, repairList)
+            const udpatedErrorList = errorList.ErrorList.map((ele) => {
+                if (ele['Reason'] === null || ele['Reason'] === undefined) {
+                    ele['Reason'] = '待修'
+                }
+                return ele
+            })
             parsedErrorList = parsingErrorList(udpatedErrorList)
         } else {
-            parsedErrorList = repairList
+            parsedErrorList = parsingErrorList(repairList.RepairList)
         }
+
+        // mappingErrorListAndRepairList(errorList, repairList)
+        // const udpatedErrorList = errorList.ErrorList.map((ele) => {
+        //     if (ele['Reason'] === null || ele['Reason'] === undefined) {
+        //         ele['Reason'] = '待修'
+        //     }
+        //     return ele
+        // })
+        // console.log('repair list', repairList.RepairList)
+        // console.log('updateErrorList', udpatedErrorList)
+        // const parsedErrorList = parsingErrorList(udpatedErrorList)
+        // let parsedErrorList
+        // if (
+        //     repairList.RepairList[0].Vendor === 'USI' ||
+        //     repairList.RepairList[0].Vendor === 'USISZ'
+        // ) {
+        //     parsedErrorList = parsingErrorList(udpatedErrorList)
+        // } else {
+        //     parsedErrorList = repairList
+        // }
         props.saveAppState({ yieldRate, parsedErrorList })
 
         // const parsedErrorList = parsingErrorList(udpatedErrorList);
