@@ -5,6 +5,11 @@ import direction from '../images/direction.png'
 const Nav = styled.div`
     background-color: #fff;
     border-bottom: 1px solid rgba(0, 0, 0, 0.0975);
+    z-index: 10;
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
 `
 
 const NavHeader = styled.div`
@@ -80,10 +85,10 @@ export default function SearchHeader(props) {
     const {
         stations,
         sortModelName,
-        sortStation0Flag,
-        sortStation1Flag,
-        sortStation2Flag,
-        sortStation3Flag,
+        setSortStation0,
+        setSortStation1,
+        setSortStation2,
+        setSortStation3,
         searchBarOnchanged,
         date,
     } = props
@@ -128,7 +133,7 @@ export default function SearchHeader(props) {
                             src={direction}
                             alt="direction"
                             width="15px"
-                            onClick={() => sortStation0Flag}
+                            onClick={() => setSortStation0()}
                         />
                     </ModelBlock>
 
@@ -138,7 +143,7 @@ export default function SearchHeader(props) {
                             src={direction}
                             alt="direction"
                             width="15px"
-                            onClick={() => sortStation1Flag}
+                            onClick={() => setSortStation1()}
                         />
                     </ModelBlock>
                     <ModelBlock>
@@ -147,7 +152,7 @@ export default function SearchHeader(props) {
                             src={direction}
                             alt="direction"
                             width="15px"
-                            onClick={() => sortStation2Flag}
+                            onClick={() => setSortStation2()}
                         />
                     </ModelBlock>
                     <ModelBlock>
@@ -156,7 +161,7 @@ export default function SearchHeader(props) {
                             src={direction}
                             alt="direction"
                             width="15px"
-                            onClick={() => sortStation3Flag}
+                            onClick={() => setSortStation3()}
                         />
                     </ModelBlock>
                 </ModelContainer>

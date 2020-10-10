@@ -1,5 +1,5 @@
 export function outputDate(date) {
-    return date.toLocaleString().split(',')[0] || ''
+    return new Date(date).toLocaleDateString()
 }
 
 export function separateString(str) {
