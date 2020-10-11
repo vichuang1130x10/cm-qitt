@@ -1,7 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 import connect from './connect'
-import ModelCardForDashboard from '../ModelCardForDashboard'
+import ModelCardForPrimary from '../ModelCardForPrimary'
+import { pickUpStationByCMVendor } from '../../ParsingData/ParsingHelpFunction'
 
 const CardContainer = styled.div`
     padding: 0 10px;
@@ -9,7 +10,29 @@ const CardContainer = styled.div`
     flex-direction: column;
     justify-content: flex-start;
     height: 100%;
+    overflow: auto;
+    position: relative;
+    > h4 {
+        text-decoration: underline;
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 16px;
+        padding: 10px;
+    }
 `
+
+const StickHead = styled.div`
+    position: sticky;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 102;
+    background-color: #fff;
+    > h4 {
+        color: #1d0332;
+    }
+`
+
 const Header = styled.div`
     width: 100%;
     height: 30px;
@@ -19,7 +42,7 @@ const Header = styled.div`
     margin: 10px auto;
 
     padding: 0;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid #eee;
 `
 
 const HeaderBlock = styled.div`
@@ -28,40 +51,55 @@ const HeaderBlock = styled.div`
     justify-content: center;
     align-items: center;
     margin: 0;
-    & img {
-        width: 15px;
-        margin-left: 6px;
-    }
+
     & p {
-        color: #6fa4e3;
-        font-weight: 700;
+        color: #1d0332;
+        font-weight: 400;
+        font-size: 12px;
+        font-style: italic;
     }
 `
 
-function App(props) {
+const ModelWrapper = styled.div``
+
+function App({ appData, primaryState }) {
+    const { vendor, models } = appData
+    const stations = pickUpStationByCMVendor(vendor)
+    const selectedModels = models.filter((model) =>
+        primaryState.includes(model.model)
+    )
+
     return (
         <CardContainer>
-            <Header>
-                <HeaderBlock>
-                    <p>Model</p>
-                </HeaderBlock>
-                <HeaderBlock>
-                    <p>SMT1</p>
-                </HeaderBlock>
-                <HeaderBlock>
-                    <p>SMT2</p>
-                </HeaderBlock>
-                <HeaderBlock>
-                    <p>ASM</p>
-                </HeaderBlock>
-                <HeaderBlock>
-                    <p>FCT</p>
-                </HeaderBlock>
-            </Header>
-            <ModelCardForDashboard OnCardClick={() => {}} />
-            <ModelCardForDashboard OnCardClick={() => {}} />
-            <ModelCardForDashboard OnCardClick={() => {}} />
-            <ModelCardForDashboard OnCardClick={() => {}} />
+            <StickHead>
+                <h4>Primary Model:</h4>
+                <Header>
+                    <HeaderBlock>
+                        <p>Model</p>
+                    </HeaderBlock>
+                    <HeaderBlock>
+                        <p>{stations[0]}</p>
+                    </HeaderBlock>
+                    <HeaderBlock>
+                        <p>{stations[1]}</p>
+                    </HeaderBlock>
+                    <HeaderBlock>
+                        <p>{stations[2]}</p>
+                    </HeaderBlock>
+                    <HeaderBlock>
+                        <p>{stations[3]}</p>
+                    </HeaderBlock>
+                </Header>
+            </StickHead>
+            <ModelWrapper>
+                {selectedModels.map((m) => (
+                    <ModelCardForPrimary
+                        key={m.model}
+                        m={m}
+                        stations={stations}
+                    />
+                ))}
+            </ModelWrapper>
         </CardContainer>
     )
 }

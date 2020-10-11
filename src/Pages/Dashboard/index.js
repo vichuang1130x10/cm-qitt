@@ -17,32 +17,34 @@ function App() {
             <Header />
             <section className="main-section">
                 <Container>
-                    <Row>
-                        <div className="first-row-container">
-                            <div className="component component-1">
-                                <InfoContainer />
-                            </div>
+                    <Col>
+                        <Row>
+                            <div className="first-row-container">
+                                <div className="component component-1">
+                                    <InfoContainer />
+                                </div>
 
-                            <div className="component component-2">
-                                <TrendContainer />
-                            </div>
+                                <div className="component component-2">
+                                    <TrendContainer />
+                                </div>
 
-                            <div className="component component-3">
-                                <PieContainer />
+                                <div className="component component-3">
+                                    <PieContainer />
+                                </div>
                             </div>
-                        </div>
-                    </Row>
-                    <Row>
-                        <div className="second-row-container">
-                            <div className="component component-4">
-                                <PrimaryModelContainer />
-                            </div>
+                        </Row>
+                        <Row>
+                            <div className="second-row-container">
+                                <div className="component component-4">
+                                    <PrimaryModelContainer />
+                                </div>
 
-                            <div className="component component-5">
-                                <WeeklyRankContainer />
+                                <div className="component component-5">
+                                    <WeeklyRankContainer />
+                                </div>
                             </div>
-                        </div>
-                    </Row>
+                        </Row>
+                    </Col>
                 </Container>
             </section>
             <Footer />

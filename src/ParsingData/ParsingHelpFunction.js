@@ -87,7 +87,7 @@ const WZSTYPE = ['SMT_AOI(BOT)', 'SMT_AOI(TOP)', 'DIP_AOI', 'DIP_Function_A']
 const WIHTYPE = ['AOI BOT', 'AOI TOP', 'DIP Final Inspection', 'DIP Function A']
 const OSETYPE = ['AOI-A1', 'AOI-A2', 'DIP-VI', 'First & Function TEST']
 const RISETYPE = ['SMT1', 'AOI1', 'DIP1', 'FCT']
-const CPWTYPE = ['04_AOI_B', '09_AOI_T', '24_DIP_VI', '24_DIP_VI_T', '34_FT_1']
+const CPWTYPE = ['04_AOI_B', '09_AOI_T', '24_DIP_VI_T', '34_FT_1']
 
 // eight cm vendor code with six statyion type
 const VENDOR_CODE_WITH_STATION = {
@@ -101,16 +101,16 @@ const VENDOR_CODE_WITH_STATION = {
     CPW: CPWTYPE,
 }
 
-const VENDOR_CODE_WITH_STATION_FUNCTION = {
-    USI: 'FCT',
-    WZS: 'DIP_AOI',
-    WIH: 'DIP Final Inspection',
-    VPS: 'First & Function TEST',
-    USISZ: 'FCT',
-    RISECOM: 'FCT',
-    OSE: 'First & Function TEST',
-    CPW: '34_FT_1',
-}
+// const VENDOR_CODE_WITH_STATION_FUNCTION = {
+//     USI: 'FCT',
+//     WZS: 'DIP_AOI',
+//     WIH: 'DIP Final Inspection',
+//     VPS: 'First & Function TEST',
+//     USISZ: 'FCT',
+//     RISECOM: 'FCT',
+//     OSE: 'First & Function TEST',
+//     CPW: '34_FT_1',
+// }
 
 const VENDOR_CODE_WITH_STATION_PIE = {
     USI: 'FCT',
@@ -144,7 +144,7 @@ export function getCurrentYear() {
 
 export function getCurrentMonth() {
     const d = new Date()
-    const month = new Array()
+    const month = []
     month[0] = 'January'
     month[1] = 'February'
     month[2] = 'March'

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Container, Row, Col } from 'react-bootstrap'
 import { navigate } from '@reach/router'
-import { FaHourglass, FaThinkPeaks } from 'react-icons/fa'
+import { FaHourglass } from 'react-icons/fa'
 /* From Helper & Components */
 import { parsingErrorList } from '../../ParsingData/ParsingCMData'
 import { mappingErrorListAndRepairList } from '../../ParsingData/MappingErrorListAndRepairList'
