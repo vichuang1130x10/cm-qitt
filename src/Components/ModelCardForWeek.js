@@ -28,7 +28,7 @@ const ModelBlock = styled.div`
     font-weight: 400;
     font-style: italic;
     > h6 {
-        font-size: 12px;
+        font-size: 10px;
         font-weight: 400;
         font-style: italic;
     }
@@ -39,7 +39,9 @@ export default function App({ index, modelName, fty, pass, total }) {
     return (
         <ModelContainer onClick={() => handleOnClick()}>
             <ModelBlock>{index + 1}</ModelBlock>
-            <ModelBlock>{modelName}</ModelBlock>
+            <ModelBlock>
+                <h6>{modelName}</h6>
+            </ModelBlock>
             <ModelBlock>{`${fty} (${pass}/${total})`}</ModelBlock>
         </ModelContainer>
     )

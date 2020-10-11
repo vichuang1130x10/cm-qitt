@@ -33,6 +33,12 @@ const ModelBlock = styled.div`
         font-weight: 400;
         font-style: italic;
     }
+
+    > p {
+        font-size: 10px;
+        font-weight: 400;
+        font-style: italic;
+    }
 `
 export default function App({ m, stations }) {
     const { model, station0FTY, station1FTY, station2FTY, station3FTY } = m
@@ -49,7 +55,9 @@ export default function App({ m, stations }) {
 
     return (
         <ModelContainer onClick={() => handleOnClick()}>
-            <ModelBlock>{model}</ModelBlock>
+            <ModelBlock>
+                <p>{model}</p>
+            </ModelBlock>
             <ModelBlock fty={station0FTY}>
                 <h6>{`${station0FTY}%`}</h6>
                 <h6>{`${station0Pass}/${station0Total}`}</h6>

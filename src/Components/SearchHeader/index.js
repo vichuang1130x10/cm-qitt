@@ -84,7 +84,7 @@ const Input = styled.input`
 
     width: 20%;
     margin: 0px 128px 10px 128px;
-
+    transition: all 0.5s;
     &:active,
     &:focus {
         text-align: left;
@@ -126,16 +126,6 @@ function App({
     primaryState,
 }) {
     const [value, setValue] = useState('')
-    // const {
-    //     stations,
-    //     sortModelName,
-    //     setSortStation0,
-    //     setSortStation1,
-    //     setSortStation2,
-    //     setSortStation3,
-    //     searchBarOnchanged,
-    //     date,
-    // } = props
 
     const onValueChanged = (v) => {
         setValue(v)
@@ -164,7 +154,6 @@ function App({
                     </div>
                 </NavSubTitle>
                 <Input
-                    Input
                     type={value}
                     onChange={(e) => onValueChanged(e.target.value)}
                     placeholder="Model Search"

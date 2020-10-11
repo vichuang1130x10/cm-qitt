@@ -55,7 +55,7 @@ const HeaderBlock = styled.div`
     & p {
         color: #1d0332;
         font-weight: 400;
-        font-size: 12px;
+        font-size: 10px;
         font-style: italic;
     }
 `
