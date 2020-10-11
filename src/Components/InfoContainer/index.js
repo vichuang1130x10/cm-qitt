@@ -6,6 +6,7 @@ import {
     getCurrentYear,
     outputDate,
     shrinkDateString,
+    pickUpStationByCMVendor,
 } from '../../ParsingData/ParsingHelpFunction'
 
 const InfoContainer = styled.div`
@@ -31,7 +32,7 @@ const BoxContainer = styled.div`
     }
 
     & .box-title-date {
-        font-size: 8px;
+        font-size: 12px;
         margin: 5px 10px;
     }
 
@@ -76,19 +77,32 @@ const BoxContent = styled.div`
 `
 
 function App({ appData }) {
+    const { vendor, startDate, endDate, MBData } = appData
+    const stations = pickUpStationByCMVendor(vendor)
+    const monthlyMBData = MBData[stations[3]].monthly
+    const latestMonthData = monthlyMBData[monthlyMBData.length - 1]
+    const latestMonthFty = (
+        (latestMonthData.Pass / latestMonthData.Total) *
+        100
+    ).toFixed(1)
+    const fullYearPass = monthlyMBData.reduce((accu, ele) => accu + ele.Pass, 0)
+    const fullYearTotal = monthlyMBData.reduce(
+        (accu, ele) => accu + ele.Total,
+        0
+    )
+    const fullYearFty = ((fullYearPass / fullYearTotal) * 100).toFixed(1)
+
     return (
         <div>
             <InfoContainer>
                 <BoxContainer>
                     <BoxTitle>
                         <div className="box-title-content">
-                            <h4>{appData.vendor}</h4>
+                            <h4>{vendor}</h4>
                             <p className="box-title-date">
                                 {`${shrinkDateString(
-                                    outputDate(appData.startDate)
-                                )}~${shrinkDateString(
-                                    outputDate(appData.endDate)
-                                )}`}
+                                    outputDate(startDate)
+                                )}~${shrinkDateString(outputDate(endDate))}`}
                             </p>
                         </div>
 
@@ -96,8 +110,8 @@ function App({ appData }) {
                     </BoxTitle>
                     <div className="small-tag">MB</div>
                     <BoxContent>
-                        <h2>98.2%</h2>
-                        <h6>290/399</h6>
+                        <h2>{`${latestMonthFty}%`}</h2>
+                        <h6>{`${latestMonthData.Pass}/${latestMonthData.Total}`}</h6>
                     </BoxContent>
                 </BoxContainer>
                 <div className="dummy-line"></div>
@@ -107,8 +121,8 @@ function App({ appData }) {
                     </BoxTitle>
                     <div className="small-tag">MB</div>
                     <BoxContent>
-                        <h2>98.2%</h2>
-                        <h6>29000/39900</h6>
+                        <h2>{`${fullYearFty}%`}</h2>
+                        <h6>{`${fullYearPass}/${fullYearTotal}`}</h6>
                     </BoxContent>
                 </BoxContainer>
             </InfoContainer>

@@ -139,7 +139,7 @@ export function generateLabelValueSelectionByCM(cm) {
 }
 
 export function getCurrentYear() {
-    return new Date().toLocaleDateString().split('/')[0]
+    return new Date().toLocaleDateString().split('/')[2]
 }
 
 export function getCurrentMonth() {
