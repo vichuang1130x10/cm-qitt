@@ -17,7 +17,7 @@ class DashboardTrend extends Component {
     yAxis = React.createRef()
     yAxisVolume = React.createRef()
 
-    static getDerivedStateFromProps(nextProps, prevState) {
+    static getDerivedStateFromProps(nextProps) {
         /* <DashboardTrend data={whatever data is}/>*/
         const { data, unit } = nextProps
         if (!data) return {}

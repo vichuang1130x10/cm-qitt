@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import CardTrend from '../Visualization/CardTrend'
 
 const Card = styled.div`
     height: 180px;
@@ -25,6 +26,7 @@ const Card = styled.div`
         width: 90%;
         margin: 0 auto;
         background-color: #ccc;
+        margin-bottom: 10px;
     }
 `
 const StationInfo = styled.div`
@@ -33,10 +35,21 @@ const StationInfo = styled.div`
     display: grid;
     grid-template-columns: 23% 23% 23% 23%;
 
-    margin: 6px auto;
+    margin: 4px auto;
     padding: 0;
     > p {
         font-size: 9px;
+    }
+`
+
+const CardTendContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    svg {
+        border: 1px solid #ccc;
     }
 `
 // station0FTY: 99.4
@@ -61,6 +74,10 @@ const App = ({ model, stations }) => {
                 <p>{model.station2FTY}%</p>
                 <p>{model.station3FTY}%</p>
             </StationInfo>
+            <CardTendContainer>
+                <h6>FCT Trend</h6>
+                <CardTrend data={model[stations[3]].weekly} />
+            </CardTendContainer>
         </Card>
     )
 }

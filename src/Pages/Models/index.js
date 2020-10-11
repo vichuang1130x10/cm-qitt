@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import { Container, Col } from 'react-bootstrap'
+import { Container } from 'react-bootstrap'
 import Header from '../../Components/Header'
 import Footer from '../../Components/Footer'
 import connect from './connect'
