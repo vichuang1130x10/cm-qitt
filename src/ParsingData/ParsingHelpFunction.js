@@ -2,6 +2,11 @@ export function outputDate(date) {
     return new Date(date).toLocaleDateString()
 }
 
+export function shrinkDateString(str) {
+    const [month, day] = str.split('/')
+    return `${month}/${day}`
+}
+
 export function separateString(str) {
     return str.split('(')
 }

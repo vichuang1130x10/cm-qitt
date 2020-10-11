@@ -4,6 +4,8 @@ import connect from './connect'
 import {
     getCurrentMonth,
     getCurrentYear,
+    outputDate,
+    shrinkDateString,
 } from '../../ParsingData/ParsingHelpFunction'
 
 const InfoContainer = styled.div`
@@ -73,15 +75,21 @@ const BoxContent = styled.div`
     }
 `
 
-function App(props) {
+function App({ appData }) {
     return (
         <div>
             <InfoContainer>
                 <BoxContainer>
                     <BoxTitle>
                         <div className="box-title-content">
-                            <h4>{props.appData.vendor}</h4>
-                            <p className="box-title-date">1/1~9/7</p>
+                            <h4>{appData.vendor}</h4>
+                            <p className="box-title-date">
+                                {`${shrinkDateString(
+                                    outputDate(appData.startDate)
+                                )}~${shrinkDateString(
+                                    outputDate(appData.endDate)
+                                )}`}
+                            </p>
                         </div>
 
                         <h6>{getCurrentMonth()}</h6>
