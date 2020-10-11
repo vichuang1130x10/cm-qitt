@@ -4,17 +4,21 @@ import { Container, Col } from 'react-bootstrap'
 import Header from '../../Components/Header'
 import Footer from '../../Components/Footer'
 import connect from './connect'
-import { outputDate } from '../../ParsingData/ParsingHelpFunction'
+import {
+    outputDate,
+    pickUpStationByCMVendor,
+} from '../../ParsingData/ParsingHelpFunction'
+import Card from '../../Components/ModePageModelCard'
 
 const ModelWrapper = styled.div`
     width: 100%;
     height: 100vh;
-    margin: 10px;
     margin-top: 80px;
-    padding: 10px;
+
     background-color: #fefefe;
     border-radius: 20px;
     box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.3);
+    overflow: auto;
 `
 const Input = styled.input`
     font-size: 16px;
@@ -45,8 +49,9 @@ const SearchBarWrapper = styled.div`
     align-items: center;
     width: 90%;
     margin: 0 auto;
-    margin-top: 20px;
+    margin-top: 0px;
     border-bottom: 1px solid #ccc;
+    background-color: #fff;
 `
 const CategoryButton = styled.button`
     padding: 6px 12px;
@@ -64,10 +69,30 @@ const CategoryButton = styled.button`
         transform: translateY(-5px);
     }
 `
+const CardWrapper = styled.div`
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 90%;
+    margin: 0 auto;
+    margin-top: 20px;
+    flex-wrap: wrap;
+`
+
+const Sticker = styled.div`
+    padding: 20px 20px;
+    position: sticky;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 102;
+    background-color: #fff;
+`
 
 function App({ appState }) {
     const [value, setValue] = useState('')
-    const { startDate, endDate, models } = appState
+    const { startDate, endDate, models, vendor } = appState
+    const stations = pickUpStationByCMVendor(vendor)
 
     const onValueChanged = (v) => setValue(v)
     useEffect(() => {
@@ -78,40 +103,43 @@ function App({ appState }) {
             <Header />
             <section className="main-section">
                 <Container>
-                    <Col>
-                        <ModelWrapper>
-                            <Container>
-                                <Col>
-                                    <h3>Models:</h3>
-                                    <h6>
-                                        Date Range:{' '}
-                                        {`${outputDate(startDate)}~${outputDate(
-                                            endDate
-                                        )}`}
-                                    </h6>
-                                </Col>
-                                <Col>
-                                    <SearchBarWrapper>
-                                        <Input
-                                            type={value}
-                                            onChange={(e) =>
-                                                onValueChanged(e.target.value)
-                                            }
-                                            placeholder="Model Search"
-                                        />
-                                        <div>
-                                            <CategoryButton>All</CategoryButton>
-                                            <CategoryButton>MB</CategoryButton>
-                                            <CategoryButton>BPN</CategoryButton>
-                                            <CategoryButton>
-                                                OTHER
-                                            </CategoryButton>
-                                        </div>
-                                    </SearchBarWrapper>
-                                </Col>
-                            </Container>
-                        </ModelWrapper>
-                    </Col>
+                    <ModelWrapper>
+                        <Sticker>
+                            <h3>Models:</h3>
+                            <h6>
+                                Date Range:{' '}
+                                {`${outputDate(startDate)}~${outputDate(
+                                    endDate
+                                )}`}
+                            </h6>
+
+                            <SearchBarWrapper>
+                                <Input
+                                    type={value}
+                                    onChange={(e) =>
+                                        onValueChanged(e.target.value)
+                                    }
+                                    placeholder="Model Search"
+                                />
+                                <div>
+                                    <CategoryButton>All</CategoryButton>
+                                    <CategoryButton>MB</CategoryButton>
+                                    <CategoryButton>BPN</CategoryButton>
+                                    <CategoryButton>OTHER</CategoryButton>
+                                </div>
+                            </SearchBarWrapper>
+                        </Sticker>
+
+                        <CardWrapper>
+                            {models.map((model) => (
+                                <Card
+                                    key={model.model}
+                                    model={model}
+                                    stations={stations}
+                                />
+                            ))}
+                        </CardWrapper>
+                    </ModelWrapper>
                 </Container>
             </section>
 
