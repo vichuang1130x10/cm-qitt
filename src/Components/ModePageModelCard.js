@@ -14,6 +14,7 @@ const Card = styled.div`
     flex-direction: column;
     flex: 0 0 30%;
     margin: 10px;
+    transition: all 0.5s;
     > h5 {
         margin-left: 10px;
         color: #93c0a4;
@@ -27,6 +28,11 @@ const Card = styled.div`
         margin: 0 auto;
         background-color: #ccc;
         margin-bottom: 10px;
+    }
+
+    &:hover {
+        color: #fff;
+        background-color: #123abc;
     }
 `
 const StationInfo = styled.div`
@@ -52,14 +58,15 @@ const CardTendContainer = styled.div`
         border: 1px solid #ccc;
     }
 `
-// station0FTY: 99.4
-// station1FTY: 99
-// station2FTY: 99.9
-// station3FTY: 97.7
+
+const FTYNumber = styled.p`
+    color: ${(props) => (props.fty < 98 ? '#d00213' : '#6fa4e3')};
+`
 
 const App = ({ model, stations }) => {
+    const handleOnClick = () => {}
     return (
-        <Card>
+        <Card onClick={() => handleOnClick()}>
             <h5>{model.model}+</h5>
             <div className="dummy"></div>
             <StationInfo>
@@ -69,10 +76,18 @@ const App = ({ model, stations }) => {
                 <p>{stations[3]}</p>
             </StationInfo>
             <StationInfo>
-                <p>{model.station0FTY}%</p>
-                <p>{model.station1FTY}%</p>
-                <p>{model.station2FTY}%</p>
-                <p>{model.station3FTY}%</p>
+                <FTYNumber fty={model.station0FTY}>
+                    {model.station0FTY}%
+                </FTYNumber>
+                <FTYNumber fty={model.station1FTY}>
+                    {model.station1FTY}%
+                </FTYNumber>
+                <FTYNumber fty={model.station2FTY}>
+                    {model.station2FTY}%
+                </FTYNumber>
+                <FTYNumber fty={model.station3FTY}>
+                    {model.station3FTY}%
+                </FTYNumber>
             </StationInfo>
             <CardTendContainer>
                 <h6>FCT Trend</h6>

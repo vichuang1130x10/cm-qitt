@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { navigate } from '@reach/router'
 
 const ModelContainer = styled.div`
     width: 100%;
@@ -28,7 +29,7 @@ const ModelBlock = styled.div`
     font-weight: 400;
     font-style: italic;
     > h6 {
-        color: ${(props) => (props.fty < 97.5 ? '#d00213' : '#6fa4e3')};
+        color: ${(props) => (props.fty < 98 ? '#d00213' : '#6fa4e3')};
         font-size: 12px;
         font-weight: 400;
         font-style: italic;
@@ -51,7 +52,11 @@ export default function App({ m, stations }) {
     const station3Pass = m[stations[3]].Pass
     const station3Total = m[stations[3]].Total
 
-    const handleOnClick = () => {}
+    const handleOnClick = () => {
+        navigate(`/detail`, {
+            state: { modelName: model, stations },
+        })
+    }
 
     return (
         <ModelContainer onClick={() => handleOnClick()}>

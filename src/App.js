@@ -13,6 +13,7 @@ import Models from './Pages/Models'
 import RepairData from './Pages/RepairData'
 import ChooseFiles from './Pages/ChooseFiles'
 import SelectPrimary from './Pages/SelectPrimary'
+import DetailPage from './Pages/ModelDetail'
 /* Redux store */
 import { store, persistor } from './Data/createStore'
 
@@ -26,6 +27,7 @@ function App() {
                     <Models path="/models" />
                     <RepairData path="/repairs" />
                     <SelectPrimary path="/selectPrimary" />
+                    <DetailPage path="detail" />
                 </Router>
             </PersistGate>
         </Provider>

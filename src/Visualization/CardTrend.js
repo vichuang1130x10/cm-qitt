@@ -31,8 +31,6 @@ class CardTrend extends Component {
                 yield: parseFloat(((d.Pass / d.Total) * 100).toFixed(1)),
             }))
 
-        console.log(updateData)
-
         const x = updateData.map((d) => d.weekNumber)
 
         const xScale = d3

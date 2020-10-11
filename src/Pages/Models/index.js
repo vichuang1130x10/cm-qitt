@@ -90,14 +90,48 @@ const Sticker = styled.div`
 `
 
 function App({ appState }) {
-    const [value, setValue] = useState('')
     const { startDate, endDate, models, vendor } = appState
+    const [value, setValue] = useState('')
+    const [modelList, setModelList] = useState([])
     const stations = pickUpStationByCMVendor(vendor)
 
-    const onValueChanged = (v) => setValue(v)
+    const keywordSearch = (value) => {
+        const searchList = models.filter((model) =>
+            model.model.toLowerCase().includes(value.toLowerCase())
+        )
+        setModelList(searchList)
+    }
+
+    const onValueChanged = (v) => {
+        setValue(v)
+        keywordSearch(v)
+    }
     useEffect(() => {
         window.scrollTo(0, 0)
-    }, [])
+        setModelList(models)
+    }, [models])
+
+    const handleAllBtnOnClicked = () => {
+        setModelList(models)
+    }
+
+    const handleMBBtnOnClicked = () => {
+        const updateList = models.filter((model) => model.productType === 'MB')
+        setModelList(updateList)
+    }
+
+    const handleBPNBtnOnClicked = () => {
+        const updateList = models.filter((model) => model.productType === 'BPN')
+        setModelList(updateList)
+    }
+
+    const handleOtherBtnOnClicked = () => {
+        const updateList = models.filter(
+            (model) => model.productType === 'Other'
+        )
+        setModelList(updateList)
+    }
+
     return (
         <>
             <Header />
@@ -122,16 +156,34 @@ function App({ appState }) {
                                     placeholder="Model Search"
                                 />
                                 <div>
-                                    <CategoryButton>All</CategoryButton>
-                                    <CategoryButton>MB</CategoryButton>
-                                    <CategoryButton>BPN</CategoryButton>
-                                    <CategoryButton>OTHER</CategoryButton>
+                                    <CategoryButton
+                                        onClick={() => handleAllBtnOnClicked()}
+                                    >
+                                        All
+                                    </CategoryButton>
+                                    <CategoryButton
+                                        onClick={() => handleMBBtnOnClicked()}
+                                    >
+                                        MB
+                                    </CategoryButton>
+                                    <CategoryButton
+                                        onClick={() => handleBPNBtnOnClicked()}
+                                    >
+                                        BPN
+                                    </CategoryButton>
+                                    <CategoryButton
+                                        onClick={() =>
+                                            handleOtherBtnOnClicked()
+                                        }
+                                    >
+                                        OTHER
+                                    </CategoryButton>
                                 </div>
                             </SearchBarWrapper>
                         </Sticker>
 
                         <CardWrapper>
-                            {models.map((model) => (
+                            {modelList.map((model) => (
                                 <Card
                                     key={model.model}
                                     model={model}
