@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import CardTrend from '../Visualization/CardTrend'
+import {navigate} from '@reach/router'
 
 const Card = styled.div`
     height: 180px;
@@ -64,7 +65,11 @@ const FTYNumber = styled.p`
 `
 
 const App = ({ model, stations }) => {
-    const handleOnClick = () => {}
+    const handleOnClick = () => {
+        navigate(`/detail`, {
+            state: { modelName: model.model, stations },
+        })
+    }
     return (
         <Card onClick={() => handleOnClick()}>
             <h5>{model.model}+</h5>

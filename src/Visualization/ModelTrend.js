@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import * as d3 from 'd3'
 import { translateToMonthCharater } from '../ParsingData/ParsingHelpFunction'
-const width = 900
-const height = 400
+const width = 600
+const height = 340
 const margin = { top: 20, right: 5, bottom: 50, left: 35 }
 const barPadding = 1
 
@@ -12,6 +12,33 @@ const sortMo = (a, b) => {
         return 1
     } else {
         return -1
+    }
+}
+
+const sortWeek = (a, b) => {
+    if (a.weekNumber > b.weekNumber) {
+        return 1
+    } else {
+        return -1
+    }
+}
+
+const sortMonth =  (a, b) => {
+    if (a.Month > b.Month) {
+        return 1
+    } else {
+        return -1
+    }
+}
+
+const mappingUnit = (d,unit) =>{
+    switch(unit){
+        case 'weekly':
+            return d.weekNumber
+        case 'monthly':
+            return translateToMonthCharater(d.Month - 1)
+        case 'mo':
+            return d.MO
     }
 }
 
@@ -31,16 +58,26 @@ class ModelTrendChart extends Component {
         const trimData =
             data.length > 10 ? data.slice(data.length - 10, data.length) : data
         /* parsing & update for plotting */
+        let sortUnit = null
+        if(unit === 'weekly'){
+            sortUnit = sortWeek
+        }else if(unit === 'monthly'){
+            sortUnit = sortMonth
+        }else{
+            sortUnit = sortMo
+        }
         const updateData = trimData
             .filter((d) => d.Pass > 5 && d.Total > 5)
+            .sort(sortUnit)
             .map((d) => ({
                 unit:
-                    unit === 'Week'
-                        ? d.Week
-                        : translateToMonthCharater(d.Month - 1),
+                mappingUnit(d,unit),
                 total: d.Total,
                 yield: parseFloat(((d.Pass / d.Total) * 100).toFixed(1)),
             }))
+
+
+        
 
         /* find the x axis scale */
         const x = updateData.map((d) => d.unit)

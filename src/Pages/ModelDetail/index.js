@@ -63,30 +63,46 @@ const ChartContainerTitle = styled.div`
     & .content-title {
         font-size: 18px;
     }
+
+    > .select-input {
+        margin-left:20px;
+        
+        & select {
+            width:180px;
+            height:30px;
+            padding: 4px 12px;
+        }
+
+    
+
+        
+    }
+    margin-top:20px;
+    
 `
 const ChartContainerContent = styled.div`
     margin: 0 auto;
     padding: 0;
-    width: 440px;
-    height: 240px;
+    width: 640px;
+    height: 400px;
+    margin-top:20px;
 `
+const DataWrapper = styled.div`
+    display: flex;
+    flex-direction:column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    margin: 0 auto;
+    margin-top: 20px;
+    background-color:#fff;
+    border-radius:10px;
+    border: 1px solid transparent;
+`
+
 
 const timeUnits = ['mo','weekly', 'monthly']
 const timeUnitsWithoutMo = ['weekly', 'monthly']
-
-const timeUnitMapping = (str) =>{
-    switch (str){
-        case 'MO':
-            return 'mo'
-        case 'Week':
-            return 'weekly'
-        case 'Month':
-            return 'monthly'
-        default:
-            return ""            
-
-    }
-}
 
 function Detail(props) {
     const { modelName, stations } = props.location.state
@@ -432,12 +448,13 @@ function Detail(props) {
                 </NavHeader>
             </Nav>
             <Container>
-               <Row>
+            <DataWrapper>
+              
                <ChartContainerTitle>
                 <h6 className="content-title">
                   Product Trend Chart
                 </h6>
-                <div>
+                <div className="select-input">
                  
                     <label htmlFor="station">
                         <select
@@ -471,10 +488,13 @@ function Detail(props) {
                     </label>
                 </div>
             </ChartContainerTitle>
+           
             <ChartContainerContent>
                <ModelTrend data={chartData} unit={timeUnit} /> 
             </ChartContainerContent>
-               </Row>
+         
+          
+               </DataWrapper>
                     {/* <Row style={{ margin: '20px' }}>
                         <Button onClick={() => this.gotoDefectMapping()}>
                             Defect Mapping Page

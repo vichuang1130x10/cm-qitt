@@ -5,6 +5,7 @@ import {
     getSevenDayBoundary,
     outputDate,
     shrinkDateString,
+    pickUpStationByCMVendor
 } from '../../ParsingData/ParsingHelpFunction'
 import ModelCardForWeek from '../ModelCardForWeek'
 
@@ -81,7 +82,8 @@ const HeaderBlock = styled.div`
 const ModelWrapper = styled.div``
 
 function App({ appData }) {
-    const { endDate, models } = appData
+    const { endDate, models,vendor } = appData
+    const stations = pickUpStationByCMVendor(vendor)
     const dateRange = getSevenDayBoundary(endDate)
     const filterSevenDayTrackingModel = models
         .filter((model) => model.sevenDayTotal > 50)
@@ -123,6 +125,7 @@ function App({ appData }) {
                         fty={m.sevenDayFty}
                         pass={m.sevenDayPass}
                         total={m.sevenDayTotal}
+                        stations={stations}
                     />
                 ))}
             </ModelWrapper>
