@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { Container, Row, Col } from 'react-bootstrap'
+import ModelTrend from '../../Visualization/ModelTrend'
 
 import DefectTable from '../../Components/DefectTable'
 import {
@@ -46,14 +47,59 @@ const TableContainer = styled.div`
     padding: 12px 64px;
 `
 
+const ChartContainerTitle = styled.div`
+    padding: 0 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 auto;
+    & .content-category {
+        margin-left: 8px;
+        font-size: 18px;
+        color: #6fa4e3;
+        font-weight: 700;
+    }
+    & .content-title {
+        font-size: 18px;
+    }
+`
+const ChartContainerContent = styled.div`
+    margin: 0 auto;
+    padding: 0;
+    width: 440px;
+    height: 240px;
+`
+
+const timeUnits = ['mo','weekly', 'monthly']
+const timeUnitsWithoutMo = ['weekly', 'monthly']
+
+const timeUnitMapping = (str) =>{
+    switch (str){
+        case 'MO':
+            return 'mo'
+        case 'Week':
+            return 'weekly'
+        case 'Month':
+            return 'monthly'
+        default:
+            return ""            
+
+    }
+}
+
 function Detail(props) {
+    const { modelName, stations } = props.location.state
     const [dModel, setModel] = useState({})
     const [dStartDate, setStartDate] = useState('')
     const [dEndDate, setEndate] = useState('')
     const [dStations, setStations] = useState([])
-
+    const [station,setStation] = useState(stations[0])
+    const [chartData, setChartData] = useState({})
+    const [timeUnit, setTimeUnit] = useState('weekly')
+    const [timeUnitArray,setTimeUnitArray] = useState([])
     useEffect(() => {
-        const { modelName, stations } = props.location.state
+       
         const { appState, repairData } = props
         const { startDate, endDate } = appState
         const modelObject = appState.models.filter(
@@ -65,8 +111,37 @@ function Detail(props) {
         setStartDate(startDate)
         setEndate(endDate)
         setStations(stations)
+    
+       
+        let tArray = []
+        switch(appState.vendor){
+            case 'USI':
+            case 'USISZ':
+            case 'OSE':
+                tArray = timeUnits
+                break;
+            default:
+                tArray = timeUnitsWithoutMo
+                break;        
+        }
+        setTimeUnitArray(tArray)
+        console.log('station',station)
+        console.log('timeUnit',timeUnit)
+        console.log('modelObject',modelObject)
+        const chartData = modelObject[station][timeUnit]
+        console.log('chartData',chartData)
+        setChartData(chartData)
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dModel, dStartDate, dEndDate, dStations])
+    }, [dModel, dStartDate, dEndDate, dStations,station,timeUnit])
+
+    const updateStation = (str) => {
+        setStation(str)
+    }
+
+    const updateTimeUnit = (str) => {
+        setTimeUnit(str)
+    }
 
     // udpateStation = (str) => {
     //     this.setState({
@@ -357,39 +432,50 @@ function Detail(props) {
                 </NavHeader>
             </Nav>
             <Container>
-                {/* <h4 className="center-text">LAST 20 WORKING-ORDER TREND</h4>
-                    <Row>
-                        <label htmlFor="station">
-                            Trend Chart:
-                            <select
-                                id="station"
-                                value={station}
-                                onChange={(e) =>
-                                    this.udpateStation(e.target.value)
-                                }
-                                onBlur={(e) =>
-                                    this.udpateStation(e.target.value)
-                                }
-                            >
-                                {[
-                                    'SMT1',
-                                    'SMT2',
-                                    'ASM',
-                                    'ICT',
-                                    'CPLD',
-                                    'VOL',
-                                    'FCT',
-                                    'DAOI',
-                                ].map((station) => (
-                                    <option value={station} key={station}>
-                                        {station}
-                                    </option>
-                                ))}
-                            </select>
-                        </label>
-                        <BarChart data={trendData} />
-                    </Row>
-                    <Row style={{ margin: '20px' }}>
+               <Row>
+               <ChartContainerTitle>
+                <h6 className="content-title">
+                  Product Trend Chart
+                </h6>
+                <div>
+                 
+                    <label htmlFor="station">
+                        <select
+                            id="station"
+                            value={station}
+                            onChange={(e) => updateStation(e.target.value)}
+                            onBlur={(e) => updateStation(e.target.value)}
+                        >
+                            {dStations
+                                ? dStations.map((station) => (
+                                      <option value={station} key={station}>
+                                          {station}
+                                      </option>
+                                  ))
+                                : null}
+                        </select>
+                    </label>
+                    <label htmlFor="timeUnit">
+                        <select
+                            id="timeUnit"
+                            value={timeUnit}
+                            onChange={(e) => updateTimeUnit(e.target.value)}
+                            onBlur={(e) => updateTimeUnit(e.target.value)}
+                        >
+                            {timeUnitArray.map((t) => (
+                                <option value={t} key={t}>
+                                    {t}
+                                </option>
+                            ))}
+                        </select>
+                    </label>
+                </div>
+            </ChartContainerTitle>
+            <ChartContainerContent>
+               <ModelTrend data={chartData} unit={timeUnit} /> 
+            </ChartContainerContent>
+               </Row>
+                    {/* <Row style={{ margin: '20px' }}>
                         <Button onClick={() => this.gotoDefectMapping()}>
                             Defect Mapping Page
                         </Button>
@@ -611,9 +697,9 @@ function Detail(props) {
                                 </div>
                             ) : null}
                         </Col>
-                    </Row>
+                    </Row> */}
 
-                  */}
+                
             </Container>
         </>
     ) : null
