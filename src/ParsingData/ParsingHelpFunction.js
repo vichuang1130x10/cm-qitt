@@ -3,7 +3,7 @@ export function outputDate(date) {
 }
 
 export function shrinkDateString(str) {
-    const [month, day] = str.split('/')
+    const [year,month, day] = str.split('/')
     return `${month}/${day}`
 }
 
@@ -139,7 +139,7 @@ export function generateLabelValueSelectionByCM(cm) {
 }
 
 export function getCurrentYear() {
-    return new Date().toLocaleDateString().split('/')[2]
+    return new Date().toLocaleDateString().split('/')[0]
 }
 
 export function getCurrentMonth() {
