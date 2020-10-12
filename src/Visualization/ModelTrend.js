@@ -1,11 +1,25 @@
-import React, { Component } from 'react'
+import React, { Children, Component } from 'react'
 import * as d3 from 'd3'
 import { translateToMonthCharater } from '../ParsingData/ParsingHelpFunction'
+import styled from 'styled-components'
 const width = 600
 const height = 340
 const margin = { top: 20, right: 5, bottom: 50, left: 35 }
 const barPadding = 1
 
+// const SVGGroup = styled.g`
+
+//         > text {
+//             font-family: Optima, Futura, sans-serif;
+//             font-weight: bold;
+//             font-size: 8px;
+//             transform: rotate(45deg) translate(30px, -10px);
+//         }
+//     }
+// `
+//    <g
+// ref={this.xAxis}
+// transform={`translate(0, ${height - margin.bottom})`}
 
 const sortMo = (a, b) => {
     if (a.Start_date > b.Start_date) {
@@ -23,7 +37,7 @@ const sortWeek = (a, b) => {
     }
 }
 
-const sortMonth =  (a, b) => {
+const sortMonth = (a, b) => {
     if (a.Month > b.Month) {
         return 1
     } else {
@@ -31,14 +45,16 @@ const sortMonth =  (a, b) => {
     }
 }
 
-const mappingUnit = (d,unit) =>{
-    switch(unit){
+const mappingUnit = (d, unit) => {
+    switch (unit) {
         case 'weekly':
             return d.weekNumber
         case 'monthly':
             return translateToMonthCharater(d.Month - 1)
         case 'mo':
             return d.MO
+        default:
+            return {}
     }
 }
 
@@ -59,25 +75,21 @@ class ModelTrendChart extends Component {
             data.length > 10 ? data.slice(data.length - 10, data.length) : data
         /* parsing & update for plotting */
         let sortUnit = null
-        if(unit === 'weekly'){
+        if (unit === 'weekly') {
             sortUnit = sortWeek
-        }else if(unit === 'monthly'){
+        } else if (unit === 'monthly') {
             sortUnit = sortMonth
-        }else{
+        } else {
             sortUnit = sortMo
         }
         const updateData = trimData
             .filter((d) => d.Pass > 5 && d.Total > 5)
             .sort(sortUnit)
             .map((d) => ({
-                unit:
-                mappingUnit(d,unit),
+                unit: mappingUnit(d, unit),
                 total: d.Total,
                 yield: parseFloat(((d.Pass / d.Total) * 100).toFixed(1)),
             }))
-
-
-        
 
         /* find the x axis scale */
         const x = updateData.map((d) => d.unit)
@@ -142,6 +154,7 @@ class ModelTrendChart extends Component {
             labels,
             textLabels,
             passedLineHight,
+            unit,
         }
     }
 
@@ -245,6 +258,7 @@ class ModelTrendChart extends Component {
 
                 {/* axis: */}
                 <g
+                    className="axis_bottom"
                     ref={this.xAxis}
                     transform={`translate(0, ${height - margin.bottom})`}
                 />

@@ -2,50 +2,17 @@ import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { Container, Row, Col } from 'react-bootstrap'
 import ModelTrend from '../../Visualization/ModelTrend'
-
+import DetailHeader from '../../Components/DetailHeader'
 import DefectTable from '../../Components/DefectTable'
 import {
     getSevenDayBoundary,
     outputDate,
 } from '../../ParsingData/ParsingHelpFunction'
-// import Plato from '../Visualizations/Plato'
-// import Button from '../Component/Button'
+
 import { navigate } from '@reach/router'
 import { Link } from '@reach/router'
-import { Table } from 'react-bootstrap'
+import Plato from '../../Visualization/Plato'
 import connect from './connect'
-
-const Nav = styled.div`
-    background-color: #fff;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.0975);
-`
-
-const NavHeader = styled.div`
-    max-width: 1200px;
-    padding: 20px 20px 5px 20px;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    margin: 0 auto;
-`
-
-const NavTitle = styled.div`
-    margin: 20px 0 10px 0;
-    padding: 0 64px;
-    font-family: 'Oswald', sans-serif;
-`
-
-const DataRange = styled.div`
-    padding: 20px 64px;
-`
-
-const ModelName = styled.div`
-    padding: 0 64px;
-`
-
-const TableContainer = styled.div`
-    padding: 12px 64px;
-`
 
 const ChartContainerTitle = styled.div`
     padding: 0 10px;
@@ -65,43 +32,46 @@ const ChartContainerTitle = styled.div`
     }
 
     > .select-input {
-        margin-left:20px;
-        
+        margin-left: 20px;
+
         & select {
-            width:180px;
-            height:30px;
+            width: 180px;
+            height: 30px;
             padding: 4px 12px;
         }
-
-    
-
-        
     }
-    margin-top:20px;
-    
+    margin-top: 20px;
 `
+
+const SectionTitle = styled.div`
+    background: #666;
+    padding: 6px 10px;
+    color: #fff;
+    width: 90%;
+    margin: 0 auto;
+`
+
 const ChartContainerContent = styled.div`
     margin: 0 auto;
     padding: 0;
     width: 640px;
     height: 400px;
-    margin-top:20px;
+    margin-top: 20px;
 `
 const DataWrapper = styled.div`
     display: flex;
-    flex-direction:column;
+    flex-direction: column;
     justify-content: flex-start;
     align-items: center;
     width: 100%;
     margin: 0 auto;
     margin-top: 20px;
-    background-color:#fff;
-    border-radius:10px;
+    background-color: #fff;
+    border-radius: 10px;
     border: 1px solid transparent;
 `
 
-
-const timeUnits = ['mo','weekly', 'monthly']
+const timeUnits = ['mo', 'weekly', 'monthly']
 const timeUnitsWithoutMo = ['weekly', 'monthly']
 
 function Detail(props) {
@@ -110,12 +80,11 @@ function Detail(props) {
     const [dStartDate, setStartDate] = useState('')
     const [dEndDate, setEndate] = useState('')
     const [dStations, setStations] = useState([])
-    const [station,setStation] = useState(stations[0])
+    const [station, setStation] = useState(stations[0])
     const [chartData, setChartData] = useState({})
     const [timeUnit, setTimeUnit] = useState('weekly')
-    const [timeUnitArray,setTimeUnitArray] = useState([])
+    const [timeUnitArray, setTimeUnitArray] = useState([])
     useEffect(() => {
-       
         const { appState, repairData } = props
         const { startDate, endDate } = appState
         const modelObject = appState.models.filter(
@@ -127,29 +96,28 @@ function Detail(props) {
         setStartDate(startDate)
         setEndate(endDate)
         setStations(stations)
-    
-       
+
         let tArray = []
-        switch(appState.vendor){
+        switch (appState.vendor) {
             case 'USI':
             case 'USISZ':
             case 'OSE':
                 tArray = timeUnits
-                break;
+                break
             default:
                 tArray = timeUnitsWithoutMo
-                break;        
+                break
         }
         setTimeUnitArray(tArray)
-        console.log('station',station)
-        console.log('timeUnit',timeUnit)
-        console.log('modelObject',modelObject)
+        console.log('station', station)
+        console.log('timeUnit', timeUnit)
+        console.log('modelObject', modelObject)
         const chartData = modelObject[station][timeUnit]
-        console.log('chartData',chartData)
+        console.log('chartData', chartData)
         setChartData(chartData)
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dModel, dStartDate, dEndDate, dStations,station,timeUnit])
+    }, [dModel, dStartDate, dEndDate, dStations, station, timeUnit])
 
     const updateStation = (str) => {
         setStation(str)
@@ -379,123 +347,87 @@ function Detail(props) {
 
     return dStartDate ? (
         <>
-            <Nav>
-                <NavHeader>
-                    <NavTitle>
-                        <h3>PRODUCT DETAIL</h3>
-                    </NavTitle>
-                    <DataRange>
-                        <h6>
-                            Date Range :
-                            {`${outputDate(dStartDate)} ~ ${outputDate(
-                                dEndDate
-                            )}`}
-                        </h6>
-                    </DataRange>
-                    <ModelName>
-                        <h4>Model: {dModel.model}</h4>
-                    </ModelName>
-
-                    <TableContainer>
-                        <Table
-                            striped
-                            bordered
-                            hover
-                            size="sm"
-                            style={{ fontSize: '16px' }}
-                        >
-                            <thead>
-                                <tr>
-                                    <th>Station</th>
-                                    <th>{dStations[0]}</th>
-                                    <th>{dStations[1]}</th>
-                                    <th>{dStations[2]}</th>
-                                    <th>{dStations[3]}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <th>YIELD</th>
-                                    <td>{dModel.station0FTY}%</td>
-                                    <td>{dModel.station1FTY}%</td>
-                                    <td>{dModel.station2FTY}%</td>
-                                    <td>{dModel.station3FTY}%</td>
-                                </tr>
-                                <tr>
-                                    <th>INPUT</th>
-                                    <td>{dModel[dStations[0]].Total}</td>
-                                    <td>{dModel[dStations[1]].Total}</td>
-                                    <td>{dModel[dStations[2]].Total}</td>
-                                    <td>{dModel[dStations[3]].Total}</td>
-                                </tr>
-                                <tr>
-                                    <th>PASS</th>
-                                    <td>{dModel[dStations[0]].Pass}</td>
-                                    <td>{dModel[dStations[1]].Pass}</td>
-                                    <td>{dModel[dStations[2]].Pass}</td>
-                                    <td>{dModel[dStations[3]].Pass}</td>
-                                </tr>
-                                <tr>
-                                    <th>FAIL</th>
-                                    <td>{dModel[dStations[0]].Fail}</td>
-                                    <td>{dModel[dStations[1]].Fail}</td>
-                                    <td>{dModel[dStations[2]].Fail}</td>
-                                    <td>{dModel[dStations[3]].Fail}</td>
-                                </tr>
-                            </tbody>
-                        </Table>
-                    </TableContainer>
-                </NavHeader>
-            </Nav>
+            <DetailHeader
+                dStartDate={dStartDate}
+                dEndDate={dEndDate}
+                dModel={dModel}
+                dStations={dStations}
+            />
             <Container>
-            <DataWrapper>
-              
-               <ChartContainerTitle>
-                <h6 className="content-title">
-                  Product Trend Chart
-                </h6>
-                <div className="select-input">
-                 
-                    <label htmlFor="station">
-                        <select
-                            id="station"
-                            value={station}
-                            onChange={(e) => updateStation(e.target.value)}
-                            onBlur={(e) => updateStation(e.target.value)}
-                        >
-                            {dStations
-                                ? dStations.map((station) => (
-                                      <option value={station} key={station}>
-                                          {station}
-                                      </option>
-                                  ))
-                                : null}
-                        </select>
-                    </label>
-                    <label htmlFor="timeUnit">
-                        <select
-                            id="timeUnit"
-                            value={timeUnit}
-                            onChange={(e) => updateTimeUnit(e.target.value)}
-                            onBlur={(e) => updateTimeUnit(e.target.value)}
-                        >
-                            {timeUnitArray.map((t) => (
-                                <option value={t} key={t}>
-                                    {t}
-                                </option>
-                            ))}
-                        </select>
-                    </label>
-                </div>
-            </ChartContainerTitle>
-           
-            <ChartContainerContent>
-               <ModelTrend data={chartData} unit={timeUnit} /> 
-            </ChartContainerContent>
-         
-          
-               </DataWrapper>
-                    {/* <Row style={{ margin: '20px' }}>
+                <DataWrapper>
+                    <ChartContainerTitle>
+                        <h6 className="content-title">Product Trend Chart</h6>
+                        <div className="select-input">
+                            <label htmlFor="station">
+                                <select
+                                    id="station"
+                                    value={station}
+                                    onChange={(e) =>
+                                        updateStation(e.target.value)
+                                    }
+                                    onBlur={(e) =>
+                                        updateStation(e.target.value)
+                                    }
+                                >
+                                    {dStations
+                                        ? dStations.map((station) => (
+                                              <option
+                                                  value={station}
+                                                  key={station}
+                                              >
+                                                  {station}
+                                              </option>
+                                          ))
+                                        : null}
+                                </select>
+                            </label>
+                            <label htmlFor="timeUnit">
+                                <select
+                                    id="timeUnit"
+                                    value={timeUnit}
+                                    onChange={(e) =>
+                                        updateTimeUnit(e.target.value)
+                                    }
+                                    onBlur={(e) =>
+                                        updateTimeUnit(e.target.value)
+                                    }
+                                >
+                                    {timeUnitArray.map((t) => (
+                                        <option value={t} key={t}>
+                                            {t}
+                                        </option>
+                                    ))}
+                                </select>
+                            </label>
+                        </div>
+                    </ChartContainerTitle>
+
+                    <ChartContainerContent>
+                        <ModelTrend data={chartData} unit={timeUnit} />
+                    </ChartContainerContent>
+                    <SectionTitle>
+                        <h6>Defect Symptom Analysis:</h6>
+                    </SectionTitle>
+
+                    <Row>
+                        <Col>
+                            <h5 className="subtitle-text">
+                                {' '}
+                                {`${outputDate(dStartDate)} ~ ${outputDate(
+                                    dEndDate
+                                )}`}
+                            </h5>
+                            {/* <Plato data={sortFailure} /> */}
+                        </Col>
+                        <Col>
+                            <h5 className="subtitle-text">
+                                LAST 14 DAYS DEFECT SYMPTOM
+                            </h5>
+                            {/* <Plato data={sevenDaysFailure} /> */}
+                        </Col>
+                    </Row>
+                </DataWrapper>
+                {/* <Row style={{ margin: '20px' }}>
                         <Button onClick={() => this.gotoDefectMapping()}>
                             Defect Mapping Page
                         </Button>
@@ -718,8 +650,6 @@ function Detail(props) {
                             ) : null}
                         </Col>
                     </Row> */}
-
-                
             </Container>
         </>
     ) : null

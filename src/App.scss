@@ -20,12 +20,10 @@ body {
     position: relative;
     color: #202020;
     background: rgb(197, 222, 218);
-    background: linear-gradient(
-        126deg,
-        rgba(197, 222, 218, 1) 0%,
-        rgba(190, 213, 230, 1) 39%,
-        rgba(220, 240, 255, 1) 86%
-    );
+    background: linear-gradient(126deg,
+            rgba(197, 222, 218, 1) 0%,
+            rgba(190, 213, 230, 1) 39%,
+            rgba(220, 240, 255, 1) 86%);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 
@@ -154,4 +152,47 @@ th {
     justify-content: center;
     align-items: center;
     margin: 0 auto;
+}
+
+.axis_bottom text {
+    font-family: Optima, Futura, sans-serif;
+    font-weight: bold;
+    font-size: 8px;
+    transform: rotate(45deg) translate(26px, -10px);
+}
+
+.plato-axis_bottom text {
+    font-family: Optima, Futura, sans-serif;
+    font-weight: bold;
+    font-size: 8px;
+    transform: rotate(45deg) translate(30px, 10px);
+}
+
+.section-style {
+    background: #666;
+    padding: 4px;
+    color: #fff
+}
+
+.subtitle-text {
+    color: #666;
+    font-size: 18px;
+}
+
+.img-overlay-wrap {
+    position: relative;
+    display: inline-block;
+
+}
+
+.img-overlay-wrap img {
+    display: block;
+    width: 900px;
+    height: 900px;
+}
+
+.img-overlay-wrap svg {
+    position: absolute;
+    top: 0;
+    left: 0;
 }

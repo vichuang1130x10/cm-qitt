@@ -1,9 +1,9 @@
 export function outputDate(date) {
-    return new Date(date).toLocaleDateString()
+    return new Date(date).toLocaleDateString('en-US')
 }
 
 export function shrinkDateString(str) {
-    const [year,month, day] = str.split('/')
+    const [year, month, day] = str.split('/')
     return `${month}/${day}`
 }
 
