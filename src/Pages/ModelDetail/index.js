@@ -89,6 +89,7 @@ const timeUnitsWithoutMo = ['weekly', 'monthly']
 function Detail(props) {
     const { modelName, stations } = props.location.state
     const [dModel, setModel] = useState({})
+    const [dRepair,setRepair] = useState({})
     const [dStartDate, setStartDate] = useState('')
     const [dEndDate, setEndate] = useState('')
     const [dStations, setStations] = useState([])
@@ -104,13 +105,15 @@ function Detail(props) {
         const modelObject = appState.models.filter(
             (m) => m.model === modelName
         )[0]
-        console.log(modelObject)
-
+        const repairObject = repairData[modelName]
+        setRepair(repairObject)
+       
         setModel(modelObject)
         setStartDate(startDate)
         setEndate(endDate)
         setStations(stations)
-
+        const sortFailureData = parsingToQty(repairObject,station)
+        setSortFailure(sortFailureData)
         let tArray = []
         switch (appState.vendor) {
             case 'USI':
@@ -123,9 +126,7 @@ function Detail(props) {
                 break
         }
         setTimeUnitArray(tArray)
-        console.log('station', station)
-        console.log('timeUnit', timeUnit)
-        console.log('modelObject', modelObject)
+       
         const chartData = modelObject[station][timeUnit]
         setChartData(chartData)
 
@@ -134,10 +135,12 @@ function Detail(props) {
 
     const updateStation = (str) => {
         setStation(str)
+       
     }
 
     const updateTimeUnit = (str) => {
         setTimeUnit(str)
+      
     }
 
     // udpateStation = (str) => {
@@ -206,53 +209,51 @@ function Detail(props) {
     //     return result
     // }
 
-    // parsingToQty = (e, str) => {
-    //     console.log('parsing')
-    //     console.log(e)
-    //     if (e === undefined || e === null) {
-    //         return []
-    //     }
-    //     const allDefects = {}
-    //     // const { station } = this.state;
-    //     e[str].ErorrDescriptions.forEach((defect) => {
-    //         if (
-    //             allDefects[defect.description] === null ||
-    //             allDefects[defect.description] === undefined
-    //         ) {
-    //             allDefects[defect.description] = 1
-    //         } else {
-    //             allDefects[defect.description] += 1
-    //         }
-    //     })
+    const parsingToQty = (e, str) => {
+           console.log('parsing')
+         console.log(e)
+         if (e === undefined || e === null) {
+             return []
+         }
+         const allDefects = {}
+         
+         e[str].ErorrDescriptions.forEach((defect) => {
+             if (
+                 allDefects[defect.description] === null ||
+                 allDefects[defect.description] === undefined
+             ) {
+                 allDefects[defect.description] = 1
+             } else {
+                 allDefects[defect.description] += 1
+             }
+         })
 
-    //     console.log('all defects', allDefects)
+         console.log('all defects', allDefects)
 
-    //     let sortable = []
-    //     for (let defect in allDefects) {
-    //         sortable.push([defect, allDefects[defect]])
-    //     }
+         let sortable = []
+         for (let defect in allDefects) {
+             sortable.push([defect, allDefects[defect]])
+         }
 
-    //     sortable.sort(function (a, b) {
-    //         return b[1] - a[1]
-    //     })
-    //     const totalDefects = sortable.reduce((acc, elem) => acc + elem[1], 0)
-    //     const result = []
-    //     let accumulate = 0
-    //     sortable.forEach((d) => {
-    //         const indiv = parseInt((d[1] / totalDefects) * 100)
-    //         accumulate += d[1]
-    //         result.push({
-    //             defectName: d[0],
-    //             qty: d[1],
-    //             indiv: indiv,
-    //             accu: parseInt((accumulate / totalDefects) * 100),
-    //         })
-    //     })
-    //     // const arr = this.state.errorAnalysis[this.state.station].ErorrDescriptions;
-    //     // console.log(arr);
+         sortable.sort(function (a, b) {
+             return b[1] - a[1]
+         })
+         const totalDefects = sortable.reduce((acc, elem) => acc + elem[1], 0)
+         const result = []
+         let accumulate = 0
+         sortable.forEach((d) => {
+             const indiv = parseInt((d[1] / totalDefects) * 100)
+             accumulate += d[1]
+             result.push({
+                 defectName: d[0],
+                 qty: d[1],
+                 indiv: indiv,
+                 accu: parseInt((accumulate / totalDefects) * 100),
+             })
+         })
 
-    //     return result
-    // }
+         return result
+     }
 
     // parsingRootCause = (failureName, e, str) => {
     //     const result = []
@@ -431,7 +432,7 @@ function Detail(props) {
                                     dEndDate
                                 )}`}
                             </h5>
-                            {/* <Plato data={sortFailure} /> */}
+                             <Plato data={sortFailure} /> 
                             </PlatoContainer>
               
                         </Col>

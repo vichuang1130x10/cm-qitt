@@ -11,11 +11,11 @@ const ModelContainer = styled.div`
     margin: 3px;
     border: 1px solid rgba(0, 0, 0, 0.0975);
     border-radius: 5px;
-    transition: all 0.5s;
+    transition: all 0.3s;
 
     &:hover {
         color: #fff;
-        background-color: #123abc;
+        background-color: #FEE4C4;
     }
 `
 

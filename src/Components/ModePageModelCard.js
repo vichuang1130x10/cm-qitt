@@ -15,7 +15,7 @@ const Card = styled.div`
     flex-direction: column;
     flex: 0 0 30%;
     margin: 10px;
-    transition: all 0.5s;
+    transition: all 0.3s;
     > h5 {
         margin-left: 10px;
         color: #93c0a4;
@@ -33,7 +33,7 @@ const Card = styled.div`
 
     &:hover {
         color: #fff;
-        background-color: #123abc;
+        background-color: #FEE4C4;
     }
 `
 const StationInfo = styled.div`
