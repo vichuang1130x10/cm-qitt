@@ -23,7 +23,7 @@ class DashboardTrend extends Component {
         if (!data) return {}
         /* trimming for last 10 weeks/months */
         const trimData =
-            data.length > 10 ? data.slice(data.length - 10, data.length) : data
+            data.length > 13 ? data.slice(data.length - 13, data.length) : data
         /* parsing & update for plotting */
         const updateData = trimData
             .filter((d) => d.Pass > 5 && d.Total > 5)

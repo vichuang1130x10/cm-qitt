@@ -82,16 +82,16 @@ const App = ({ model, stations }) => {
             </StationInfo>
             <StationInfo>
                 <FTYNumber fty={model.station0FTY}>
-                    {model.station0FTY}%
+                    {model.station0FTY || 'NA'}%
                 </FTYNumber>
                 <FTYNumber fty={model.station1FTY}>
-                    {model.station1FTY}%
+                    {model.station1FTY || 'NA'}%
                 </FTYNumber>
                 <FTYNumber fty={model.station2FTY}>
-                    {model.station2FTY}%
+                    {model.station2FTY || 'NA'}%
                 </FTYNumber>
                 <FTYNumber fty={model.station3FTY}>
-                    {model.station3FTY}%
+                    {model.station3FTY || 'NA'}%
                 </FTYNumber>
             </StationInfo>
             <CardTendContainer>

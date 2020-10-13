@@ -106,7 +106,7 @@ function App({ appData }) {
                             </p>
                         </div>
 
-                        <h6>{getCurrentMonth()}</h6>
+                        <h6>{getCurrentMonth(new Date(endDate))}</h6>
                     </BoxTitle>
                     <div className="small-tag">MB</div>
                     <BoxContent>

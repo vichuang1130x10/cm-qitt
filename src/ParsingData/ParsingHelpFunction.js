@@ -3,7 +3,7 @@ export function outputDate(date) {
 }
 
 export function shrinkDateString(str) {
-    const [year, month, day] = str.split('/')
+    const [ month, day] = str.split('/')
     return `${month}/${day}`
 }
 
@@ -30,9 +30,11 @@ export function getDateOfISOWeek(w, y) {
     return ISOweekStart
 }
 
-export function getSevenDayBoundary(d) {
-    return new Date(new Date(d).valueOf() + -7 * 24 * 3600 * 1000)
+export function getSevenDayBoundary(d,n=7) {
+    return new Date(new Date(d).valueOf() + -n * 24 * 3600 * 1000)
 }
+
+
 
 export function milToMiliMeter(mil) {
     return parseFloat((mil * 0.0254).toFixed(2))
@@ -142,8 +144,9 @@ export function getCurrentYear() {
     return new Date().toLocaleDateString().split('/')[0]
 }
 
-export function getCurrentMonth() {
-    const d = new Date()
+
+export function getCurrentMonth(d = new Date()) {
+    
     const month = []
     month[0] = 'January'
     month[1] = 'February'
@@ -158,6 +161,11 @@ export function getCurrentMonth() {
     month[10] = 'November'
     month[11] = 'December'
     return month[d.getMonth()].substr(0, 3)
+}
+
+
+export function getDataMonth(date) {
+   return date.getMonth() + 1
 }
 
 export function translateToMonthCharater(num) {

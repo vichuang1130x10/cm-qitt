@@ -41,7 +41,7 @@ function App(props) {
     const [chartData, setChartData] = useState([])
     useEffect(() => {
         // fetch data from props( redux store) and set the value for each state
-        console.log('use effect is called')
+      
         const { MBData, BPNData, OtherData } = props.appState
 
         const unit = timeUnit === 'Week' ? 'weekly' : 'monthly'

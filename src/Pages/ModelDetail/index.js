@@ -71,6 +71,18 @@ const DataWrapper = styled.div`
     border: 1px solid transparent;
 `
 
+const PlatoContainer = styled.div`
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-start;
+    align-items:center;
+    width:100%;
+    text-align:center;
+  
+    margin-top:10px;
+
+`
+
 const timeUnits = ['mo', 'weekly', 'monthly']
 const timeUnitsWithoutMo = ['weekly', 'monthly']
 
@@ -84,6 +96,8 @@ function Detail(props) {
     const [chartData, setChartData] = useState({})
     const [timeUnit, setTimeUnit] = useState('weekly')
     const [timeUnitArray, setTimeUnitArray] = useState([])
+    const [sortFailure,setSortFailure] = useState([])
+    const [fourteenDaysFailure,setFourteenDaysFailure] = useState([])
     useEffect(() => {
         const { appState, repairData } = props
         const { startDate, endDate } = appState
@@ -113,7 +127,6 @@ function Detail(props) {
         console.log('timeUnit', timeUnit)
         console.log('modelObject', modelObject)
         const chartData = modelObject[station][timeUnit]
-        console.log('chartData', chartData)
         setChartData(chartData)
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -409,22 +422,29 @@ function Detail(props) {
                         <h6>Defect Symptom Analysis:</h6>
                     </SectionTitle>
 
-                    <Row>
+                    <Row style={{width:"100%"}}>
                         <Col>
-                            <h5 className="subtitle-text">
+                           <PlatoContainer>
+                           <h5 className="subtitle-text">
                                 {' '}
                                 {`${outputDate(dStartDate)} ~ ${outputDate(
                                     dEndDate
                                 )}`}
                             </h5>
                             {/* <Plato data={sortFailure} /> */}
+                            </PlatoContainer>
+              
                         </Col>
+                     
                         <Col>
+                        <PlatoContainer>
                             <h5 className="subtitle-text">
                                 LAST 14 DAYS DEFECT SYMPTOM
                             </h5>
                             {/* <Plato data={sevenDaysFailure} /> */}
+                            </PlatoContainer>
                         </Col>
+                        
                     </Row>
                 </DataWrapper>
                 {/* <Row style={{ margin: '20px' }}>

@@ -6,6 +6,7 @@ import {
     pickUpStationByCMVendorForPie,
     extractModelName,
     getSevenDayBoundary,
+    getDataMonth
 } from './ParsingHelpFunction'
 
 // Main function to parsing yieldRate json to specfic format for each models and some meta data

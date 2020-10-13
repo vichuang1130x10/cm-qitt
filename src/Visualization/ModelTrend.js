@@ -72,7 +72,7 @@ class ModelTrendChart extends Component {
         if (!data) return {}
         /* trimming for last 10 weeks/months */
         const trimData =
-            data.length > 10 ? data.slice(data.length - 10, data.length) : data
+            data.length > 13 ? data.slice(data.length - 13, data.length) : data
         /* parsing & update for plotting */
         let sortUnit = null
         if (unit === 'weekly') {
@@ -101,13 +101,13 @@ class ModelTrendChart extends Component {
         const [min, max] = d3.extent(updateData, (d) => d.yield)
         const yScale = d3
             .scaleLinear()
-            .domain([Math.min(min, 90), max])
+            .domain([Math.min(min, 90), 100])
             .range([height - margin.bottom, margin.top])
         /* find the right y axis scale */
         const [yMin, yMax] = d3.extent(updateData, (d) => d.total)
         const yScaleRight = d3
             .scaleLinear()
-            .domain([Math.min(100, yMin), yMax + 1000])
+            .domain([Math.min(100, yMin), yMax + 200])
             .range([height - margin.bottom, margin.top])
         /* calculate the path data by using d3 line() */
         const trend = d3
@@ -169,8 +169,8 @@ class ModelTrendChart extends Component {
     /* generate axis by using react ref() */
     createAxis = () => {
         let xAxisD3 = d3.axisBottom()
-        let yAxisD3 = d3.axisLeft().tickFormat((d) => `${d}%`)
-        let yAxisRight = d3.axisRight().tickFormat((d) => d)
+        let yAxisD3 = d3.axisLeft().tickFormat((d) => `${d}%`).ticks(5)
+        let yAxisRight = d3.axisRight().tickFormat((d) => d).ticks(5)
 
         xAxisD3.scale(this.state.xScale)
 

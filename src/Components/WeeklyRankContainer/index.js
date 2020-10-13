@@ -89,11 +89,6 @@ function App({ appData }) {
         .filter((model) => model.sevenDayTotal > 50)
         .sort(sortSevenDayFty)
 
-    console.log(filterSevenDayTrackingModel)
-
-    // sevenDayFty: 83.33
-    // sevenDayPass: 20
-    // sevenDayTotal: 24
     return (
         <CardContainer>
             <StickHead>
