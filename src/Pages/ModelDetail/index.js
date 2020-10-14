@@ -113,7 +113,9 @@ function Detail(props) {
         setEndate(endDate)
         setStations(stations)
         const sortFailureData = parsingToQty(repairObject,station)
+        const fourteenDaysFailure = parsingToFourteenDayQty(repairObject,station)
         setSortFailure(sortFailureData)
+        setFourteenDaysFailure(fourteenDaysFailure)
         let tArray = []
         switch (appState.vendor) {
             case 'USI':
@@ -155,63 +157,62 @@ function Detail(props) {
     //     })
     // }
 
-    // parsingToSevenDayQty = (e, str) => {
-    //     console.log('parsing')
-    //     console.log(e)
-    //     if (e === undefined || e === null) {
-    //         return []
-    //     }
-    //     const allDefects = {}
-    //     // const { station } = this.state;
+    const parsingToFourteenDayQty = (e, str) => {
+        
+    
+        if (e === undefined || e === null) {
+            return []
+        }
+        const allDefects = {}
+        // const { station } = this.state;
 
-    //     const inTheSevenDaysData = e[str].ErorrDescriptions.filter(
-    //         (obj) =>
-    //             new Date(obj.date) > getSevenDayBoundary(this.state.endDate)
-    //     )
+        const inTheSevenDaysData = e[str].ErorrDescriptions.filter(
+            (obj) =>
+                new Date(obj.date) > getSevenDayBoundary(dEndDate,14)
+        )
 
-    //     inTheSevenDaysData.forEach((defect) => {
-    //         if (
-    //             allDefects[defect.description] === null ||
-    //             allDefects[defect.description] === undefined
-    //         ) {
-    //             allDefects[defect.description] = 1
-    //         } else {
-    //             allDefects[defect.description] += 1
-    //         }
-    //     })
+        inTheSevenDaysData.forEach((defect) => {
+            if (
+                allDefects[defect.description] === null ||
+                allDefects[defect.description] === undefined
+            ) {
+                allDefects[defect.description] = 1
+            } else {
+                allDefects[defect.description] += 1
+            }
+        })
 
-    //     console.log('all defects', allDefects)
+        console.log('all defects', allDefects)
 
-    //     let sortable = []
-    //     for (let defect in allDefects) {
-    //         sortable.push([defect, allDefects[defect]])
-    //     }
+        let sortable = []
+        for (let defect in allDefects) {
+            sortable.push([defect, allDefects[defect]])
+        }
 
-    //     sortable.sort(function (a, b) {
-    //         return b[1] - a[1]
-    //     })
-    //     const totalDefects = sortable.reduce((acc, elem) => acc + elem[1], 0)
-    //     const result = []
-    //     let accumulate = 0
-    //     sortable.forEach((d) => {
-    //         const indiv = parseInt((d[1] / totalDefects) * 100)
-    //         accumulate += d[1]
-    //         result.push({
-    //             defectName: d[0],
-    //             qty: d[1],
-    //             indiv: indiv,
-    //             accu: parseInt((accumulate / totalDefects) * 100),
-    //         })
-    //     })
-    //     // const arr = this.state.errorAnalysis[this.state.station].ErorrDescriptions;
-    //     // console.log(arr);
+        sortable.sort(function (a, b) {
+            return b[1] - a[1]
+        })
+        const totalDefects = sortable.reduce((acc, elem) => acc + elem[1], 0)
+        const result = []
+        let accumulate = 0
+        sortable.forEach((d) => {
+            const indiv = parseInt((d[1] / totalDefects) * 100)
+            accumulate += d[1]
+            result.push({
+                defectName: d[0],
+                qty: d[1],
+                indiv: indiv,
+                accu: parseInt((accumulate / totalDefects) * 100),
+            })
+        })
+        // const arr = this.state.errorAnalysis[this.state.station].ErorrDescriptions;
+        // console.log(arr);
 
-    //     return result
-    // }
+        return result
+    }
 
     const parsingToQty = (e, str) => {
-           console.log('parsing')
-         console.log(e)
+         
          if (e === undefined || e === null) {
              return []
          }
@@ -228,7 +229,6 @@ function Detail(props) {
              }
          })
 
-         console.log('all defects', allDefects)
 
          let sortable = []
          for (let defect in allDefects) {
@@ -428,7 +428,7 @@ function Detail(props) {
                            <PlatoContainer>
                            <h5 className="subtitle-text">
                                 {' '}
-                                {`${outputDate(dStartDate)} ~ ${outputDate(
+                                {`${station} station ${outputDate(dStartDate)} ~ ${outputDate(
                                     dEndDate
                                 )}`}
                             </h5>
@@ -440,9 +440,10 @@ function Detail(props) {
                         <Col>
                         <PlatoContainer>
                             <h5 className="subtitle-text">
-                                LAST 14 DAYS DEFECT SYMPTOM
+                                {station}
+                                -LAST 14 DAYS DEFECT SYMPTOM
                             </h5>
-                            {/* <Plato data={sevenDaysFailure} /> */}
+                             <Plato data={fourteenDaysFailure} /> 
                             </PlatoContainer>
                         </Col>
                         

@@ -100,8 +100,8 @@ class Plato extends Component {
 
     createAxis = () => {
         let xAxisD3 = d3.axisBottom()
-        let yAxisD3 = d3.axisLeft().tickFormat((d) => d)
-        let yAxisRight = d3.axisRight().tickFormat((d) => `${d}%`)
+        let yAxisD3 = d3.axisLeft().tickFormat((d) => d).ticks(5)
+        let yAxisRight = d3.axisRight().tickFormat((d) => `${d}%`).ticks(5)
         xAxisD3.scale(this.state.xScale)
         if (this.xAxis.current) {
             d3.select(this.xAxis.current).call(xAxisD3)
@@ -178,7 +178,7 @@ class Plato extends Component {
                     transform={`translate(${width - margin.right * 7}, 0)`}
                 />
             </svg>
-        ) : null
+        ) : <h3 style={{marginTop:'70px',marginLeft:'40px',color:'#ccc'}}>No Data</h3>
     }
 }
 
