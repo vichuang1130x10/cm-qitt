@@ -7,6 +7,8 @@ import DetialRepairRow from '../../Components/DetailRepairRow'
 import {
     getSevenDayBoundary,
     outputDate,
+    parsingToQty,
+    parsingRootCause
 } from '../../ParsingData/ParsingHelpFunction'
 import { navigate } from '@reach/router'
 import { Link } from '@reach/router'
@@ -109,11 +111,8 @@ function Detail(props) {
         setStartDate(startDate)
         setEndate(endDate)
         setStations(stations)
-        const sortFailureData = parsingToQty(repairObject, station)
-        const fourteenDaysFailure = parsingToFourteenDayQty(
-            repairObject,
-            station
-        )
+        const sortFailureData = parsingToQty(repairObject, station, false,endDate)
+        const fourteenDaysFailure = parsingToQty(repairObject, station, true,endDate)
         setSortFailure(sortFailureData)
         setFourteenDaysFailure(fourteenDaysFailure)
         let tArray = []
@@ -143,193 +142,6 @@ function Detail(props) {
         setTimeUnit(str)
     }
 
-    const parsingToFourteenDayQty = (e, str) => {
-        if (e === undefined || e === null) {
-            return []
-        }
-        const allDefects = {}
-        // const { station } = this.state;
-
-        const inTheSevenDaysData = e[str].ErorrDescriptions.filter(
-            obj => new Date(obj.date) > getSevenDayBoundary(dEndDate, 14)
-        )
-
-        inTheSevenDaysData.forEach(defect => {
-            if (
-                allDefects[defect.description] === null ||
-                allDefects[defect.description] === undefined
-            ) {
-                allDefects[defect.description] = 1
-            } else {
-                allDefects[defect.description] += 1
-            }
-        })
-
-        console.log('all defects', allDefects)
-
-        let sortable = []
-        for (let defect in allDefects) {
-            sortable.push([defect, allDefects[defect]])
-        }
-
-        sortable.sort(function(a, b) {
-            return b[1] - a[1]
-        })
-        const totalDefects = sortable.reduce((acc, elem) => acc + elem[1], 0)
-        const result = []
-        let accumulate = 0
-        sortable.forEach(d => {
-            const indiv = parseInt((d[1] / totalDefects) * 100)
-            accumulate += d[1]
-            result.push({
-                defectName: d[0],
-                qty: d[1],
-                indiv: indiv,
-                accu: parseInt((accumulate / totalDefects) * 100),
-            })
-        })
-
-        return result
-    }
-
-    const parsingToQty = (e, str) => {
-        if (e === undefined || e === null) {
-            return []
-        }
-        const allDefects = {}
-
-        e[str].ErorrDescriptions.forEach(defect => {
-            if (
-                allDefects[defect.description] === null ||
-                allDefects[defect.description] === undefined
-            ) {
-                allDefects[defect.description] = 1
-            } else {
-                allDefects[defect.description] += 1
-            }
-        })
-
-        let sortable = []
-        for (let defect in allDefects) {
-            sortable.push([defect, allDefects[defect]])
-        }
-
-        sortable.sort(function(a, b) {
-            return b[1] - a[1]
-        })
-        const totalDefects = sortable.reduce((acc, elem) => acc + elem[1], 0)
-        const result = []
-        let accumulate = 0
-        sortable.forEach(d => {
-            const indiv = parseInt((d[1] / totalDefects) * 100)
-            accumulate += d[1]
-            result.push({
-                defectName: d[0],
-                qty: d[1],
-                indiv: indiv,
-                accu: parseInt((accumulate / totalDefects) * 100),
-            })
-        })
-
-        return result
-    }
-
-    const parsingRootCause = (failureName, e, str) => {
-        const result = []
-        const rootCause = {}
-        const failures = e[str].ErorrDescriptions
-
-        const f = failures.filter(
-            failure => failure.description === failureName
-        )
-        f.forEach(reason => {
-            result.push(`${reason.reasons[0].reason}/${reason.reasons[0].item}`)
-        })
-
-        console.log(result)
-
-        result.forEach(item => {
-            if (rootCause[item] === null || rootCause[item] === undefined) {
-                rootCause[item] = 1
-            } else {
-                rootCause[item] += 1
-            }
-        })
-
-        let sortable = []
-        for (let defect in rootCause) {
-            sortable.push([defect, rootCause[defect]])
-        }
-
-        sortable.sort(function(a, b) {
-            return b[1] - a[1]
-        })
-
-        const totalDefects = sortable.reduce((acc, elem) => acc + elem[1], 0)
-        const rootCauseResult = []
-        let accumulate = 0
-        sortable.forEach(d => {
-            const indiv = parseInt((d[1] / totalDefects) * 100)
-            accumulate += d[1]
-            rootCauseResult.push({
-                defectName: d[0],
-                qty: d[1],
-                indiv: indiv,
-                accu: parseInt((accumulate / totalDefects) * 100),
-            })
-        })
-        return rootCauseResult
-    }
-
-    // parsingSevenDayRootCause = (failureName, e, str) => {
-    //     const result = []
-    //     const rootCause = {}
-    //     const failures = e[str].ErorrDescriptions.filter(
-    //         (obj) =>
-    //             new Date(obj.date) > getSevenDayBoundary(this.state.endDate)
-    //     )
-
-    //     const f = failures.filter(
-    //         (failure) => failure.description === failureName
-    //     )
-    //     f.forEach((reason) => {
-    //         result.push(`${reason.reasons[0].reason}/${reason.reasons[0].item}`)
-    //     })
-
-    //     console.log(result)
-
-    //     result.forEach((item) => {
-    //         if (rootCause[item] === null || rootCause[item] === undefined) {
-    //             rootCause[item] = 1
-    //         } else {
-    //             rootCause[item] += 1
-    //         }
-    //     })
-
-    //     let sortable = []
-    //     for (let defect in rootCause) {
-    //         sortable.push([defect, rootCause[defect]])
-    //     }
-
-    //     sortable.sort(function (a, b) {
-    //         return b[1] - a[1]
-    //     })
-
-    //     const totalDefects = sortable.reduce((acc, elem) => acc + elem[1], 0)
-    //     const rootCauseResult = []
-    //     let accumulate = 0
-    //     sortable.forEach((d) => {
-    //         const indiv = parseInt((d[1] / totalDefects) * 100)
-    //         accumulate += d[1]
-    //         rootCauseResult.push({
-    //             defectName: d[0],
-    //             qty: d[1],
-    //             indiv: indiv,
-    //             accu: parseInt((accumulate / totalDefects) * 100),
-    //         })
-    //     })
-    //     return rootCauseResult
-    // }
 
     // gotoDefectMapping = () => {
     //     const { modelName, startDate, endDate, errorAnalysis } = this.state
