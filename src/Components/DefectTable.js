@@ -3,7 +3,7 @@ import { Table } from 'react-bootstrap'
 
 export default function DefectTable({ sortFailure }) {
     return (
-        <Table striped bordered hover size="sm" style={{ fontSize: '16px' }}>
+        <Table striped bordered hover size="sm" style={{ width:'100%',fontSize: '12px',margin:'0 auto' }}>
             <thead>
                 <tr>
                     <th>Defect Item </th>

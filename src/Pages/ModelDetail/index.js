@@ -255,52 +255,52 @@ function Detail(props) {
          return result
      }
 
-    // parsingRootCause = (failureName, e, str) => {
-    //     const result = []
-    //     const rootCause = {}
-    //     const failures = e[str].ErorrDescriptions
+    const parsingRootCause = (failureName, e, str) => {
+        const result = []
+        const rootCause = {}
+        const failures = e[str].ErorrDescriptions
 
-    //     const f = failures.filter(
-    //         (failure) => failure.description === failureName
-    //     )
-    //     f.forEach((reason) => {
-    //         result.push(`${reason.reasons[0].reason}/${reason.reasons[0].item}`)
-    //     })
+        const f = failures.filter(
+            (failure) => failure.description === failureName
+        )
+        f.forEach((reason) => {
+            result.push(`${reason.reasons[0].reason}/${reason.reasons[0].item}`)
+        })
 
-    //     console.log(result)
+        console.log(result)
 
-    //     result.forEach((item) => {
-    //         if (rootCause[item] === null || rootCause[item] === undefined) {
-    //             rootCause[item] = 1
-    //         } else {
-    //             rootCause[item] += 1
-    //         }
-    //     })
+        result.forEach((item) => {
+            if (rootCause[item] === null || rootCause[item] === undefined) {
+                rootCause[item] = 1
+            } else {
+                rootCause[item] += 1
+            }
+        })
 
-    //     let sortable = []
-    //     for (let defect in rootCause) {
-    //         sortable.push([defect, rootCause[defect]])
-    //     }
+        let sortable = []
+        for (let defect in rootCause) {
+            sortable.push([defect, rootCause[defect]])
+        }
 
-    //     sortable.sort(function (a, b) {
-    //         return b[1] - a[1]
-    //     })
+        sortable.sort(function (a, b) {
+            return b[1] - a[1]
+        })
 
-    //     const totalDefects = sortable.reduce((acc, elem) => acc + elem[1], 0)
-    //     const rootCauseResult = []
-    //     let accumulate = 0
-    //     sortable.forEach((d) => {
-    //         const indiv = parseInt((d[1] / totalDefects) * 100)
-    //         accumulate += d[1]
-    //         rootCauseResult.push({
-    //             defectName: d[0],
-    //             qty: d[1],
-    //             indiv: indiv,
-    //             accu: parseInt((accumulate / totalDefects) * 100),
-    //         })
-    //     })
-    //     return rootCauseResult
-    // }
+        const totalDefects = sortable.reduce((acc, elem) => acc + elem[1], 0)
+        const rootCauseResult = []
+        let accumulate = 0
+        sortable.forEach((d) => {
+            const indiv = parseInt((d[1] / totalDefects) * 100)
+            accumulate += d[1]
+            rootCauseResult.push({
+                defectName: d[0],
+                qty: d[1],
+                indiv: indiv,
+                accu: parseInt((accumulate / totalDefects) * 100),
+            })
+        })
+        return rootCauseResult
+    }
 
     // parsingSevenDayRootCause = (failureName, e, str) => {
     //     const result = []
@@ -420,7 +420,7 @@ function Detail(props) {
                         <ModelTrend data={chartData} unit={timeUnit} />
                     </ChartContainerContent>
                     <SectionTitle>
-                        <h6>Defect Symptom Analysis:</h6>
+                        <h6>Defect Symptom Analysis History:</h6>
                     </SectionTitle>
 
                     <Row style={{width:"100%"}}>
@@ -448,42 +448,77 @@ function Detail(props) {
                         </Col>
                         
                     </Row>
-                </DataWrapper>
-                {/* <Row style={{ margin: '20px' }}>
-                        <Button onClick={() => this.gotoDefectMapping()}>
-                            Defect Mapping Page
-                        </Button>
-                    </Row>
-                    <br />
-                    <h4 className="section-style">Defect Symptom Analysis:</h4>
-                    <Row>
+                    <Row  style={{ width: '100%',marginBottom:'20px' }}>
                         <Col>
-                            <h5 className="subtitle-text">{`${startDate}~${endDate}`}</h5>
-                            <Plato data={sortFailure} />
-                        </Col>
-                        <Col>
-                            <h5 className="subtitle-text">
-                                LAST 14 DAYS DEFECT SYMPTOM
-                            </h5>
-                            <Plato data={sevenDaysFailure} />
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col>
-                            <div style={{ width: '100%' }}>
+                            <div>
                                 <DefectTable sortFailure={sortFailure} />
                             </div>
                         </Col>
                         <Col>
-                            <div style={{ width: '100%' }}>
-                                <DefectTable sortFailure={sevenDaysFailure} />
+                            <div>
+                                <DefectTable sortFailure={fourteenDaysFailure} />
                             </div>
                         </Col>
                     </Row>
 
-                    <h4 className="section-style">TOP 3 Root Cause:</h4>
+                    <SectionTitle>
+                        <h6>TOP 3 ROOT CAUSES HISTORY:</h6>
+                    </SectionTitle>
+                    <Row style={{width:"100%"}}>
+                        <Col>
+                           <PlatoContainer>
+                           <h5 className="subtitle-text">
+                             
+                                {`${station} station ${outputDate(dStartDate)} ~ ${outputDate(
+                                    dEndDate
+                                )}`}
+                            </h5>
+                            {sortFailure.length ? (
+                                <div>
+                                    <h6>{sortFailure[0].defectName}</h6>
+                                    <Plato
+                                        data={parsingRootCause(
+                                            sortFailure[0].defectName,
+                                            dRepair,
+                                            station
+                                        )}
+                                    />
+                                </div>
+                            ) : null}
+                            </PlatoContainer>
+              
+                        </Col>
+                     
+                        <Col>
+                        <PlatoContainer>
+                            <h5 className="subtitle-text">
+                                {station}
+                                -LAST 14 DAYS  REPAIR RECORD
+                            </h5>
+                            {fourteenDaysFailure.length ? (
+                                <div>
+                                    <h6>{sortFailure[0].defectName}</h6>
+                                    <Plato
+                                        data={parsingRootCause(
+                                            sortFailure[0].defectName,
+                                            dRepair,
+                                            station
+                                        )}
+                                    />
+                                </div>
+                            ) : null}
+                            </PlatoContainer>
+                        </Col>
+                        
+                    </Row> 
+                </DataWrapper>
+            
+                   
+          
 
-                    <Row>
+  
+
+                    {/* <Row>
                         <Col>
                             <h5 className="subtitle-text">{`${startDate}~${endDate}`}</h5>
                             {sortFailure.length ? (
@@ -671,10 +706,17 @@ function Detail(props) {
                                 </div>
                             ) : null}
                         </Col>
-                    </Row> */}
+                    </Row>  */} 
             </Container>
         </>
     ) : null
 }
 
 export default connect(Detail)
+
+
+     /* <Row style={{ margin: '20px' }}>
+                        <Button onClick={() => this.gotoDefectMapping()}>
+                            Defect Mapping Page
+                        </Button>
+                    </Row> */
