@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import {navigate} from '@reach/router'
+import { navigate } from '@reach/router'
 
 const ModelContainer = styled.div`
     width: 100%;
@@ -15,7 +15,7 @@ const ModelContainer = styled.div`
 
     &:hover {
         color: #fff;
-        background-color: #FEE4C4;
+        background-color: #fee4c4;
     }
 `
 
@@ -34,7 +34,7 @@ const ModelBlock = styled.div`
         font-style: italic;
     }
 `
-export default function App({ index, modelName, fty, pass, total,stations }) {
+export default function App({ index, modelName, fty, pass, total, stations }) {
     const handleOnClick = () => {
         navigate(`/detail`, {
             state: { modelName, stations },

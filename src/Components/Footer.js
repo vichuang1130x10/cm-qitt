@@ -29,7 +29,7 @@ const Footer = styled.footer`
         color: #4c4c4c;
     }
 `
-export default function () {
+export default function() {
     return (
         <div>
             <Footer>

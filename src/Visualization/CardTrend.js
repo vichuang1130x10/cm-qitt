@@ -23,21 +23,21 @@ class CardTrend extends Component {
         if (!data) return {}
 
         const updateData = data
-            .filter((d) => d.Pass > 50 && d.Total > 50)
+            .filter(d => d.Pass > 50 && d.Total > 50)
             .sort(sortWeek)
-            .map((d) => ({
+            .map(d => ({
                 weekNumber: d.weekNumber,
                 total: d.Total,
                 yield: parseFloat(((d.Pass / d.Total) * 100).toFixed(1)),
             }))
 
-        const x = updateData.map((d) => d.weekNumber)
+        const x = updateData.map(d => d.weekNumber)
 
         const xScale = d3
             .scaleBand()
             .domain(x)
             .range([margin.left, width - margin.left])
-        const [min] = d3.extent(updateData, (d) => d.yield)
+        const [min] = d3.extent(updateData, d => d.yield)
         const yScale = d3
             .scaleLinear()
             .domain([Math.min(min, 80), 100])
@@ -45,8 +45,8 @@ class CardTrend extends Component {
 
         const trend = d3
             .line()
-            .x((d) => xScale(d.weekNumber))
-            .y((d) => yScale(d.yield))
+            .x(d => xScale(d.weekNumber))
+            .y(d => yScale(d.yield))
 
         const line = trend(updateData)
         const passedLineHight = yScale(98)

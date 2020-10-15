@@ -26,8 +26,8 @@ class DashboardTrend extends Component {
             data.length > 13 ? data.slice(data.length - 13, data.length) : data
         /* parsing & update for plotting */
         const updateData = trimData
-            .filter((d) => d.Pass > 5 && d.Total > 5)
-            .map((d) => ({
+            .filter(d => d.Pass > 5 && d.Total > 5)
+            .map(d => ({
                 unit:
                     unit === 'Week'
                         ? d.Week
@@ -37,19 +37,19 @@ class DashboardTrend extends Component {
             }))
 
         /* find the x axis scale */
-        const x = updateData.map((d) => d.unit)
+        const x = updateData.map(d => d.unit)
         const xScale = d3
             .scaleBand()
             .domain(x)
             .range([margin.left, width - margin.left])
         /* find the y axis scale */
-        const [min, max] = d3.extent(updateData, (d) => d.yield)
+        const [min, max] = d3.extent(updateData, d => d.yield)
         const yScale = d3
             .scaleLinear()
             .domain([Math.min(min, 90), max])
             .range([height - margin.bottom, margin.top])
         /* find the right y axis scale */
-        const [yMin, yMax] = d3.extent(updateData, (d) => d.total)
+        const [yMin, yMax] = d3.extent(updateData, d => d.total)
         const yScaleRight = d3
             .scaleLinear()
             .domain([Math.min(100, yMin), yMax + 1000])
@@ -57,13 +57,13 @@ class DashboardTrend extends Component {
         /* calculate the path data by using d3 line() */
         const trend = d3
             .line()
-            .x((d) => xScale(d.unit) + 20)
-            .y((d) => yScale(d.yield))
+            .x(d => xScale(d.unit) + 20)
+            .y(d => yScale(d.yield))
 
         const line = trend(updateData)
 
         /* calculate yield rate text */
-        const labels = updateData.map((d) => ({
+        const labels = updateData.map(d => ({
             x: xScale(d.unit) + 20,
             y: yScale(d.yield),
             fill: '#6eae3e',
@@ -71,14 +71,14 @@ class DashboardTrend extends Component {
         }))
 
         /* calculate production output total text */
-        const textLabels = updateData.map((d) => ({
+        const textLabels = updateData.map(d => ({
             x: xScale(d.unit) + 7 - barPadding,
             y: yScaleRight(d.total),
             text: d.total,
         }))
 
         /* calculate the bar for plotting*/
-        const bars = updateData.map((d) => {
+        const bars = updateData.map(d => {
             return {
                 x: xScale(d.unit) + 7,
                 y: yScaleRight(d.total),
@@ -113,8 +113,8 @@ class DashboardTrend extends Component {
     /* generate axis by using react ref() */
     createAxis = () => {
         let xAxisD3 = d3.axisBottom()
-        let yAxisD3 = d3.axisLeft().tickFormat((d) => `${d}%`)
-        let yAxisRight = d3.axisRight().tickFormat((d) => d)
+        let yAxisD3 = d3.axisLeft().tickFormat(d => `${d}%`)
+        let yAxisRight = d3.axisRight().tickFormat(d => d)
 
         xAxisD3.scale(this.state.xScale)
 

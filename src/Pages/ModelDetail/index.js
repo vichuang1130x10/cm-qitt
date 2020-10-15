@@ -3,12 +3,11 @@ import styled from 'styled-components'
 import { Container, Row, Col } from 'react-bootstrap'
 import ModelTrend from '../../Visualization/ModelTrend'
 import DetailHeader from '../../Components/DetailHeader'
-import DefectTable from '../../Components/DefectTable'
+import DetialRepairRow from '../../Components/DetailRepairRow'
 import {
     getSevenDayBoundary,
     outputDate,
 } from '../../ParsingData/ParsingHelpFunction'
-
 import { navigate } from '@reach/router'
 import { Link } from '@reach/router'
 import Plato from '../../Visualization/Plato'
@@ -72,15 +71,14 @@ const DataWrapper = styled.div`
 `
 
 const PlatoContainer = styled.div`
-    display:flex;
-    flex-direction:column;
-    justify-content:flex-start;
-    align-items:center;
-    width:100%;
-    text-align:center;
-  
-    margin-top:10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    text-align: center;
 
+    margin-top: 10px;
 `
 
 const timeUnits = ['mo', 'weekly', 'monthly']
@@ -89,7 +87,7 @@ const timeUnitsWithoutMo = ['weekly', 'monthly']
 function Detail(props) {
     const { modelName, stations } = props.location.state
     const [dModel, setModel] = useState({})
-    const [dRepair,setRepair] = useState({})
+    const [dRepair, setRepair] = useState({})
     const [dStartDate, setStartDate] = useState('')
     const [dEndDate, setEndate] = useState('')
     const [dStations, setStations] = useState([])
@@ -97,23 +95,25 @@ function Detail(props) {
     const [chartData, setChartData] = useState({})
     const [timeUnit, setTimeUnit] = useState('weekly')
     const [timeUnitArray, setTimeUnitArray] = useState([])
-    const [sortFailure,setSortFailure] = useState([])
-    const [fourteenDaysFailure,setFourteenDaysFailure] = useState([])
+    const [sortFailure, setSortFailure] = useState([])
+    const [fourteenDaysFailure, setFourteenDaysFailure] = useState([])
     useEffect(() => {
         const { appState, repairData } = props
         const { startDate, endDate } = appState
         const modelObject = appState.models.filter(
-            (m) => m.model === modelName
+            m => m.model === modelName
         )[0]
         const repairObject = repairData[modelName]
         setRepair(repairObject)
-       
         setModel(modelObject)
         setStartDate(startDate)
         setEndate(endDate)
         setStations(stations)
-        const sortFailureData = parsingToQty(repairObject,station)
-        const fourteenDaysFailure = parsingToFourteenDayQty(repairObject,station)
+        const sortFailureData = parsingToQty(repairObject, station)
+        const fourteenDaysFailure = parsingToFourteenDayQty(
+            repairObject,
+            station
+        )
         setSortFailure(sortFailureData)
         setFourteenDaysFailure(fourteenDaysFailure)
         let tArray = []
@@ -128,38 +128,22 @@ function Detail(props) {
                 break
         }
         setTimeUnitArray(tArray)
-       
+
         const chartData = modelObject[station][timeUnit]
         setChartData(chartData)
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dModel, dStartDate, dEndDate, dStations, station, timeUnit])
 
-    const updateStation = (str) => {
+    const updateStation = str => {
         setStation(str)
-       
     }
 
-    const updateTimeUnit = (str) => {
+    const updateTimeUnit = str => {
         setTimeUnit(str)
-      
     }
-
-    // udpateStation = (str) => {
-    //     this.setState({
-    //         station: str,
-    //         trendData: this.state.modelDetail[str].mo,
-    //         sortFailure: this.parsingToQty(this.state.errorAnalysis, str),
-    //         sevenDaysFailure: this.parsingToSevenDayQty(
-    //             this.state.errorAnalysis,
-    //             str
-    //         ),
-    //     })
-    // }
 
     const parsingToFourteenDayQty = (e, str) => {
-        
-    
         if (e === undefined || e === null) {
             return []
         }
@@ -167,11 +151,10 @@ function Detail(props) {
         // const { station } = this.state;
 
         const inTheSevenDaysData = e[str].ErorrDescriptions.filter(
-            (obj) =>
-                new Date(obj.date) > getSevenDayBoundary(dEndDate,14)
+            obj => new Date(obj.date) > getSevenDayBoundary(dEndDate, 14)
         )
 
-        inTheSevenDaysData.forEach((defect) => {
+        inTheSevenDaysData.forEach(defect => {
             if (
                 allDefects[defect.description] === null ||
                 allDefects[defect.description] === undefined
@@ -189,13 +172,13 @@ function Detail(props) {
             sortable.push([defect, allDefects[defect]])
         }
 
-        sortable.sort(function (a, b) {
+        sortable.sort(function(a, b) {
             return b[1] - a[1]
         })
         const totalDefects = sortable.reduce((acc, elem) => acc + elem[1], 0)
         const result = []
         let accumulate = 0
-        sortable.forEach((d) => {
+        sortable.forEach(d => {
             const indiv = parseInt((d[1] / totalDefects) * 100)
             accumulate += d[1]
             result.push({
@@ -205,55 +188,51 @@ function Detail(props) {
                 accu: parseInt((accumulate / totalDefects) * 100),
             })
         })
-        // const arr = this.state.errorAnalysis[this.state.station].ErorrDescriptions;
-        // console.log(arr);
 
         return result
     }
 
     const parsingToQty = (e, str) => {
-         
-         if (e === undefined || e === null) {
-             return []
-         }
-         const allDefects = {}
-         
-         e[str].ErorrDescriptions.forEach((defect) => {
-             if (
-                 allDefects[defect.description] === null ||
-                 allDefects[defect.description] === undefined
-             ) {
-                 allDefects[defect.description] = 1
-             } else {
-                 allDefects[defect.description] += 1
-             }
-         })
+        if (e === undefined || e === null) {
+            return []
+        }
+        const allDefects = {}
 
+        e[str].ErorrDescriptions.forEach(defect => {
+            if (
+                allDefects[defect.description] === null ||
+                allDefects[defect.description] === undefined
+            ) {
+                allDefects[defect.description] = 1
+            } else {
+                allDefects[defect.description] += 1
+            }
+        })
 
-         let sortable = []
-         for (let defect in allDefects) {
-             sortable.push([defect, allDefects[defect]])
-         }
+        let sortable = []
+        for (let defect in allDefects) {
+            sortable.push([defect, allDefects[defect]])
+        }
 
-         sortable.sort(function (a, b) {
-             return b[1] - a[1]
-         })
-         const totalDefects = sortable.reduce((acc, elem) => acc + elem[1], 0)
-         const result = []
-         let accumulate = 0
-         sortable.forEach((d) => {
-             const indiv = parseInt((d[1] / totalDefects) * 100)
-             accumulate += d[1]
-             result.push({
-                 defectName: d[0],
-                 qty: d[1],
-                 indiv: indiv,
-                 accu: parseInt((accumulate / totalDefects) * 100),
-             })
-         })
+        sortable.sort(function(a, b) {
+            return b[1] - a[1]
+        })
+        const totalDefects = sortable.reduce((acc, elem) => acc + elem[1], 0)
+        const result = []
+        let accumulate = 0
+        sortable.forEach(d => {
+            const indiv = parseInt((d[1] / totalDefects) * 100)
+            accumulate += d[1]
+            result.push({
+                defectName: d[0],
+                qty: d[1],
+                indiv: indiv,
+                accu: parseInt((accumulate / totalDefects) * 100),
+            })
+        })
 
-         return result
-     }
+        return result
+    }
 
     const parsingRootCause = (failureName, e, str) => {
         const result = []
@@ -261,15 +240,15 @@ function Detail(props) {
         const failures = e[str].ErorrDescriptions
 
         const f = failures.filter(
-            (failure) => failure.description === failureName
+            failure => failure.description === failureName
         )
-        f.forEach((reason) => {
+        f.forEach(reason => {
             result.push(`${reason.reasons[0].reason}/${reason.reasons[0].item}`)
         })
 
         console.log(result)
 
-        result.forEach((item) => {
+        result.forEach(item => {
             if (rootCause[item] === null || rootCause[item] === undefined) {
                 rootCause[item] = 1
             } else {
@@ -282,14 +261,14 @@ function Detail(props) {
             sortable.push([defect, rootCause[defect]])
         }
 
-        sortable.sort(function (a, b) {
+        sortable.sort(function(a, b) {
             return b[1] - a[1]
         })
 
         const totalDefects = sortable.reduce((acc, elem) => acc + elem[1], 0)
         const rootCauseResult = []
         let accumulate = 0
-        sortable.forEach((d) => {
+        sortable.forEach(d => {
             const indiv = parseInt((d[1] / totalDefects) * 100)
             accumulate += d[1]
             rootCauseResult.push({
@@ -376,15 +355,13 @@ function Detail(props) {
                                 <select
                                     id="station"
                                     value={station}
-                                    onChange={(e) =>
+                                    onChange={e =>
                                         updateStation(e.target.value)
                                     }
-                                    onBlur={(e) =>
-                                        updateStation(e.target.value)
-                                    }
+                                    onBlur={e => updateStation(e.target.value)}
                                 >
                                     {dStations
-                                        ? dStations.map((station) => (
+                                        ? dStations.map(station => (
                                               <option
                                                   value={station}
                                                   key={station}
@@ -399,14 +376,12 @@ function Detail(props) {
                                 <select
                                     id="timeUnit"
                                     value={timeUnit}
-                                    onChange={(e) =>
+                                    onChange={e =>
                                         updateTimeUnit(e.target.value)
                                     }
-                                    onBlur={(e) =>
-                                        updateTimeUnit(e.target.value)
-                                    }
+                                    onBlur={e => updateTimeUnit(e.target.value)}
                                 >
-                                    {timeUnitArray.map((t) => (
+                                    {timeUnitArray.map(t => (
                                         <option value={t} key={t}>
                                             {t}
                                         </option>
@@ -423,102 +398,65 @@ function Detail(props) {
                         <h6>Defect Symptom Analysis History:</h6>
                     </SectionTitle>
 
-                    <Row style={{width:"100%"}}>
-                        <Col>
-                           <PlatoContainer>
-                           <h5 className="subtitle-text">
-                                {' '}
-                                {`${station} station ${outputDate(dStartDate)} ~ ${outputDate(
-                                    dEndDate
-                                )}`}
-                            </h5>
-                             <Plato data={sortFailure} /> 
-                            </PlatoContainer>
-              
-                        </Col>
-                     
-                        <Col>
-                        <PlatoContainer>
-                            <h5 className="subtitle-text">
-                                {station}
-                                -LAST 14 DAYS DEFECT SYMPTOM
-                            </h5>
-                             <Plato data={fourteenDaysFailure} /> 
-                            </PlatoContainer>
-                        </Col>
-                        
-                    </Row>
-                    <Row  style={{ width: '100%',marginBottom:'20px' }}>
-                        <Col>
-                            <div>
-                                <DefectTable sortFailure={sortFailure} />
-                            </div>
-                        </Col>
-                        <Col>
-                            <div>
-                                <DefectTable sortFailure={fourteenDaysFailure} />
-                            </div>
-                        </Col>
-                    </Row>
+                    <DetialRepairRow
+                        station={station}
+                        dStartDate={dStartDate}
+                        dEndDate={dEndDate}
+                        sortFailure={sortFailure}
+                        fourteenDaysFailure={fourteenDaysFailure}
+                        description={'-LAST 14 DAYS DEFECT SYMPTOM'}
+                    />
 
                     <SectionTitle>
                         <h6>TOP 3 ROOT CAUSES HISTORY:</h6>
                     </SectionTitle>
-                    <Row style={{width:"100%"}}>
+                    <Row style={{ width: '100%' }}>
                         <Col>
-                           <PlatoContainer>
-                           <h5 className="subtitle-text">
-                             
-                                {`${station} station ${outputDate(dStartDate)} ~ ${outputDate(
-                                    dEndDate
-                                )}`}
-                            </h5>
-                            {sortFailure.length ? (
-                                <div>
-                                    <h6>{sortFailure[0].defectName}</h6>
-                                    <Plato
-                                        data={parsingRootCause(
-                                            sortFailure[0].defectName,
-                                            dRepair,
-                                            station
-                                        )}
-                                    />
-                                </div>
-                            ) : null}
-                            </PlatoContainer>
-              
-                        </Col>
-                     
-                        <Col>
-                        <PlatoContainer>
-                            <h5 className="subtitle-text">
-                                {station}
-                                -LAST 14 DAYS  REPAIR RECORD
-                            </h5>
-                            {fourteenDaysFailure.length ? (
-                                <div>
-                                    <h6>{sortFailure[0].defectName}</h6>
-                                    <Plato
-                                        data={parsingRootCause(
-                                            sortFailure[0].defectName,
-                                            dRepair,
-                                            station
-                                        )}
-                                    />
-                                </div>
-                            ) : null}
+                            <PlatoContainer>
+                                <h5 className="subtitle-text">
+                                    {`${station} station ${outputDate(
+                                        dStartDate
+                                    )} ~ ${outputDate(dEndDate)}`}
+                                </h5>
+                                {sortFailure.length ? (
+                                    <div>
+                                        <h6>{sortFailure[0].defectName}</h6>
+                                        <Plato
+                                            data={parsingRootCause(
+                                                sortFailure[0].defectName,
+                                                dRepair,
+                                                station
+                                            )}
+                                        />
+                                    </div>
+                                ) : null}
                             </PlatoContainer>
                         </Col>
-                        
-                    </Row> 
+
+                        <Col>
+                            <PlatoContainer>
+                                <h5 className="subtitle-text">
+                                    {station}
+                                    -LAST 14 DAYS REPAIR RECORD
+                                </h5>
+                                {fourteenDaysFailure.length ? (
+                                    <div>
+                                        <h6>{sortFailure[0].defectName}</h6>
+                                        <Plato
+                                            data={parsingRootCause(
+                                                sortFailure[0].defectName,
+                                                dRepair,
+                                                station
+                                            )}
+                                        />
+                                    </div>
+                                ) : null}
+                            </PlatoContainer>
+                        </Col>
+                    </Row>
                 </DataWrapper>
-            
-                   
-          
 
-  
-
-                    {/* <Row>
+                {/* <Row>
                         <Col>
                             <h5 className="subtitle-text">{`${startDate}~${endDate}`}</h5>
                             {sortFailure.length ? (
@@ -706,7 +644,7 @@ function Detail(props) {
                                 </div>
                             ) : null}
                         </Col>
-                    </Row>  */} 
+                    </Row>  */}
             </Container>
         </>
     ) : null
@@ -714,8 +652,7 @@ function Detail(props) {
 
 export default connect(Detail)
 
-
-     /* <Row style={{ margin: '20px' }}>
+/* <Row style={{ margin: '20px' }}>
                         <Button onClick={() => this.gotoDefectMapping()}>
                             Defect Mapping Page
                         </Button>

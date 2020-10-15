@@ -15,7 +15,7 @@ const ModelContainer = styled.div`
 
     &:hover {
         color: #fff;
-        background-color: #FEE4C4;
+        background-color: #fee4c4;
     }
 `
 
@@ -29,7 +29,7 @@ const ModelBlock = styled.div`
     font-weight: 400;
     font-style: italic;
     > h6 {
-        color: ${(props) => (props.fty < 98 ? '#d00213' : '#6fa4e3')};
+        color: ${props => (props.fty < 98 ? '#d00213' : '#6fa4e3')};
         font-size: 12px;
         font-weight: 400;
         font-style: italic;

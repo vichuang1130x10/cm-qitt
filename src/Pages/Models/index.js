@@ -95,14 +95,14 @@ function App({ appState }) {
     const [modelList, setModelList] = useState([])
     const stations = pickUpStationByCMVendor(vendor)
 
-    const keywordSearch = (value) => {
-        const searchList = models.filter((model) =>
+    const keywordSearch = value => {
+        const searchList = models.filter(model =>
             model.model.toLowerCase().includes(value.toLowerCase())
         )
         setModelList(searchList)
     }
 
-    const onValueChanged = (v) => {
+    const onValueChanged = v => {
         setValue(v)
         keywordSearch(v)
     }
@@ -116,19 +116,17 @@ function App({ appState }) {
     }
 
     const handleMBBtnOnClicked = () => {
-        const updateList = models.filter((model) => model.productType === 'MB')
+        const updateList = models.filter(model => model.productType === 'MB')
         setModelList(updateList)
     }
 
     const handleBPNBtnOnClicked = () => {
-        const updateList = models.filter((model) => model.productType === 'BPN')
+        const updateList = models.filter(model => model.productType === 'BPN')
         setModelList(updateList)
     }
 
     const handleOtherBtnOnClicked = () => {
-        const updateList = models.filter(
-            (model) => model.productType === 'Other'
-        )
+        const updateList = models.filter(model => model.productType === 'Other')
         setModelList(updateList)
     }
 
@@ -150,7 +148,7 @@ function App({ appState }) {
                             <SearchBarWrapper>
                                 <Input
                                     type={value}
-                                    onChange={(e) =>
+                                    onChange={e =>
                                         onValueChanged(e.target.value)
                                     }
                                     placeholder="Model Search"
@@ -183,7 +181,7 @@ function App({ appState }) {
                         </Sticker>
 
                         <CardWrapper>
-                            {modelList.map((model) => (
+                            {modelList.map(model => (
                                 <Card
                                     key={model.model}
                                     model={model}

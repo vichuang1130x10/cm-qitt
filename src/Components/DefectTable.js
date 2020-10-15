@@ -3,7 +3,13 @@ import { Table } from 'react-bootstrap'
 
 export default function DefectTable({ sortFailure }) {
     return (
-        <Table striped bordered hover size="sm" style={{ width:'100%',fontSize: '12px',margin:'0 auto' }}>
+        <Table
+            striped
+            bordered
+            hover
+            size="sm"
+            style={{ width: '100%', fontSize: '12px', margin: '0 auto' }}
+        >
             <thead>
                 <tr>
                     <th>Defect Item </th>
@@ -13,7 +19,7 @@ export default function DefectTable({ sortFailure }) {
                 </tr>
             </thead>
             <tbody>
-                {sortFailure.map((item) => (
+                {sortFailure.map(item => (
                     <tr key={item.defectName}>
                         <td>{item.defectName}</td>
                         <td>{item.qty}</td>

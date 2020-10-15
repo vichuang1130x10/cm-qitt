@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
     appState: state.app.yieldRate,
 })
 

@@ -18,24 +18,24 @@ function App(props) {
     const [errorListFlag, setErrorListFlag] = useState(false)
     const [repairListFlag, setRepairListFlag] = useState(false)
 
-    const receivedYieldRate = (obj) => {
+    const receivedYieldRate = obj => {
         setYieldRate(obj)
     }
 
-    const receivedErrorList = (obj) => {
+    const receivedErrorList = obj => {
         setErrorList(obj)
     }
 
-    const receivedRepairList = (obj) => setRepairList(obj)
+    const receivedRepairList = obj => setRepairList(obj)
 
-    const transferData = (e) => {
+    const transferData = e => {
         let parsedErrorList = null
         if (
             repairList.RepairList[0].Vendor === 'USI' ||
             repairList.RepairList[0].Vendor === 'USISZ'
         ) {
             mappingErrorListAndRepairList(errorList, repairList)
-            const udpatedErrorList = errorList.ErrorList.map((ele) => {
+            const udpatedErrorList = errorList.ErrorList.map(ele => {
                 if (ele['Reason'] === null || ele['Reason'] === undefined) {
                     ele['Reason'] = '待修'
                 }
@@ -85,24 +85,24 @@ function App(props) {
                         <DragCard
                             title="Yield Rate"
                             fileType="YieldRate"
-                            callback={(obj) => receivedYieldRate(obj)}
-                            setFlag={(bool) => setYieldRateFlag(bool)}
+                            callback={obj => receivedYieldRate(obj)}
+                            setFlag={bool => setYieldRateFlag(bool)}
                         />
                     </Col>
                     <Col>
                         <DragCard
                             title="Error List"
                             fileType="ErrorList"
-                            callback={(obj) => receivedErrorList(obj)}
-                            setFlag={(bool) => setErrorListFlag(bool)}
+                            callback={obj => receivedErrorList(obj)}
+                            setFlag={bool => setErrorListFlag(bool)}
                         />
                     </Col>
                     <Col>
                         <DragCard
                             title="Repair List"
                             fileType="RepairList"
-                            callback={(obj) => receivedRepairList(obj)}
-                            setFlag={(bool) => setRepairListFlag(bool)}
+                            callback={obj => receivedRepairList(obj)}
+                            setFlag={bool => setRepairListFlag(bool)}
                         />
                     </Col>
                 </Row>

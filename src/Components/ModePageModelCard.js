@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import CardTrend from '../Visualization/CardTrend'
-import {navigate} from '@reach/router'
+import { navigate } from '@reach/router'
 
 const Card = styled.div`
     height: 180px;
@@ -33,7 +33,7 @@ const Card = styled.div`
 
     &:hover {
         color: #fff;
-        background-color: #FEE4C4;
+        background-color: #fee4c4;
     }
 `
 const StationInfo = styled.div`
@@ -61,7 +61,7 @@ const CardTendContainer = styled.div`
 `
 
 const FTYNumber = styled.p`
-    color: ${(props) => (props.fty < 98 ? '#d00213' : '#6fa4e3')};
+    color: ${props => (props.fty < 98 ? '#d00213' : '#6fa4e3')};
 `
 
 const App = ({ model, stations }) => {

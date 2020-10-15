@@ -42,7 +42,7 @@ function App(props) {
     console.log('primary selection page start')
     const { models, vendor, startDate, endDate } = props.appState
     const stations = pickUpStationByCMVendor(vendor)
-    const mBModelList = models.filter((model) => model.productType === 'MB')
+    const mBModelList = models.filter(model => model.productType === 'MB')
     const [modelList, setModelList] = useState([])
     const [sortModelNameFlag, setSortModelNameFlag] = useState(false)
     const [sortStation0Flag, setSortStation0Flag] = useState(false)
@@ -57,8 +57,8 @@ function App(props) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [models])
 
-    const keywordSearch = (value) => {
-        const searchList = mBModelList.filter((model) =>
+    const keywordSearch = value => {
+        const searchList = mBModelList.filter(model =>
             model.model.toLowerCase().includes(value.toLowerCase())
         )
         setModelList(searchList)
@@ -164,14 +164,14 @@ function App(props) {
                 setSortStation1={() => setSortStation1()}
                 setSortStation2={() => setSortStation2()}
                 setSortStation3={() => setSortStation3()}
-                searchBarOnchanged={(v) => keywordSearch(v)}
+                searchBarOnchanged={v => keywordSearch(v)}
                 date={`${outputDate(startDate)} ~ ${outputDate(endDate)}`}
             />
             <ListContainer>
                 <Container>
                     <Row>
                         <div className="model-list-container">
-                            {modelList.map((model) => (
+                            {modelList.map(model => (
                                 <ModelCards
                                     key={model.model}
                                     modelObj={model}

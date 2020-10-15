@@ -16,7 +16,7 @@ class Plato extends Component {
     static getDerivedStateFromProps(nextProps, prevState) {
         const { data } = nextProps
         if (!data) return {}
-        const trimNameData = data.map((d) => {
+        const trimNameData = data.map(d => {
             const updateName =
                 d.defectName.length <= 18
                     ? d.defectName
@@ -33,7 +33,7 @@ class Plato extends Component {
 
         console.log('plato chart start')
         console.log(updateData)
-        const x = updateData.map((d) => d.defectName)
+        const x = updateData.map(d => d.defectName)
         // console.log(x);
         const xScale = d3
             .scaleBand()
@@ -45,7 +45,7 @@ class Plato extends Component {
             .domain([0, 100])
             .range([height - margin.bottom, margin.top])
 
-        const [yMin, yMax] = d3.extent(updateData, (d) => d.qty)
+        const [yMin, yMax] = d3.extent(updateData, d => d.qty)
         const yScaleRight = d3
             .scaleLinear()
             .domain([0, yMax + 5])
@@ -53,19 +53,19 @@ class Plato extends Component {
 
         const trend = d3
             .line()
-            .x((d) => xScale(d.defectName) + 20)
-            .y((d) => yScale(d.accu))
+            .x(d => xScale(d.defectName) + 20)
+            .y(d => yScale(d.accu))
 
         const line = trend(updateData)
 
-        const labels = updateData.map((d) => ({
+        const labels = updateData.map(d => ({
             x: xScale(d.defectName) + 20,
             y: yScale(d.accu),
             fill: '#4372c4',
             text: `${d.accu}%`,
         }))
 
-        const bars = updateData.map((d) => {
+        const bars = updateData.map(d => {
             return {
                 x: xScale(d.defectName) + 7,
                 y: yScaleRight(d.qty),
@@ -79,7 +79,7 @@ class Plato extends Component {
             }
         })
 
-        const textLabels = updateData.map((d) => ({
+        const textLabels = updateData.map(d => ({
             x: xScale(d.defectName),
             y: yScaleRight(d.qty),
             stroke: '#4372c4',
@@ -100,8 +100,14 @@ class Plato extends Component {
 
     createAxis = () => {
         let xAxisD3 = d3.axisBottom()
-        let yAxisD3 = d3.axisLeft().tickFormat((d) => d).ticks(5)
-        let yAxisRight = d3.axisRight().tickFormat((d) => `${d}%`).ticks(5)
+        let yAxisD3 = d3
+            .axisLeft()
+            .tickFormat(d => d)
+            .ticks(5)
+        let yAxisRight = d3
+            .axisRight()
+            .tickFormat(d => `${d}%`)
+            .ticks(5)
         xAxisD3.scale(this.state.xScale)
         if (this.xAxis.current) {
             d3.select(this.xAxis.current).call(xAxisD3)
@@ -178,7 +184,13 @@ class Plato extends Component {
                     transform={`translate(${width - margin.right * 7}, 0)`}
                 />
             </svg>
-        ) : <h3 style={{marginTop:'70px',marginLeft:'40px',color:'#ccc'}}>No Data</h3>
+        ) : (
+            <h3
+                style={{ marginTop: '70px', marginLeft: '40px', color: '#ccc' }}
+            >
+                No Data
+            </h3>
+        )
     }
 }
 
