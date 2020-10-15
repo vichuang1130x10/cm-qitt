@@ -274,6 +274,7 @@ export function parsingToQty(e, str, isFourteenDay,dEndDate){
 }
 
 export function parsingRootCause(failureName, e, str,isFourteenDay,dEndate){
+    if(!failureName) return
     const result = []
     const rootCause = {}
     const failures = isFourteenDay ? e[str].ErorrDescriptions.filter(

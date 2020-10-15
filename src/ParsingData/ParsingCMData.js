@@ -6,7 +6,7 @@ import {
     pickUpStationByCMVendorForPie,
     extractModelName,
     getSevenDayBoundary,
-    getDataMonth,
+  
 } from './ParsingHelpFunction'
 
 // Main function to parsing yieldRate json to specfic format for each models and some meta data
@@ -54,7 +54,7 @@ export function parseForYieldRate(updatedJson) {
     */
         if (n[obj.Model] === undefined || n[obj.Model] === null) {
             n[obj.Model] = {}
-            n[obj.Model]['RowData'] = [obj]
+            // n[obj.Model]['RowData'] = [obj]
 
             for (let s of station) {
                 // e.g. X11QPH+ : { SMT1:{Pass,Fail,....},SMT2:{...},ASM:{...},FCT:{...}}
@@ -91,7 +91,7 @@ export function parseForYieldRate(updatedJson) {
                 n[obj.Model][obj.Type].monthly = [{ Month, Pass, Fail, Total }]
             }
         } else {
-            n[obj.Model]['RowData'].push(obj)
+            // n[obj.Model]['RowData'].push(obj)
             if (
                 // if the station is what we need, grab it; Otherwise, ignore this row
                 station.includes(obj.Type)

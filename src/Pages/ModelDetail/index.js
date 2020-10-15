@@ -85,6 +85,9 @@ const PlatoContainer = styled.div`
 
 const timeUnits = ['mo', 'weekly', 'monthly']
 const timeUnitsWithoutMo = ['weekly', 'monthly']
+const getNElement = (arr) => arr.length > 3 ? 3 : arr.length
+
+
 
 function Detail(props) {
     const { modelName, stations } = props.location.state
@@ -222,50 +225,35 @@ function Detail(props) {
                     <SectionTitle>
                         <h6>TOP 3 ROOT CAUSES HISTORY:</h6>
                     </SectionTitle>
-                    <Row style={{ width: '100%' }}>
-                        <Col>
-                            <PlatoContainer>
-                                <h5 className="subtitle-text">
-                                    {`${station} station ${outputDate(
-                                        dStartDate
-                                    )} ~ ${outputDate(dEndDate)}`}
-                                </h5>
-                                {sortFailure.length ? (
-                                    <div>
-                                        <h6>{sortFailure[0].defectName}</h6>
-                                        <Plato
-                                            data={parsingRootCause(
-                                                sortFailure[0].defectName,
-                                                dRepair,
-                                                station
-                                            )}
-                                        />
-                                    </div>
-                                ) : null}
-                            </PlatoContainer>
-                        </Col>
-
-                        <Col>
-                            <PlatoContainer>
-                                <h5 className="subtitle-text">
-                                    {station}
-                                    -LAST 14 DAYS REPAIR RECORD
-                                </h5>
-                                {fourteenDaysFailure.length ? (
-                                    <div>
-                                        <h6>{sortFailure[0].defectName}</h6>
-                                        <Plato
-                                            data={parsingRootCause(
-                                                sortFailure[0].defectName,
-                                                dRepair,
-                                                station
-                                            )}
-                                        />
-                                    </div>
-                                ) : null}
-                            </PlatoContainer>
-                        </Col>
-                    </Row>
+                    {
+                        sortFailure.length &&  sortFailure.slice(0,getNElement(sortFailure)).map(
+                            (s,i) => <DetialRepairRow 
+                                      key={i}
+                                      station={station}
+                                      dStartDate={dStartDate}
+                                      dEndDate={dEndDate}
+                                      sortFailure={parsingRootCause(
+                                        s.defectName,
+                                        dRepair,
+                                        station,
+                                       false,
+                                       dEndDate
+                                    )}
+                                      fourteenDaysFailure={parsingRootCause(
+                                        s.defectName,
+                                        dRepair,
+                                        station,
+                                        true,
+                                        dEndDate
+                                    )}
+                                      description={'-LAST 14 Repair Record'}
+                                      failureName={s.defectName}
+                                      fourteenfailureName={(fourteenDaysFailure[i] && fourteenDaysFailure[i].defectName) || ""}
+                            
+                            />
+                        )
+                    }
+                
                 </DataWrapper>
 
                 {/* <Row>

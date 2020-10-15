@@ -23,6 +23,7 @@ export default function App({
     fourteenDaysFailure,
     description,
     failureName,
+    fourteenfailureName
 }) {
     return (
         <>
@@ -45,7 +46,7 @@ export default function App({
                         <h5 className="subtitle-text">
                             {`${station} ${description}`}
                         </h5>
-                        <h6>{failureName}</h6>
+                        <h6>{fourteenfailureName}</h6>
                         <Plato data={fourteenDaysFailure} />
                     </PlatoContainer>
                 </Col>

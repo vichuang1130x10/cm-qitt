@@ -18,11 +18,11 @@ class Plato extends Component {
         if (!data) return {}
         const trimNameData = data.map(d => {
             const updateName =
-                d.defectName.length <= 18
+                d.defectName.length <= 28
                     ? d.defectName
-                    : d.defectName.substr(0, 18)
+                    : d.defectName.substr(0, 28)
             return {
-                defectName: updateName,
+                defectName: d.defectName,
                 qty: d.qty,
                 indiv: d.indiv,
                 accu: d.accu,

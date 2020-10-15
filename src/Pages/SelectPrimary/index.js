@@ -39,7 +39,7 @@ const SpinnerWrapper = styled.div`
 `
 
 function App(props) {
-    console.log('primary selection page start')
+   
     const { models, vendor, startDate, endDate } = props.appState
     const stations = pickUpStationByCMVendor(vendor)
     const mBModelList = models.filter(model => model.productType === 'MB')
