@@ -336,6 +336,56 @@ function sortByMonth(a, b) {
     }
 }
 
+// CM_PN: "65G1225-207X"
+// Count: 1
+// Cust_PN: "CAP-0530L"
+// Cust_PartName: "CER 2.2UF 6.3V M X6S 0402"
+// Date: Tue Jan 14 2020 00:00:00 GMT+0800 (台北標準時間) {}
+// Error_Code: "SMT-M01"
+// Error_Description: "MISSING COMP(WITH SOLDER)"
+// Line: "22W1"
+// MO: 11204604
+// Model: "AOC-UR-i4XTF-ST031"
+// Month: 1
+// Reason: "MISSING COMP(WITH SOLDER)"
+// START_DATE: Mon Jan 13 2020 00:00:00 GMT+0800 (台北標準時間) {}
+// Type: "AOI-A1"
+// Vendor: "OSE"
+// Version: 1.01
+// item: "C218"
+
+export function parsingRepairList(repairList,isSevenDay,date){
+    let n = {}
+
+    let dateFilteredRepairList = null
+    
+    if(isSevenDay){
+        // const inTheSevenDaysData = e[str].ErorrDescriptions.filter(
+        //     obj => new Date(obj.date) > getSevenDayBoundary(dEndDate, 14)
+        // )
+        dateFilteredRepairList = repairList.filter(obj => new Date(obj.Date) > getSevenDayBoundary(date,7))
+    
+    }else{
+        dateFilteredRepairList = repairList
+    }
+
+    const updateRepairList = dateFilteredRepairList.filter(rep => rep.Cust_PN && !rep.Cust_PN.includes('PCB')&& !rep.Cust_PN.includes('MBD') && !rep.Cust_PN.includes('AOC') && !rep.Cust_PN.includes('AOM') && rep.Cust_PN.trim().length > 0 && rep.Cust_PN !== "N/A" && rep.Cust_PN !== "NTF")
+        console.log(updateRepairList)
+    
+
+    updateRepairList.forEach(rep => {
+        if (n[rep.Cust_PN] === undefined || n[rep.Cust_PN] === null) {
+            n[rep.Cust_PN] = {qty:1,data:[]}
+            n[rep.Cust_PN].data.push(rep)
+            
+          
+       }else{
+        n[rep.Cust_PN].qty += 1   
+        n[rep.Cust_PN].data.push(rep)
+       }
+    })
+    return n
+}
 // parsing errorlist json to specfic format for each station failure symptom
 export function parsingErrorList(errorList) {
     let n = {}
