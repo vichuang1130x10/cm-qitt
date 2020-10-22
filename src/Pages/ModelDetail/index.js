@@ -120,6 +120,7 @@ function Detail(props) {
             case 'USI':
             case 'USISZ':
             case 'OSE':
+            case 'CPW':    
                 tArray = timeUnits
                 break
             default:
