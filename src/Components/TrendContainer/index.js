@@ -84,7 +84,7 @@ function App(props) {
                 <h6 className="content-category">{category}</h6>
                 <h6 className="content-title">
                     {timeUnit === 'Week'
-                        ? `last 10 Weeks trend`
+                        ? `last 12 Weeks trend`
                         : `Monthly trend`}
                 </h6>
                 <div>
