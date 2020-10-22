@@ -9,6 +9,7 @@ import Footer from '../../Components/Footer'
 import SubmitButton from '../../Components/SubmitButton'
 import DragCard from '../../Components/DragCard'
 import connect from './connect'
+import { SetFilters } from '../../Data/SetHeaderLink'
 
 function App(props) {
     const [yieldRate, setYieldRate] = useState({})
@@ -68,6 +69,7 @@ function App(props) {
         // } else {
         //     parsedErrorList = repairList
         // }
+        props.setHeaderLinkFilters(SetFilters.SELECT_DASHBOARD)
         props.saveAppState({ yieldRate, parsedErrorList,rawRepairList })
         props.resetPrimaryModel()
 

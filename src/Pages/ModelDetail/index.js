@@ -1,18 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import { Container, Row, Col } from 'react-bootstrap'
+import { Container,} from 'react-bootstrap'
 import ModelTrend from '../../Visualization/ModelTrend'
 import DetailHeader from '../../Components/DetailHeader'
 import DetialRepairRow from '../../Components/DetailRepairRow'
 import {
-    getSevenDayBoundary,
-    outputDate,
     parsingToQty,
     parsingRootCause
 } from '../../ParsingData/ParsingHelpFunction'
-import { navigate } from '@reach/router'
-import { Link } from '@reach/router'
-import Plato from '../../Visualization/Plato'
+// import { navigate } from '@reach/router'
+// import { Link } from '@reach/router'
 import connect from './connect'
 
 const ChartContainerTitle = styled.div`
@@ -255,196 +252,6 @@ function Detail(props) {
                     }
                 
                 </DataWrapper>
-
-                {/* <Row>
-                        <Col>
-                            <h5 className="subtitle-text">{`${startDate}~${endDate}`}</h5>
-                            {sortFailure.length ? (
-                                <div>
-                                    <h6>{sortFailure[0].defectName}</h6>
-                                    <Plato
-                                        data={this.parsingRootCause(
-                                            sortFailure[0].defectName,
-                                            errorAnalysis,
-                                            station
-                                        )}
-                                    />
-                                </div>
-                            ) : null}
-                        </Col>
-                        <Col>
-                            <h5 className="subtitle-text">
-                                LAST 14 DAYS REPAIR RECORD
-                            </h5>
-                            {sevenDaysFailure.length ? (
-                                <div>
-                                    <h6>{sevenDaysFailure[0].defectName}</h6>
-                                    <Plato
-                                        data={this.parsingSevenDayRootCause(
-                                            sevenDaysFailure[0].defectName,
-                                            errorAnalysis,
-                                            station
-                                        )}
-                                    />
-                                </div>
-                            ) : null}
-                        </Col>
-                    </Row>
-
-                    <Row>
-                        <Col>
-                            {sortFailure.length ? (
-                                <div>
-                                    <h6>{sortFailure[0].defectName}</h6>
-                                    <DefectTable
-                                        sortFailure={this.parsingRootCause(
-                                            sortFailure[0].defectName,
-                                            errorAnalysis,
-                                            station
-                                        )}
-                                    />
-                                </div>
-                            ) : null}
-                        </Col>
-                        <Col>
-                            {sevenDaysFailure.length ? (
-                                <div>
-                                    <h6>{sevenDaysFailure[0].defectName}</h6>
-                                    <DefectTable
-                                        sortFailure={this.parsingSevenDayRootCause(
-                                            sevenDaysFailure[0].defectName,
-                                            errorAnalysis,
-                                            station
-                                        )}
-                                    />
-                                </div>
-                            ) : null}
-                        </Col>
-                    </Row>
-
-                    <Row>
-                        <Col>
-                            {sortFailure[1] ? (
-                                <div>
-                                    <h6>{sortFailure[1].defectName}</h6>
-                                    <Plato
-                                        data={this.parsingRootCause(
-                                            sortFailure[1].defectName,
-                                            errorAnalysis,
-                                            station
-                                        )}
-                                    />
-                                </div>
-                            ) : null}
-                        </Col>
-                        <Col>
-                            {sevenDaysFailure[1] ? (
-                                <div>
-                                    <h6>{sevenDaysFailure[1].defectName}</h6>
-                                    <Plato
-                                        data={this.parsingSevenDayRootCause(
-                                            sevenDaysFailure[1].defectName,
-                                            errorAnalysis,
-                                            station
-                                        )}
-                                    />
-                                </div>
-                            ) : null}
-                        </Col>
-                    </Row>
-
-                    <Row>
-                        <Col>
-                            {sortFailure[1] ? (
-                                <div>
-                                    <h6>{sortFailure[1].defectName}</h6>
-                                    <DefectTable
-                                        sortFailure={this.parsingRootCause(
-                                            sortFailure[1].defectName,
-                                            errorAnalysis,
-                                            station
-                                        )}
-                                    />
-                                </div>
-                            ) : null}
-                        </Col>
-                        <Col>
-                            {sevenDaysFailure[1] ? (
-                                <div>
-                                    <h6>{sevenDaysFailure[1].defectName}</h6>
-                                    <DefectTable
-                                        sortFailure={this.parsingSevenDayRootCause(
-                                            sevenDaysFailure[1].defectName,
-                                            errorAnalysis,
-                                            station
-                                        )}
-                                    />
-                                </div>
-                            ) : null}
-                        </Col>
-                    </Row>
-
-                    <Row>
-                        <Col>
-                            {sortFailure[2] ? (
-                                <div>
-                                    <h6>{sortFailure[2].defectName}</h6>
-                                    <Plato
-                                        data={this.parsingRootCause(
-                                            sortFailure[2].defectName,
-                                            errorAnalysis,
-                                            station
-                                        )}
-                                    />
-                                </div>
-                            ) : null}
-                        </Col>
-                        <Col>
-                            {sevenDaysFailure[2] ? (
-                                <div>
-                                    <h6>{sevenDaysFailure[2].defectName}</h6>
-                                    <Plato
-                                        data={this.parsingSevenDayRootCause(
-                                            sevenDaysFailure[2].defectName,
-                                            errorAnalysis,
-                                            station
-                                        )}
-                                    />
-                                </div>
-                            ) : null}
-                        </Col>
-                    </Row>
-
-                    <Row>
-                        <Col>
-                            {sortFailure[2] ? (
-                                <div>
-                                    <h6>{sortFailure[2].defectName}</h6>
-                                    <DefectTable
-                                        sortFailure={this.parsingRootCause(
-                                            sortFailure[2].defectName,
-                                            errorAnalysis,
-                                            station
-                                        )}
-                                    />
-                                </div>
-                            ) : null}
-                        </Col>
-                        <Col>
-                            {sevenDaysFailure[2] ? (
-                                <div>
-                                    <h6>{sevenDaysFailure[2].defectName}</h6>
-                                    <DefectTable
-                                        sortFailure={this.parsingSevenDayRootCause(
-                                            sevenDaysFailure[2].defectName,
-                                            errorAnalysis,
-                                            station
-                                        )}
-                                    />
-                                </div>
-                            ) : null}
-                        </Col>
-                    </Row>  */}
             </Container>
         </>
     ) : null
@@ -452,8 +259,3 @@ function Detail(props) {
 
 export default connect(Detail)
 
-/* <Row style={{ margin: '20px' }}>
-                        <Button onClick={() => this.gotoDefectMapping()}>
-                            Defect Mapping Page
-                        </Button>
-                    </Row> */
