@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import { Container,} from 'react-bootstrap'
+import { Container } from 'react-bootstrap'
 import ModelTrend from '../../Visualization/ModelTrend'
 import DetailHeader from '../../Components/DetailHeader'
 import DetialRepairRow from '../../Components/DetailRepairRow'
 import {
     parsingToQty,
-    parsingRootCause
+    parsingRootCause,
 } from '../../ParsingData/ParsingHelpFunction'
 // import { navigate } from '@reach/router'
 // import { Link } from '@reach/router'
@@ -68,7 +68,7 @@ const DataWrapper = styled.div`
     border-radius: 10px;
     border: 1px solid transparent;
 `
-
+/*
 const PlatoContainer = styled.div`
     display: flex;
     flex-direction: column;
@@ -79,12 +79,11 @@ const PlatoContainer = styled.div`
 
     margin-top: 10px;
 `
+*/
 
 const timeUnits = ['mo', 'weekly', 'monthly']
 const timeUnitsWithoutMo = ['weekly', 'monthly']
-const getNElement = (arr) => arr.length > 3 ? 3 : arr.length
-
-
+const getNElement = (arr) => (arr.length > 3 ? 3 : arr.length)
 
 function Detail(props) {
     const { modelName, stations } = props.location.state
@@ -103,7 +102,7 @@ function Detail(props) {
         const { appState, repairData } = props
         const { startDate, endDate } = appState
         const modelObject = appState.models.filter(
-            m => m.model === modelName
+            (m) => m.model === modelName
         )[0]
         const repairObject = repairData[modelName]
         setRepair(repairObject)
@@ -111,8 +110,18 @@ function Detail(props) {
         setStartDate(startDate)
         setEndate(endDate)
         setStations(stations)
-        const sortFailureData = parsingToQty(repairObject, station, false,endDate)
-        const fourteenDaysFailure = parsingToQty(repairObject, station, true,endDate)
+        const sortFailureData = parsingToQty(
+            repairObject,
+            station,
+            false,
+            endDate
+        )
+        const fourteenDaysFailure = parsingToQty(
+            repairObject,
+            station,
+            true,
+            endDate
+        )
         setSortFailure(sortFailureData)
         setFourteenDaysFailure(fourteenDaysFailure)
         let tArray = []
@@ -120,7 +129,7 @@ function Detail(props) {
             case 'USI':
             case 'USISZ':
             case 'OSE':
-            case 'CPW':    
+            case 'CPW':
                 tArray = timeUnits
                 break
             default:
@@ -135,14 +144,13 @@ function Detail(props) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dModel, dStartDate, dEndDate, dStations, station, timeUnit])
 
-    const updateStation = str => {
+    const updateStation = (str) => {
         setStation(str)
     }
 
-    const updateTimeUnit = str => {
+    const updateTimeUnit = (str) => {
         setTimeUnit(str)
     }
-
 
     // gotoDefectMapping = () => {
     //     const { modelName, startDate, endDate, errorAnalysis } = this.state
@@ -168,13 +176,15 @@ function Detail(props) {
                                 <select
                                     id="station"
                                     value={station}
-                                    onChange={e =>
+                                    onChange={(e) =>
                                         updateStation(e.target.value)
                                     }
-                                    onBlur={e => updateStation(e.target.value)}
+                                    onBlur={(e) =>
+                                        updateStation(e.target.value)
+                                    }
                                 >
                                     {dStations
-                                        ? dStations.map(station => (
+                                        ? dStations.map((station) => (
                                               <option
                                                   value={station}
                                                   key={station}
@@ -189,12 +199,14 @@ function Detail(props) {
                                 <select
                                     id="timeUnit"
                                     value={timeUnit}
-                                    onChange={e =>
+                                    onChange={(e) =>
                                         updateTimeUnit(e.target.value)
                                     }
-                                    onBlur={e => updateTimeUnit(e.target.value)}
+                                    onBlur={(e) =>
+                                        updateTimeUnit(e.target.value)
+                                    }
                                 >
-                                    {timeUnitArray.map(t => (
+                                    {timeUnitArray.map((t) => (
                                         <option value={t} key={t}>
                                             {t}
                                         </option>
@@ -223,35 +235,39 @@ function Detail(props) {
                     <SectionTitle>
                         <h6>TOP 3 ROOT CAUSES HISTORY:</h6>
                     </SectionTitle>
-                    {
-                        sortFailure.length &&  sortFailure.slice(0,getNElement(sortFailure)).map(
-                            (s,i) => <DetialRepairRow 
-                                      key={i}
-                                      station={station}
-                                      dStartDate={dStartDate}
-                                      dEndDate={dEndDate}
-                                      sortFailure={parsingRootCause(
+                    {sortFailure.length &&
+                        sortFailure
+                            .slice(0, getNElement(sortFailure))
+                            .map((s, i) => (
+                                <DetialRepairRow
+                                    key={i}
+                                    station={station}
+                                    dStartDate={dStartDate}
+                                    dEndDate={dEndDate}
+                                    sortFailure={parsingRootCause(
                                         s.defectName,
                                         dRepair,
                                         station,
-                                       false,
-                                       dEndDate
+                                        false,
+                                        dEndDate
                                     )}
-                                      fourteenDaysFailure={parsingRootCause(
+                                    fourteenDaysFailure={parsingRootCause(
                                         s.defectName,
                                         dRepair,
                                         station,
                                         true,
                                         dEndDate
                                     )}
-                                      description={'-LAST 14 Repair Record'}
-                                      failureName={s.defectName}
-                                      fourteenfailureName={(fourteenDaysFailure[i] && fourteenDaysFailure[i].defectName) || ""}
-                            
-                            />
-                        )
-                    }
-                
+                                    description={'-LAST 14 Repair Record'}
+                                    failureName={s.defectName}
+                                    fourteenfailureName={
+                                        (fourteenDaysFailure[i] &&
+                                            fourteenDaysFailure[i]
+                                                .defectName) ||
+                                        ''
+                                    }
+                                />
+                            ))}
                 </DataWrapper>
             </Container>
         </>
@@ -259,4 +275,3 @@ function Detail(props) {
 }
 
 export default connect(Detail)
-
