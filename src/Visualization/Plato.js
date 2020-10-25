@@ -16,11 +16,11 @@ class Plato extends Component {
     static getDerivedStateFromProps(nextProps, prevState) {
         const { data } = nextProps
         if (!data) return {}
-        const trimNameData = data.map(d => {
-            const updateName =
+        const trimNameData = data.map((d) => {
+            /*  const updateName =
                 d.defectName.length <= 28
                     ? d.defectName
-                    : d.defectName.substr(0, 28)
+                    : d.defectName.substr(0, 28) */
             return {
                 defectName: d.defectName,
                 qty: d.qty,
@@ -33,7 +33,7 @@ class Plato extends Component {
 
         console.log('plato chart start')
         console.log(updateData)
-        const x = updateData.map(d => d.defectName)
+        const x = updateData.map((d) => d.defectName)
         // console.log(x);
         const xScale = d3
             .scaleBand()
@@ -45,7 +45,7 @@ class Plato extends Component {
             .domain([0, 100])
             .range([height - margin.bottom, margin.top])
 
-        const [yMin, yMax] = d3.extent(updateData, d => d.qty)
+        const [, yMax] = d3.extent(updateData, (d) => d.qty)
         const yScaleRight = d3
             .scaleLinear()
             .domain([0, yMax + 5])
@@ -53,19 +53,19 @@ class Plato extends Component {
 
         const trend = d3
             .line()
-            .x(d => xScale(d.defectName) + 20)
-            .y(d => yScale(d.accu))
+            .x((d) => xScale(d.defectName) + 20)
+            .y((d) => yScale(d.accu))
 
         const line = trend(updateData)
 
-        const labels = updateData.map(d => ({
+        const labels = updateData.map((d) => ({
             x: xScale(d.defectName) + 20,
             y: yScale(d.accu),
             fill: '#4372c4',
             text: `${d.accu}%`,
         }))
 
-        const bars = updateData.map(d => {
+        const bars = updateData.map((d) => {
             return {
                 x: xScale(d.defectName) + 7,
                 y: yScaleRight(d.qty),
@@ -79,7 +79,7 @@ class Plato extends Component {
             }
         })
 
-        const textLabels = updateData.map(d => ({
+        const textLabels = updateData.map((d) => ({
             x: xScale(d.defectName),
             y: yScaleRight(d.qty),
             stroke: '#4372c4',
@@ -102,11 +102,11 @@ class Plato extends Component {
         let xAxisD3 = d3.axisBottom()
         let yAxisD3 = d3
             .axisLeft()
-            .tickFormat(d => d)
+            .tickFormat((d) => d)
             .ticks(5)
         let yAxisRight = d3
             .axisRight()
-            .tickFormat(d => `${d}%`)
+            .tickFormat((d) => `${d}%`)
             .ticks(5)
         xAxisD3.scale(this.state.xScale)
         if (this.xAxis.current) {

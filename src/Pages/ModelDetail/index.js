@@ -1,18 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import { Container, Row, Col } from 'react-bootstrap'
+import { Container } from 'react-bootstrap'
 import ModelTrend from '../../Visualization/ModelTrend'
 import DetailHeader from '../../Components/DetailHeader'
 import DetialRepairRow from '../../Components/DetailRepairRow'
 import {
-    getSevenDayBoundary,
-    outputDate,
     parsingToQty,
-    parsingRootCause
+    parsingRootCause,
 } from '../../ParsingData/ParsingHelpFunction'
-import { navigate } from '@reach/router'
-import { Link } from '@reach/router'
-import Plato from '../../Visualization/Plato'
+// import { navigate } from '@reach/router'
+// import { Link } from '@reach/router'
 import connect from './connect'
 
 const ChartContainerTitle = styled.div`
@@ -71,7 +68,7 @@ const DataWrapper = styled.div`
     border-radius: 10px;
     border: 1px solid transparent;
 `
-
+/*
 const PlatoContainer = styled.div`
     display: flex;
     flex-direction: column;
@@ -82,12 +79,11 @@ const PlatoContainer = styled.div`
 
     margin-top: 10px;
 `
+*/
 
 const timeUnits = ['mo', 'weekly', 'monthly']
 const timeUnitsWithoutMo = ['weekly', 'monthly']
-const getNElement = (arr) => arr.length > 3 ? 3 : arr.length
-
-
+const getNElement = (arr) => (arr.length > 3 ? 3 : arr.length)
 
 function Detail(props) {
     const { modelName, stations } = props.location.state
@@ -106,7 +102,7 @@ function Detail(props) {
         const { appState, repairData } = props
         const { startDate, endDate } = appState
         const modelObject = appState.models.filter(
-            m => m.model === modelName
+            (m) => m.model === modelName
         )[0]
         const repairObject = repairData[modelName]
         setRepair(repairObject)
@@ -114,8 +110,18 @@ function Detail(props) {
         setStartDate(startDate)
         setEndate(endDate)
         setStations(stations)
-        const sortFailureData = parsingToQty(repairObject, station, false,endDate)
-        const fourteenDaysFailure = parsingToQty(repairObject, station, true,endDate)
+        const sortFailureData = parsingToQty(
+            repairObject,
+            station,
+            false,
+            endDate
+        )
+        const fourteenDaysFailure = parsingToQty(
+            repairObject,
+            station,
+            true,
+            endDate
+        )
         setSortFailure(sortFailureData)
         setFourteenDaysFailure(fourteenDaysFailure)
         let tArray = []
@@ -123,6 +129,7 @@ function Detail(props) {
             case 'USI':
             case 'USISZ':
             case 'OSE':
+            case 'CPW':
                 tArray = timeUnits
                 break
             default:
@@ -137,14 +144,13 @@ function Detail(props) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dModel, dStartDate, dEndDate, dStations, station, timeUnit])
 
-    const updateStation = str => {
+    const updateStation = (str) => {
         setStation(str)
     }
 
-    const updateTimeUnit = str => {
+    const updateTimeUnit = (str) => {
         setTimeUnit(str)
     }
-
 
     // gotoDefectMapping = () => {
     //     const { modelName, startDate, endDate, errorAnalysis } = this.state
@@ -170,13 +176,15 @@ function Detail(props) {
                                 <select
                                     id="station"
                                     value={station}
-                                    onChange={e =>
+                                    onChange={(e) =>
                                         updateStation(e.target.value)
                                     }
-                                    onBlur={e => updateStation(e.target.value)}
+                                    onBlur={(e) =>
+                                        updateStation(e.target.value)
+                                    }
                                 >
                                     {dStations
-                                        ? dStations.map(station => (
+                                        ? dStations.map((station) => (
                                               <option
                                                   value={station}
                                                   key={station}
@@ -191,12 +199,14 @@ function Detail(props) {
                                 <select
                                     id="timeUnit"
                                     value={timeUnit}
-                                    onChange={e =>
+                                    onChange={(e) =>
                                         updateTimeUnit(e.target.value)
                                     }
-                                    onBlur={e => updateTimeUnit(e.target.value)}
+                                    onBlur={(e) =>
+                                        updateTimeUnit(e.target.value)
+                                    }
                                 >
-                                    {timeUnitArray.map(t => (
+                                    {timeUnitArray.map((t) => (
                                         <option value={t} key={t}>
                                             {t}
                                         </option>
@@ -225,235 +235,43 @@ function Detail(props) {
                     <SectionTitle>
                         <h6>TOP 3 ROOT CAUSES HISTORY:</h6>
                     </SectionTitle>
-                    {
-                        sortFailure.length &&  sortFailure.slice(0,getNElement(sortFailure)).map(
-                            (s,i) => <DetialRepairRow 
-                                      key={i}
-                                      station={station}
-                                      dStartDate={dStartDate}
-                                      dEndDate={dEndDate}
-                                      sortFailure={parsingRootCause(
+                    {sortFailure.length &&
+                        sortFailure
+                            .slice(0, getNElement(sortFailure))
+                            .map((s, i) => (
+                                <DetialRepairRow
+                                    key={i}
+                                    station={station}
+                                    dStartDate={dStartDate}
+                                    dEndDate={dEndDate}
+                                    sortFailure={parsingRootCause(
                                         s.defectName,
                                         dRepair,
                                         station,
-                                       false,
-                                       dEndDate
+                                        false,
+                                        dEndDate
                                     )}
-                                      fourteenDaysFailure={parsingRootCause(
+                                    fourteenDaysFailure={parsingRootCause(
                                         s.defectName,
                                         dRepair,
                                         station,
                                         true,
                                         dEndDate
                                     )}
-                                      description={'-LAST 14 Repair Record'}
-                                      failureName={s.defectName}
-                                      fourteenfailureName={(fourteenDaysFailure[i] && fourteenDaysFailure[i].defectName) || ""}
-                            
-                            />
-                        )
-                    }
-                
+                                    description={'-LAST 14 Repair Record'}
+                                    failureName={s.defectName}
+                                    fourteenfailureName={
+                                        (fourteenDaysFailure[i] &&
+                                            fourteenDaysFailure[i]
+                                                .defectName) ||
+                                        ''
+                                    }
+                                />
+                            ))}
                 </DataWrapper>
-
-                {/* <Row>
-                        <Col>
-                            <h5 className="subtitle-text">{`${startDate}~${endDate}`}</h5>
-                            {sortFailure.length ? (
-                                <div>
-                                    <h6>{sortFailure[0].defectName}</h6>
-                                    <Plato
-                                        data={this.parsingRootCause(
-                                            sortFailure[0].defectName,
-                                            errorAnalysis,
-                                            station
-                                        )}
-                                    />
-                                </div>
-                            ) : null}
-                        </Col>
-                        <Col>
-                            <h5 className="subtitle-text">
-                                LAST 14 DAYS REPAIR RECORD
-                            </h5>
-                            {sevenDaysFailure.length ? (
-                                <div>
-                                    <h6>{sevenDaysFailure[0].defectName}</h6>
-                                    <Plato
-                                        data={this.parsingSevenDayRootCause(
-                                            sevenDaysFailure[0].defectName,
-                                            errorAnalysis,
-                                            station
-                                        )}
-                                    />
-                                </div>
-                            ) : null}
-                        </Col>
-                    </Row>
-
-                    <Row>
-                        <Col>
-                            {sortFailure.length ? (
-                                <div>
-                                    <h6>{sortFailure[0].defectName}</h6>
-                                    <DefectTable
-                                        sortFailure={this.parsingRootCause(
-                                            sortFailure[0].defectName,
-                                            errorAnalysis,
-                                            station
-                                        )}
-                                    />
-                                </div>
-                            ) : null}
-                        </Col>
-                        <Col>
-                            {sevenDaysFailure.length ? (
-                                <div>
-                                    <h6>{sevenDaysFailure[0].defectName}</h6>
-                                    <DefectTable
-                                        sortFailure={this.parsingSevenDayRootCause(
-                                            sevenDaysFailure[0].defectName,
-                                            errorAnalysis,
-                                            station
-                                        )}
-                                    />
-                                </div>
-                            ) : null}
-                        </Col>
-                    </Row>
-
-                    <Row>
-                        <Col>
-                            {sortFailure[1] ? (
-                                <div>
-                                    <h6>{sortFailure[1].defectName}</h6>
-                                    <Plato
-                                        data={this.parsingRootCause(
-                                            sortFailure[1].defectName,
-                                            errorAnalysis,
-                                            station
-                                        )}
-                                    />
-                                </div>
-                            ) : null}
-                        </Col>
-                        <Col>
-                            {sevenDaysFailure[1] ? (
-                                <div>
-                                    <h6>{sevenDaysFailure[1].defectName}</h6>
-                                    <Plato
-                                        data={this.parsingSevenDayRootCause(
-                                            sevenDaysFailure[1].defectName,
-                                            errorAnalysis,
-                                            station
-                                        )}
-                                    />
-                                </div>
-                            ) : null}
-                        </Col>
-                    </Row>
-
-                    <Row>
-                        <Col>
-                            {sortFailure[1] ? (
-                                <div>
-                                    <h6>{sortFailure[1].defectName}</h6>
-                                    <DefectTable
-                                        sortFailure={this.parsingRootCause(
-                                            sortFailure[1].defectName,
-                                            errorAnalysis,
-                                            station
-                                        )}
-                                    />
-                                </div>
-                            ) : null}
-                        </Col>
-                        <Col>
-                            {sevenDaysFailure[1] ? (
-                                <div>
-                                    <h6>{sevenDaysFailure[1].defectName}</h6>
-                                    <DefectTable
-                                        sortFailure={this.parsingSevenDayRootCause(
-                                            sevenDaysFailure[1].defectName,
-                                            errorAnalysis,
-                                            station
-                                        )}
-                                    />
-                                </div>
-                            ) : null}
-                        </Col>
-                    </Row>
-
-                    <Row>
-                        <Col>
-                            {sortFailure[2] ? (
-                                <div>
-                                    <h6>{sortFailure[2].defectName}</h6>
-                                    <Plato
-                                        data={this.parsingRootCause(
-                                            sortFailure[2].defectName,
-                                            errorAnalysis,
-                                            station
-                                        )}
-                                    />
-                                </div>
-                            ) : null}
-                        </Col>
-                        <Col>
-                            {sevenDaysFailure[2] ? (
-                                <div>
-                                    <h6>{sevenDaysFailure[2].defectName}</h6>
-                                    <Plato
-                                        data={this.parsingSevenDayRootCause(
-                                            sevenDaysFailure[2].defectName,
-                                            errorAnalysis,
-                                            station
-                                        )}
-                                    />
-                                </div>
-                            ) : null}
-                        </Col>
-                    </Row>
-
-                    <Row>
-                        <Col>
-                            {sortFailure[2] ? (
-                                <div>
-                                    <h6>{sortFailure[2].defectName}</h6>
-                                    <DefectTable
-                                        sortFailure={this.parsingRootCause(
-                                            sortFailure[2].defectName,
-                                            errorAnalysis,
-                                            station
-                                        )}
-                                    />
-                                </div>
-                            ) : null}
-                        </Col>
-                        <Col>
-                            {sevenDaysFailure[2] ? (
-                                <div>
-                                    <h6>{sevenDaysFailure[2].defectName}</h6>
-                                    <DefectTable
-                                        sortFailure={this.parsingSevenDayRootCause(
-                                            sevenDaysFailure[2].defectName,
-                                            errorAnalysis,
-                                            station
-                                        )}
-                                    />
-                                </div>
-                            ) : null}
-                        </Col>
-                    </Row>  */}
             </Container>
         </>
     ) : null
 }
 
 export default connect(Detail)
-
-/* <Row style={{ margin: '20px' }}>
-                        <Button onClick={() => this.gotoDefectMapping()}>
-                            Defect Mapping Page
-                        </Button>
-                    </Row> */

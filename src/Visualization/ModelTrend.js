@@ -1,7 +1,6 @@
-import React, { Children, Component } from 'react'
+import React, {  Component } from 'react'
 import * as d3 from 'd3'
 import { translateToMonthCharater } from '../ParsingData/ParsingHelpFunction'
-import styled from 'styled-components'
 const width = 600
 const height = 340
 const margin = { top: 20, right: 5, bottom: 50, left: 35 }
@@ -98,7 +97,7 @@ class ModelTrendChart extends Component {
             .domain(x)
             .range([margin.left, width - margin.left])
         /* find the y axis scale */
-        const [min, max] = d3.extent(updateData, d => d.yield)
+        const [min] = d3.extent(updateData, d => d.yield)
         const yScale = d3
             .scaleLinear()
             .domain([Math.min(min, 90), 100])

@@ -9,6 +9,7 @@ import Footer from '../../Components/Footer'
 import SubmitButton from '../../Components/SubmitButton'
 import DragCard from '../../Components/DragCard'
 import connect from './connect'
+import { SetFilters } from '../../Data/SetHeaderLink'
 
 function App(props) {
     const [yieldRate, setYieldRate] = useState({})
@@ -30,6 +31,7 @@ function App(props) {
 
     const transferData = e => {
         let parsedErrorList = null
+        let rawRepairList = null
         if (
             repairList.RepairList[0].Vendor === 'USI' ||
             repairList.RepairList[0].Vendor === 'USISZ'
@@ -42,8 +44,10 @@ function App(props) {
                 return ele
             })
             parsedErrorList = parsingErrorList(udpatedErrorList)
+            rawRepairList = udpatedErrorList
         } else {
             parsedErrorList = parsingErrorList(repairList.RepairList)
+            rawRepairList = repairList.RepairList
         }
 
         // mappingErrorListAndRepairList(errorList, repairList)
@@ -65,7 +69,8 @@ function App(props) {
         // } else {
         //     parsedErrorList = repairList
         // }
-        props.saveAppState({ yieldRate, parsedErrorList })
+        props.setHeaderLinkFilters(SetFilters.SELECT_DASHBOARD)
+        props.saveAppState({ yieldRate, parsedErrorList,rawRepairList })
         props.resetPrimaryModel()
 
         // const parsedErrorList = parsingErrorList(udpatedErrorList);
