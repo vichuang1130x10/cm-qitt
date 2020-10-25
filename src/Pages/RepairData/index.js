@@ -6,6 +6,7 @@ import Footer from '../../Components/Footer'
 import { Container } from 'react-bootstrap'
 import connect from './connect'
 import { outputDate } from '../../ParsingData/ParsingHelpFunction'
+import { parsingRepairList } from '../../ParsingData/ParsingCMData'
 
 const DataWrapper = styled.div`
     width: 100%;
@@ -120,6 +121,8 @@ function App({ repairData }) {
 
         setStartDate(sDate)
         setEndDate(eDate)
+        console.log(repairData)
+        console.log(parsingRepairList(repairData))
     }, [repairData])
 
     //     startDate:

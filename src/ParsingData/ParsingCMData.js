@@ -6,7 +6,6 @@ import {
     pickUpStationByCMVendorForPie,
     extractModelName,
     getSevenDayBoundary,
-  
 } from './ParsingHelpFunction'
 
 // Main function to parsing yieldRate json to specfic format for each models and some meta data
@@ -32,7 +31,7 @@ export function parseForYieldRate(updatedJson) {
     // each obj would be: { Fail: 0,Line: "PD2-H",MO: "6005130-UG",Model: "2701-004240-00(BPN-SAS3-833A)",Month: 6,
     // Pass: 44,Refail: 0,Repass: 0,Start_date: Sat Jun 06 2020 00:00:00 GMT+0800 (台北標準時間) {},
     // Total: 44,Type: "ASM",Vendor: "USI",Version: 1, YR: 1  }
-    updatedJson.YieldRate.forEach(obj => {
+    updatedJson.YieldRate.forEach((obj) => {
         /* 
       3.Seperate raw data for MB, BPN ,and Other groups 
     */
@@ -104,7 +103,7 @@ export function parseForYieldRate(updatedJson) {
                 // gather same date/mo/weekly/monthly
                 // for same date:
                 const sameDateObje = n[obj.Model][obj.Type].data.find(
-                    elem => elem.Date.toString() === Date.toString()
+                    (elem) => elem.Date.toString() === Date.toString()
                 )
                 if (sameDateObje) {
                     sameDateObje.Pass += Pass
@@ -120,7 +119,7 @@ export function parseForYieldRate(updatedJson) {
                 }
                 // for same mo:
                 const sameMoObj = n[obj.Model][obj.Type].mo.find(
-                    elem => elem.MO === MO
+                    (elem) => elem.MO === MO
                 )
                 if (sameMoObj) {
                     sameMoObj.Pass += Pass
@@ -137,7 +136,7 @@ export function parseForYieldRate(updatedJson) {
                 }
                 // for same weekly:
                 const sameWeeklyObj = n[obj.Model][obj.Type].weekly.find(
-                    elem => elem.weekNumber === weekNumber
+                    (elem) => elem.weekNumber === weekNumber
                 )
                 if (sameWeeklyObj) {
                     sameWeeklyObj.Pass += Pass
@@ -153,7 +152,7 @@ export function parseForYieldRate(updatedJson) {
                 }
                 // for same monthly:
                 const sameMonthObj = n[obj.Model][obj.Type].monthly.find(
-                    elem => elem.Month === Month
+                    (elem) => elem.Month === Month
                 )
                 if (sameMonthObj) {
                     sameMonthObj.Pass += Pass
@@ -223,7 +222,7 @@ function transformToArray(obj) {
     const { startDate, endDate, MB, BPN, Other, vendor } = obj
     const o = { vendor, startDate, endDate, MB, BPN, Other, models: [] }
     const keys = Object.keys(obj).filter(
-        item =>
+        (item) =>
             item !== 'startDate' &&
             item !== 'endDate' &&
             item !== 'MB' &&
@@ -231,7 +230,7 @@ function transformToArray(obj) {
             item !== 'Other' &&
             item !== 'vendor'
     )
-    keys.forEach(model => {
+    keys.forEach((model) => {
         const newObject = { model, ...obj[model] }
         o.models.push(newObject)
     })
@@ -240,15 +239,15 @@ function transformToArray(obj) {
 
 const calculateData = (arr, type) => {
     const data = arr
-        .filter(obj => obj.Type === type)
-        .map(obj => ({
+        .filter((obj) => obj.Type === type)
+        .map((obj) => ({
             Week: getWeek(obj.Date),
             Pass: obj.Pass,
             Total: obj.Total,
         }))
 
     const finalResult = {}
-    data.forEach(obj => {
+    data.forEach((obj) => {
         if (
             finalResult[obj.Week] === undefined ||
             finalResult[obj.Week] === null
@@ -265,7 +264,7 @@ const calculateData = (arr, type) => {
     })
     const keys = Object.keys(finalResult)
     const finalArray = []
-    keys.forEach(key => {
+    keys.forEach((key) => {
         finalArray.push(finalResult[key])
     })
     return finalArray
@@ -276,15 +275,15 @@ const calculateData = (arr, type) => {
 // This duplicate function is kind of awkward, Maybe will be fixed in the future
 const calculateMonthlyData = (arr, type) => {
     const data = arr
-        .filter(obj => obj.Type === type)
-        .map(obj => ({
+        .filter((obj) => obj.Type === type)
+        .map((obj) => ({
             Month: obj.Month,
             Pass: obj.Pass,
             Total: obj.Total,
         }))
 
     const finalResult = {}
-    data.forEach(obj => {
+    data.forEach((obj) => {
         if (
             finalResult[obj.Month] === undefined ||
             finalResult[obj.Month] === null
@@ -301,7 +300,7 @@ const calculateMonthlyData = (arr, type) => {
     })
     const keys = Object.keys(finalResult)
     const finalArray = []
-    keys.forEach(key => {
+    keys.forEach((key) => {
         finalArray.push(finalResult[key])
     })
     return finalArray
@@ -311,7 +310,7 @@ const calculateMonthlyData = (arr, type) => {
 const calculateSMT2AndFctYieldByGroup = (arr, vendor) => {
     const station = pickUpStationByCMVendor(vendor)
     const resultObj = {}
-    station.forEach(s => {
+    station.forEach((s) => {
         resultObj[s] = {
             weekly: calculateData(arr, s).sort(sortByWeek),
             monthly: calculateMonthlyData(arr, s).sort(sortByMonth),
@@ -336,7 +335,6 @@ function sortByMonth(a, b) {
     }
 }
 
-
 // CM_PN: "65G1225-207X"
 // Count: 1
 // Cust_PN: "CAP-0530L"
@@ -355,35 +353,34 @@ function sortByMonth(a, b) {
 // Version: 1.01
 // item: "C218"
 
-export function parsingRepairList(repairList,isSevenDay,date){
+export function parsingRepairList(repairList) {
     let n = {}
+    const updateRepairList = repairList.map((rep) => {
+        if (
+            rep.Cust_PN === undefined ||
+            rep.Cust_PN === null ||
+            rep.Cust_PN.trim().length === 0
+        ) {
+            rep.Cust_PN = 'Not Recoreded'
+        }
+        if (
+            rep.Cust_PN === 'N/A' ||
+            rep.Cust_PN === 'NTF' ||
+            rep.Reason === 'RETRY OK'
+        ) {
+            rep.Cust_PN = 'No Trouble Found'
+        }
+        return rep
+    })
 
-    let dateFilteredRepairList = null
-    
-    if(isSevenDay){
-        // const inTheSevenDaysData = e[str].ErorrDescriptions.filter(
-        //     obj => new Date(obj.date) > getSevenDayBoundary(dEndDate, 14)
-        // )
-        dateFilteredRepairList = repairList.filter(obj => new Date(obj.Date) > getSevenDayBoundary(date,7))
-    
-    }else{
-        dateFilteredRepairList = repairList
-    }
-
-    const updateRepairList = dateFilteredRepairList.filter(rep => rep.Cust_PN && !rep.Cust_PN.includes('PCB')&& !rep.Cust_PN.includes('MBD') && !rep.Cust_PN.includes('AOC') && !rep.Cust_PN.includes('AOM') && rep.Cust_PN.trim().length > 0 && rep.Cust_PN !== "N/A" && rep.Cust_PN !== "NTF")
-        console.log(updateRepairList)
-    
-
-    updateRepairList.forEach(rep => {
+    updateRepairList.forEach((rep) => {
         if (n[rep.Cust_PN] === undefined || n[rep.Cust_PN] === null) {
-            n[rep.Cust_PN] = {qty:1,data:[]}
+            n[rep.Cust_PN] = { qty: 1, data: [] }
             n[rep.Cust_PN].data.push(rep)
-            
-          
-       }else{
-        n[rep.Cust_PN].qty += 1   
-        n[rep.Cust_PN].data.push(rep)
-       }
+        } else {
+            n[rep.Cust_PN].qty += 1
+            n[rep.Cust_PN].data.push(rep)
+        }
     })
     return n
 }
@@ -394,7 +391,7 @@ export function parsingErrorList(errorList) {
     console.log('error list here', errorList)
     const station = pickUpStationByCMVendor(errorList[0].Vendor)
 
-    errorList.forEach(obj => {
+    errorList.forEach((obj) => {
         if (n[obj.Model] === undefined || n[obj.Model] === null) {
             n[obj.Model] = {}
 
@@ -446,7 +443,7 @@ export function parsingErrorList(errorList) {
 function generateFTY(obj) {
     /* extract non-model obj*/
     const keys = Object.keys(obj).filter(
-        item =>
+        (item) =>
             item !== 'vendor' &&
             item !== 'startDate' &&
             item !== 'endDate' &&
@@ -457,7 +454,7 @@ function generateFTY(obj) {
     const stations = pickUpStationByCMVendor(obj.vendor)
 
     /* iterate each model to add station 0 -3 FTY*/
-    keys.forEach(key => {
+    keys.forEach((key) => {
         let model = obj[key]
         const station0FTY = calculateStationFTY(model, stations[0])
         const station1FTY = calculateStationFTY(model, stations[1])
@@ -474,7 +471,8 @@ function generateFTY(obj) {
         }
 
         const inTheSevenDaysData = model[stations[3]].data.filter(
-            fctData => new Date(fctData.Date) > getSevenDayBoundary(obj.endDate)
+            (fctData) =>
+                new Date(fctData.Date) > getSevenDayBoundary(obj.endDate)
         )
 
         let sevenDayPass = 0
