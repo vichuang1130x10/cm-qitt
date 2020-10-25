@@ -336,9 +336,7 @@ function sortByMonth(a, b) {
     }
 }
 
-<<<<<<< HEAD
 
-=======
 // CM_PN: "65G1225-207X"
 // Count: 1
 // Cust_PN: "CAP-0530L"
@@ -389,7 +387,7 @@ export function parsingRepairList(repairList,isSevenDay,date){
     })
     return n
 }
->>>>>>> f422b20f6db98e1567bc15e074b945d0b0a75458
+
 // parsing errorlist json to specfic format for each station failure symptom
 export function parsingErrorList(errorList) {
     let n = {}
