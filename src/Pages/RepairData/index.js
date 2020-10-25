@@ -75,7 +75,7 @@ const Search = styled.div`
 `
 
 const SearchBar = styled.input`
-    padding: 1rem 1rem 1rem 3.5rem;
+    padding: 1rem 1rem 0 3.5rem;
     border: 1px solid transparent;
     outline: none;
     border-bottom: 1px solid #ccc;
@@ -86,7 +86,11 @@ const SearchBarView = ({ value, onValueChanged }) => {
     return (
         <Search>
             <BsSearch
-                style={{ marginLeft: '1rem', position: 'absolute' }}
+                style={{
+                    marginLeft: '1rem',
+                    position: 'absolute',
+                    marginTop: '1rem',
+                }}
                 size="1rem"
             />
             <SearchBar
