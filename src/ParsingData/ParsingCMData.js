@@ -336,6 +336,7 @@ function sortByMonth(a, b) {
     }
 }
 
+
 // parsing errorlist json to specfic format for each station failure symptom
 export function parsingErrorList(errorList) {
     let n = {}
