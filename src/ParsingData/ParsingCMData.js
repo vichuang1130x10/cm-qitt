@@ -382,7 +382,52 @@ export function parsingRepairList(repairList) {
             n[rep.Cust_PN].data.push(rep)
         }
     })
-    return n
+    let arr = []
+    for (let obj in n) {
+        arr.push({ pn: obj, qty: n[obj].qty, data: n[obj].data })
+    }
+    arr.sort((a, b) => b.qty - a.qty)
+    return arr
+}
+
+export function parsingRepairListForModels(repairListByPN) {
+    let n = {}
+
+    repairListByPN.data.forEach((rep) => {
+        if (n[rep.Model] === undefined || n[rep.Model] === null) {
+            n[rep.Model] = { qty: 1, data: [] }
+            n[rep.Model].data.push(rep)
+        } else {
+            n[rep.Model].qty += 1
+            n[rep.Model].data.push(rep)
+        }
+    })
+    let arr = []
+    for (let obj in n) {
+        arr.push({ model: obj, qty: n[obj].qty, data: n[obj].data })
+    }
+    arr.sort((a, b) => b.qty - a.qty)
+    return arr
+}
+
+export function parsingRepairListForReason(repairListByPN) {
+    let n = {}
+
+    repairListByPN.data.forEach((rep) => {
+        if (n[rep.Reason] === undefined || n[rep.Reason] === null) {
+            n[rep.Reason] = { qty: 1, data: [] }
+            n[rep.Reason].data.push(rep)
+        } else {
+            n[rep.Reason].qty += 1
+            n[rep.Reason].data.push(rep)
+        }
+    })
+    let arr = []
+    for (let obj in n) {
+        arr.push({ reason: obj, qty: n[obj].qty, data: n[obj].data })
+    }
+    arr.sort((a, b) => b.qty - a.qty)
+    return arr
 }
 
 // parsing errorlist json to specfic format for each station failure symptom

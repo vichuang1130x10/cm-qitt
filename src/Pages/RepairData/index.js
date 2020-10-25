@@ -6,7 +6,11 @@ import Footer from '../../Components/Footer'
 import { Container } from 'react-bootstrap'
 import connect from './connect'
 import { outputDate } from '../../ParsingData/ParsingHelpFunction'
-import { parsingRepairList } from '../../ParsingData/ParsingCMData'
+import {
+    parsingRepairList,
+    parsingRepairListForModels,
+    parsingRepairListForReason,
+} from '../../ParsingData/ParsingCMData'
 
 const DataWrapper = styled.div`
     width: 100%;
@@ -56,6 +60,7 @@ const CategoryButton = styled.button`
     outline: none;
     transition: all 0.5s;
     border-bottom: 1px solid #ccc;
+    color:${(props) => (props.disabled ? '#ccc' : 'blue')}
     &:active,
     &:focus {
         color: blue;
@@ -63,6 +68,12 @@ const CategoryButton = styled.button`
         outline: none;
     }
 `
+
+const Button = ({ isActive, onClick, children }) => (
+    <CategoryButton onClick={onClick} disabled={isActive}>
+        {children}
+    </CategoryButton>
+)
 
 const Search = styled.div`
     padding: 10px;
@@ -102,10 +113,16 @@ const SearchBarView = ({ value, onValueChanged }) => {
     )
 }
 
+const SEVENDAY = 'SEVEN-DAYS'
+const FOURTEENDAY = 'FOURTEEN-DAYS'
+const ALLDATA = 'ALL-DATA'
+
 function App({ repairData }) {
     const [startDate, setStartDate] = useState(new Date())
     const [endDate, setEndDate] = useState(new Date())
     const [value, setValue] = useState('')
+    const [range, setRange] = useState(SEVENDAY)
+    const [sRepairList, setRepairList] = useState([])
 
     const onValueChanged = () => {}
 
@@ -126,7 +143,10 @@ function App({ repairData }) {
         setStartDate(sDate)
         setEndDate(eDate)
         console.log(repairData)
-        console.log(parsingRepairList(repairData))
+        const parsedRepairList = parsingRepairList(repairData)
+        console.log(parsedRepairList)
+        console.log(parsingRepairListForModels(parsedRepairList[3]))
+        console.log(parsingRepairListForReason(parsedRepairList[3]))
     }, [repairData])
 
     //     startDate:
@@ -155,27 +175,28 @@ function App({ repairData }) {
                                 />
 
                                 <ButtonContainer>
-                                    <CategoryButton
+                                    <Button
                                         onClick={() =>
                                             handleSevenDaysBtnOnClicked()
                                         }
+                                        isActive={true}
                                     >
                                         7 days
-                                    </CategoryButton>
-                                    <CategoryButton
+                                    </Button>
+                                    <Button
                                         onClick={() =>
                                             handleThirtyDaysBtnOnClicked()
                                         }
                                     >
                                         30 days
-                                    </CategoryButton>
-                                    <CategoryButton
+                                    </Button>
+                                    <Button
                                         onClick={() =>
                                             handleOneYearBtnOnClicked()
                                         }
                                     >
-                                        1 year
-                                    </CategoryButton>
+                                        All-Data
+                                    </Button>
                                 </ButtonContainer>
                             </HeaderContainer>
                             <ContentContainer>
