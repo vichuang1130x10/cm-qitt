@@ -72,7 +72,7 @@ function App(props) {
         // }
         props.setHeaderLinkFilters(SetFilters.SELECT_DASHBOARD)
         props.setLinkFilters(VisibilityFilters.SHOW_SEVEM_DAYS)
-        props.props.saveAppState({ yieldRate, parsedErrorList, rawRepairList })
+        props.saveAppState({ yieldRate, parsedErrorList, rawRepairList })
         props.resetPrimaryModel()
 
         // const parsedErrorList = parsingErrorList(udpatedErrorList);
