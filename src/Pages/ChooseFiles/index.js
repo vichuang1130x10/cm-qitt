@@ -10,6 +10,7 @@ import SubmitButton from '../../Components/SubmitButton'
 import DragCard from '../../Components/DragCard'
 import connect from './connect'
 import { SetFilters } from '../../Data/SetHeaderLink'
+import { VisibilityFilters } from '../../Data/SetVisiblityFilter'
 
 function App(props) {
     const [yieldRate, setYieldRate] = useState({})
@@ -19,17 +20,17 @@ function App(props) {
     const [errorListFlag, setErrorListFlag] = useState(false)
     const [repairListFlag, setRepairListFlag] = useState(false)
 
-    const receivedYieldRate = obj => {
+    const receivedYieldRate = (obj) => {
         setYieldRate(obj)
     }
 
-    const receivedErrorList = obj => {
+    const receivedErrorList = (obj) => {
         setErrorList(obj)
     }
 
-    const receivedRepairList = obj => setRepairList(obj)
+    const receivedRepairList = (obj) => setRepairList(obj)
 
-    const transferData = e => {
+    const transferData = (e) => {
         let parsedErrorList = null
         let rawRepairList = null
         if (
@@ -37,7 +38,7 @@ function App(props) {
             repairList.RepairList[0].Vendor === 'USISZ'
         ) {
             mappingErrorListAndRepairList(errorList, repairList)
-            const udpatedErrorList = errorList.ErrorList.map(ele => {
+            const udpatedErrorList = errorList.ErrorList.map((ele) => {
                 if (ele['Reason'] === null || ele['Reason'] === undefined) {
                     ele['Reason'] = '待修'
                 }
@@ -70,7 +71,8 @@ function App(props) {
         //     parsedErrorList = repairList
         // }
         props.setHeaderLinkFilters(SetFilters.SELECT_DASHBOARD)
-        props.saveAppState({ yieldRate, parsedErrorList,rawRepairList })
+        props.setLinkFilters(VisibilityFilters.SHOW_SEVEM_DAYS)
+        props.props.saveAppState({ yieldRate, parsedErrorList, rawRepairList })
         props.resetPrimaryModel()
 
         // const parsedErrorList = parsingErrorList(udpatedErrorList);
@@ -90,24 +92,24 @@ function App(props) {
                         <DragCard
                             title="Yield Rate"
                             fileType="YieldRate"
-                            callback={obj => receivedYieldRate(obj)}
-                            setFlag={bool => setYieldRateFlag(bool)}
+                            callback={(obj) => receivedYieldRate(obj)}
+                            setFlag={(bool) => setYieldRateFlag(bool)}
                         />
                     </Col>
                     <Col>
                         <DragCard
                             title="Error List"
                             fileType="ErrorList"
-                            callback={obj => receivedErrorList(obj)}
-                            setFlag={bool => setErrorListFlag(bool)}
+                            callback={(obj) => receivedErrorList(obj)}
+                            setFlag={(bool) => setErrorListFlag(bool)}
                         />
                     </Col>
                     <Col>
                         <DragCard
                             title="Repair List"
                             fileType="RepairList"
-                            callback={obj => receivedRepairList(obj)}
-                            setFlag={bool => setRepairListFlag(bool)}
+                            callback={(obj) => receivedRepairList(obj)}
+                            setFlag={(bool) => setRepairListFlag(bool)}
                         />
                     </Col>
                 </Row>

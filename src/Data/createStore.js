@@ -6,7 +6,7 @@ import createCompressor from 'redux-persist-transform-compress'
 import reducer from './AppState'
 import setHeaderLink from './SetHeaderLink'
 import primaryState from './PrimaryState'
-import setVisibilityFilter from './SetVisiblityFilter'
+import visibilityFilter from './SetVisiblityFilter'
 
 const compressor = createCompressor()
 
@@ -23,7 +23,7 @@ const rootReducer = combineReducers({
     app: reducer,
     filter: setHeaderLink,
     primaryState,
-    setVisibilityFilter,
+    visibilityFilter: visibilityFilter,
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

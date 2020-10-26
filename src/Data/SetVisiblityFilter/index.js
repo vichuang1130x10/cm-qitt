@@ -10,16 +10,18 @@ const createActionWithName = (name) => `app/tasks/${name}`
 
 export default function reducer(state = initialState, action = {}) {
     switch (action.type) {
-        case SET_FILTERS:
+        case SET_VISIBILITY_FILTERS:
             return action.filter
         default:
             return state
     }
 }
 
-export const SET_FILTERS = createActionWithName('SET_FILTERS')
+export const SET_VISIBILITY_FILTERS = createActionWithName(
+    'SET_VISIBILITY_FILTERS'
+)
 
-export const setHeaderLinkFilters = (filter) => ({
-    type: SET_FILTERS,
+export const setLinkFilters = (filter) => ({
+    type: SET_VISIBILITY_FILTERS,
     filter,
 })

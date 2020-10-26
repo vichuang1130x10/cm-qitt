@@ -11,6 +11,8 @@ import {
     parsingRepairListForModels,
     parsingRepairListForReason,
 } from '../../ParsingData/ParsingCMData'
+import FilterLink from '../../Components/FilterLink'
+import { VisibilityFilters } from '../../Data/SetVisiblityFilter'
 
 const DataWrapper = styled.div`
     width: 100%;
@@ -175,28 +177,25 @@ function App({ repairData }) {
                                 />
 
                                 <ButtonContainer>
-                                    <Button
-                                        onClick={() =>
-                                            handleSevenDaysBtnOnClicked()
+                                    <FilterLink
+                                        filter={
+                                            VisibilityFilters.SHOW_SEVEM_DAYS
                                         }
-                                        isActive={true}
                                     >
                                         7 days
-                                    </Button>
-                                    <Button
-                                        onClick={() =>
-                                            handleThirtyDaysBtnOnClicked()
+                                    </FilterLink>
+                                    <FilterLink
+                                        filter={
+                                            VisibilityFilters.SHOW_FOURTEEN_DAYS
                                         }
                                     >
                                         30 days
-                                    </Button>
-                                    <Button
-                                        onClick={() =>
-                                            handleOneYearBtnOnClicked()
-                                        }
+                                    </FilterLink>
+                                    <FilterLink
+                                        filter={VisibilityFilters.SHOW_ALL}
                                     >
                                         All-Data
-                                    </Button>
+                                    </FilterLink>
                                 </ButtonContainer>
                             </HeaderContainer>
                             <ContentContainer>
