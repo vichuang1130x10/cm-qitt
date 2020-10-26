@@ -7,7 +7,7 @@ const Footer = styled.footer`
     left: 0;
     position: relative;
     height: 70px;
-    margin-top: 300px;
+    margin-top: 100px;
     background: #fcfcfc;
 
     padding: 30px 110px;
@@ -29,7 +29,7 @@ const Footer = styled.footer`
         color: #4c4c4c;
     }
 `
-export default function() {
+export default function () {
     return (
         <div>
             <Footer>

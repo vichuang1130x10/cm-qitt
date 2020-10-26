@@ -17,6 +17,7 @@ import {
 import FilterLink from '../../Components/FilterLink'
 import { VisibilityFilters } from '../../Data/SetVisiblityFilter'
 import RepairCard from '../../Components/RepairCard'
+import RepairTable from '../../Components/RepairTabel'
 
 const DataWrapper = styled.div`
     width: 100%;
@@ -141,6 +142,7 @@ function App({ repairData, dateRange }) {
     const [sRepairList, setRepairList] = useState([])
     const [sRepairListByModel, setsRepairListByModel] = useState([])
     const [sRepairListByReason, setsRepairListByReason] = useState([])
+    const [detailRawData, setDetailRawData] = useState([])
     const onValueChanged = () => {}
 
     useEffect(() => {
@@ -200,9 +202,21 @@ function App({ repairData, dateRange }) {
         })
     }
 
-    const handleModelClick = (index) => {}
+    const handleModelClick = (index) => {
+        setDetailRawData(sRepairListByModel[index].data)
+        window.scrollTo({
+            top: 600,
+            behavior: 'smooth',
+        })
+    }
 
-    const handleReasonClick = (index) => {}
+    const handleReasonClick = (index) => {
+        setDetailRawData(sRepairListByReason[index].data)
+        window.scrollTo({
+            top: 600,
+            behavior: 'smooth',
+        })
+    }
 
     return (
         <>
@@ -358,12 +372,25 @@ function App({ repairData, dateRange }) {
                             </Row>
                             <Row
                                 style={{
-                                    width: '100%',
+                                    width: '97%',
                                     marginTop: '40px',
                                     textAlign: 'center',
                                 }}
                             >
-                                <h6>Detail:</h6>
+                                <h6
+                                    style={{
+                                        backgroundColor: '#ccc',
+                                        color: '#FFF',
+                                        padding: '6px 10px',
+                                        width: '100%',
+                                        textAlign: 'left',
+                                    }}
+                                >
+                                    Detail:
+                                </h6>
+                                {detailRawData.length ? (
+                                    <RepairTable data={detailRawData} />
+                                ) : null}
                             </Row>
                         </MainContainer>
                     </DataWrapper>
