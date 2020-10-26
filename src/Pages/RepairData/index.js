@@ -119,7 +119,7 @@ const SEVENDAY = 'SEVEN-DAYS'
 const FOURTEENDAY = 'FOURTEEN-DAYS'
 const ALLDATA = 'ALL-DATA'
 
-function App({ repairData }) {
+function App({ repairData, dateRange }) {
     const [startDate, setStartDate] = useState(new Date())
     const [endDate, setEndDate] = useState(new Date())
     const [value, setValue] = useState('')
@@ -127,11 +127,6 @@ function App({ repairData }) {
     const [sRepairList, setRepairList] = useState([])
 
     const onValueChanged = () => {}
-
-    const handleSevenDaysBtnOnClicked = () => {}
-
-    const handleThirtyDaysBtnOnClicked = () => {}
-    const handleOneYearBtnOnClicked = () => {}
 
     useEffect(() => {
         window.scrollTo(0, 0)
@@ -145,11 +140,12 @@ function App({ repairData }) {
         setStartDate(sDate)
         setEndDate(eDate)
         console.log(repairData)
+        console.log(dateRange)
         const parsedRepairList = parsingRepairList(repairData)
         console.log(parsedRepairList)
         console.log(parsingRepairListForModels(parsedRepairList[3]))
         console.log(parsingRepairListForReason(parsedRepairList[3]))
-    }, [repairData])
+    }, [repairData, dateRange])
 
     //     startDate:
     //     updatedJson.YieldRate.reduce((a, b) => (a.Date > b.Date ? b : a))
