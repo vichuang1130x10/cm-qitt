@@ -134,6 +134,31 @@ const HeaderBlock = styled.div`
 
 const getNElement = (arr) => (arr.length > 10 ? 10 : arr.length)
 
+const getUpdateRepairData = (repairData, dateRange, eDate) => {
+    let updateRepairData = null
+
+    switch (dateRange) {
+        case VisibilityFilters.SHOW_SEVEM_DAYS:
+            updateRepairData = repairData.filter(
+                (obj) => new Date(obj.Date) > getSevenDayBoundary(eDate, 7)
+            )
+            break
+        case VisibilityFilters.SHOW_FOURTEEN_DAYS:
+            updateRepairData = repairData.filter(
+                (obj) => new Date(obj.Date) > getSevenDayBoundary(eDate, 30)
+            )
+            break
+
+        case VisibilityFilters.SHOW_ALL:
+            updateRepairData = repairData
+            break
+        default:
+            updateRepairData = repairData
+    }
+
+    return updateRepairData
+}
+
 function App({ repairData, dateRange }) {
     const [startDate, setStartDate] = useState(new Date())
     const [endDate, setEndDate] = useState(new Date())
@@ -143,7 +168,24 @@ function App({ repairData, dateRange }) {
     const [sRepairListByModel, setsRepairListByModel] = useState([])
     const [sRepairListByReason, setsRepairListByReason] = useState([])
     const [detailRawData, setDetailRawData] = useState([])
-    const onValueChanged = () => {}
+    const [selectPn, setSelectPn] = useState('')
+    const onValueChanged = (v) => {
+        const updateRepairData = getUpdateRepairData(
+            repairData,
+            dateRange,
+            endDate
+        )
+        if (v.trim().length !== 0) {
+            setValue(v)
+
+            const sortedRepairList = parsingRepairList(
+                updateRepairData
+            ).filter((obj) => obj.pn.toUpperCase().includes(v.toUpperCase()))
+            setRepairList(sortedRepairList)
+        } else {
+            setRepairList(parsingRepairList(updateRepairData))
+        }
+    }
 
     useEffect(() => {
         window.scrollTo(0, 0)
@@ -158,33 +200,15 @@ function App({ repairData, dateRange }) {
         setEndDate(eDate)
         console.log(repairData)
         console.log(dateRange)
-        let updateRepairData = null
 
-        switch (dateRange) {
-            case VisibilityFilters.SHOW_SEVEM_DAYS:
-                updateRepairData = repairData.filter(
-                    (obj) => new Date(obj.Date) > getSevenDayBoundary(eDate, 7)
-                )
-                break
-            case VisibilityFilters.SHOW_FOURTEEN_DAYS:
-                updateRepairData = repairData.filter(
-                    (obj) => new Date(obj.Date) > getSevenDayBoundary(eDate, 30)
-                )
-                break
-
-            case VisibilityFilters.SHOW_ALL:
-                updateRepairData = repairData
-                break
-            default:
-                updateRepairData = repairData
-        }
-
+        const updateRepairData = getUpdateRepairData(
+            repairData,
+            dateRange,
+            eDate
+        )
         const parsedRepairList = parsingRepairList(updateRepairData)
         console.log(parsedRepairList)
         setRepairList(parsedRepairList)
-        // const parsedByModel = parsingRepairListForModels(parsedRepairList[3])
-        // console.log(parsingRepairListForModels(parsedRepairList[3]))
-        // console.log(parsingRepairListForReason(parsedRepairList[3]))
     }, [repairData, dateRange])
 
     const handleRepairCardClick = (index) => {
@@ -194,6 +218,7 @@ function App({ repairData, dateRange }) {
         )
         console.log(reparListForModel)
         console.log(reparListForReason)
+        setSelectPn(sRepairList[index].pn)
         setsRepairListByModel(reparListForModel)
         setsRepairListByReason(reparListForReason)
         window.scrollTo({
@@ -286,6 +311,9 @@ function App({ repairData, dateRange }) {
                                         />
                                     ))}
                             </ContentContainer>
+                            <h3
+                                style={{ marginTop: '20px' }}
+                            >{` Selected PN: ${selectPn}`}</h3>
                             <Row
                                 style={{
                                     width: '100%',
