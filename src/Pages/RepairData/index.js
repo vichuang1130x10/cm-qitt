@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { BsSearch } from 'react-icons/bs'
 import Header from '../../Components/Header'
 import Footer from '../../Components/Footer'
-import { Container } from 'react-bootstrap'
+import { Container, Row, Col } from 'react-bootstrap'
 import connect from './connect'
 import {
     outputDate,
@@ -185,6 +185,25 @@ function App({ repairData, dateRange }) {
         // console.log(parsingRepairListForReason(parsedRepairList[3]))
     }, [repairData, dateRange])
 
+    const handleRepairCardClick = (index) => {
+        const reparListForModel = parsingRepairListForModels(sRepairList[index])
+        const reparListForReason = parsingRepairListForReason(
+            sRepairList[index]
+        )
+        console.log(reparListForModel)
+        console.log(reparListForReason)
+        setsRepairListByModel(reparListForModel)
+        setsRepairListByReason(reparListForReason)
+        window.scrollTo({
+            top: 400,
+            behavior: 'smooth',
+        })
+    }
+
+    const handleModelClick = (index) => {}
+
+    const handleReasonClick = (index) => {}
+
     return (
         <>
             <Header />
@@ -244,12 +263,108 @@ function App({ repairData, dateRange }) {
                                     .map((obj, i) => (
                                         <RepairCard
                                             index={i}
+                                            handleRepairCardClick={
+                                                handleRepairCardClick
+                                            }
                                             key={obj.pn}
                                             partNumber={obj.pn}
                                             qty={obj.qty}
                                         />
                                     ))}
                             </ContentContainer>
+                            <Row
+                                style={{
+                                    width: '100%',
+                                    marginTop: '40px',
+                                    textAlign: 'center',
+                                }}
+                            >
+                                <Col>
+                                    <h6
+                                        style={{
+                                            backgroundColor: '#ccc',
+                                            color: '#FFF',
+                                            padding: '6px 10px',
+                                        }}
+                                    >
+                                        By Model
+                                    </h6>
+                                    <HeaderForWrapper>
+                                        <HeaderBlock>
+                                            <p>RANK</p>
+                                        </HeaderBlock>
+                                        <HeaderBlock>
+                                            <p>Part Number</p>
+                                        </HeaderBlock>
+                                        <HeaderBlock>
+                                            <p>Failed QTY</p>
+                                        </HeaderBlock>
+                                    </HeaderForWrapper>
+                                    {sRepairListByModel
+                                        .slice(
+                                            0,
+                                            getNElement(sRepairListByModel)
+                                        )
+                                        .map((obj, i) => (
+                                            <RepairCard
+                                                index={i}
+                                                handleRepairCardClick={
+                                                    handleModelClick
+                                                }
+                                                key={obj.model}
+                                                partNumber={obj.model}
+                                                qty={obj.qty}
+                                            />
+                                        ))}
+                                </Col>
+                                <Col>
+                                    <h6
+                                        style={{
+                                            backgroundColor: '#ccc',
+                                            color: '#FFF',
+                                            padding: '6px 10px',
+                                        }}
+                                    >
+                                        By Reason
+                                    </h6>
+                                    <HeaderForWrapper>
+                                        <HeaderBlock>
+                                            <p>RANK</p>
+                                        </HeaderBlock>
+                                        <HeaderBlock>
+                                            <p>Part Number</p>
+                                        </HeaderBlock>
+                                        <HeaderBlock>
+                                            <p>Failed QTY</p>
+                                        </HeaderBlock>
+                                    </HeaderForWrapper>
+                                    {sRepairListByReason
+                                        .slice(
+                                            0,
+                                            getNElement(sRepairListByReason)
+                                        )
+                                        .map((obj, i) => (
+                                            <RepairCard
+                                                index={i}
+                                                handleRepairCardClick={
+                                                    handleReasonClick
+                                                }
+                                                key={obj.reason}
+                                                partNumber={obj.reason}
+                                                qty={obj.qty}
+                                            />
+                                        ))}
+                                </Col>
+                            </Row>
+                            <Row
+                                style={{
+                                    width: '100%',
+                                    marginTop: '40px',
+                                    textAlign: 'center',
+                                }}
+                            >
+                                <h6>Detail:</h6>
+                            </Row>
                         </MainContainer>
                     </DataWrapper>
                 </Container>

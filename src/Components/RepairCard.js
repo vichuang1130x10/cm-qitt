@@ -35,7 +35,7 @@ const ModelBlock = styled.div`
 `
 export default function App({ index, partNumber, qty, handleRepairCardClick }) {
     return (
-        <ModelContainer onClick={() => handleRepairCardClick()}>
+        <ModelContainer onClick={() => handleRepairCardClick(index)}>
             <ModelBlock>{index + 1}</ModelBlock>
             <ModelBlock>
                 <h6>{partNumber}</h6>
