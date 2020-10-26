@@ -32,7 +32,7 @@ function App(props) {
 
     const transferData = (e) => {
         let parsedErrorList = null
-        let rawRepairList = null
+        const rawRepairList = repairList.RepairList
         if (
             repairList.RepairList[0].Vendor === 'USI' ||
             repairList.RepairList[0].Vendor === 'USISZ'
@@ -45,10 +45,8 @@ function App(props) {
                 return ele
             })
             parsedErrorList = parsingErrorList(udpatedErrorList)
-            rawRepairList = udpatedErrorList
         } else {
             parsedErrorList = parsingErrorList(repairList.RepairList)
-            rawRepairList = repairList.RepairList
         }
 
         // mappingErrorListAndRepairList(errorList, repairList)

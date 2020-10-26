@@ -364,7 +364,7 @@ export function parsingRepairList(repairList) {
             rep.Cust_PN = 'Not Recoreded'
         }
         if (
-            rep.Cust_PN === 'N/A' ||
+            // rep.Cust_PN === 'N/A' ||
             rep.Cust_PN === 'NTF' ||
             rep.Reason === 'RETRY OK'
         ) {

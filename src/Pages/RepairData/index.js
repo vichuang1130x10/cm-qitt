@@ -5,7 +5,10 @@ import Header from '../../Components/Header'
 import Footer from '../../Components/Footer'
 import { Container } from 'react-bootstrap'
 import connect from './connect'
-import { outputDate } from '../../ParsingData/ParsingHelpFunction'
+import {
+    outputDate,
+    getSevenDayBoundary,
+} from '../../ParsingData/ParsingHelpFunction'
 import {
     parsingRepairList,
     parsingRepairListForModels,
@@ -13,6 +16,7 @@ import {
 } from '../../ParsingData/ParsingCMData'
 import FilterLink from '../../Components/FilterLink'
 import { VisibilityFilters } from '../../Data/SetVisiblityFilter'
+import RepairCard from '../../Components/RepairCard'
 
 const DataWrapper = styled.div`
     width: 100%;
@@ -30,10 +34,14 @@ const MainContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    align-content: center;
     justify-content: center;
     width: 80%;
     margin: 0 auto;
+    & > h6 {
+        text-align: left;
+        width: 60%;
+        color: #123abc;
+    }
 `
 
 const HeaderContainer = styled.div`
@@ -48,34 +56,16 @@ const ButtonContainer = styled.div`
 `
 
 const ContentContainer = styled.div`
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    width: 60%;
+    margin: 0 auto;
 `
-
-const CategoryButton = styled.button`
-    font-size: 12px;
-    margin-left: 20px;
-    background-color: transparent;
-    border: none;
-    outline: none;
-    transition: all 0.5s;
-    border-bottom: 1px solid #ccc;
-    color:${(props) => (props.disabled ? '#ccc' : 'blue')}
-    &:active,
-    &:focus {
-        color: blue;
-        border-bottom: 1px solid #123abc;
-        outline: none;
-    }
-`
-
-const Button = ({ isActive, onClick, children }) => (
-    <CategoryButton onClick={onClick} disabled={isActive}>
-        {children}
-    </CategoryButton>
-)
 
 const Search = styled.div`
     padding: 10px;
@@ -115,17 +105,42 @@ const SearchBarView = ({ value, onValueChanged }) => {
     )
 }
 
-const SEVENDAY = 'SEVEN-DAYS'
-const FOURTEENDAY = 'FOURTEEN-DAYS'
-const ALLDATA = 'ALL-DATA'
+const HeaderForWrapper = styled.div`
+    width: 100%;
+    height: 30px;
+    display: grid;
+    grid-template-columns: 18% 40% 36%;
+    grid-gap: 10px;
+    margin: 10px auto;
+    padding: 0;
+    border-bottom: 1px solid #eee;
+`
+
+const HeaderBlock = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+
+    & p {
+        color: #1d0332;
+        font-weight: 400;
+        font-size: 12px;
+        font-style: italic;
+    }
+`
+
+const getNElement = (arr) => (arr.length > 10 ? 10 : arr.length)
 
 function App({ repairData, dateRange }) {
     const [startDate, setStartDate] = useState(new Date())
     const [endDate, setEndDate] = useState(new Date())
     const [value, setValue] = useState('')
-    const [range, setRange] = useState(SEVENDAY)
-    const [sRepairList, setRepairList] = useState([])
 
+    const [sRepairList, setRepairList] = useState([])
+    const [sRepairListByModel, setsRepairListByModel] = useState([])
+    const [sRepairListByReason, setsRepairListByReason] = useState([])
     const onValueChanged = () => {}
 
     useEffect(() => {
@@ -141,18 +156,35 @@ function App({ repairData, dateRange }) {
         setEndDate(eDate)
         console.log(repairData)
         console.log(dateRange)
-        const parsedRepairList = parsingRepairList(repairData)
+        let updateRepairData = null
+
+        switch (dateRange) {
+            case VisibilityFilters.SHOW_SEVEM_DAYS:
+                updateRepairData = repairData.filter(
+                    (obj) => new Date(obj.Date) > getSevenDayBoundary(eDate, 7)
+                )
+                break
+            case VisibilityFilters.SHOW_FOURTEEN_DAYS:
+                updateRepairData = repairData.filter(
+                    (obj) => new Date(obj.Date) > getSevenDayBoundary(eDate, 30)
+                )
+                break
+
+            case VisibilityFilters.SHOW_ALL:
+                updateRepairData = repairData
+                break
+            default:
+                updateRepairData = repairData
+        }
+
+        const parsedRepairList = parsingRepairList(updateRepairData)
         console.log(parsedRepairList)
-        console.log(parsingRepairListForModels(parsedRepairList[3]))
-        console.log(parsingRepairListForReason(parsedRepairList[3]))
+        setRepairList(parsedRepairList)
+        // const parsedByModel = parsingRepairListForModels(parsedRepairList[3])
+        // console.log(parsingRepairListForModels(parsedRepairList[3]))
+        // console.log(parsingRepairListForReason(parsedRepairList[3]))
     }, [repairData, dateRange])
 
-    //     startDate:
-    //     updatedJson.YieldRate.reduce((a, b) => (a.Date > b.Date ? b : a))
-    //         .Date || new Date(),
-    // endDate:
-    //     updatedJson.YieldRate.reduce((a, b) => (a.Date > b.Date ? a : b))
-    //         .Date || new Date(),
     return (
         <>
             <Header />
@@ -194,8 +226,29 @@ function App({ repairData, dateRange }) {
                                     </FilterLink>
                                 </ButtonContainer>
                             </HeaderContainer>
+                            <h6>Top 10 Failures:</h6>
                             <ContentContainer>
-                                Repair data render here...
+                                <HeaderForWrapper>
+                                    <HeaderBlock>
+                                        <p>RANK</p>
+                                    </HeaderBlock>
+                                    <HeaderBlock>
+                                        <p>Part Number</p>
+                                    </HeaderBlock>
+                                    <HeaderBlock>
+                                        <p>Failed QTY</p>
+                                    </HeaderBlock>
+                                </HeaderForWrapper>
+                                {sRepairList
+                                    .slice(0, getNElement(sRepairList))
+                                    .map((obj, i) => (
+                                        <RepairCard
+                                            index={i}
+                                            key={obj.pn}
+                                            partNumber={obj.pn}
+                                            qty={obj.qty}
+                                        />
+                                    ))}
                             </ContentContainer>
                         </MainContainer>
                     </DataWrapper>
