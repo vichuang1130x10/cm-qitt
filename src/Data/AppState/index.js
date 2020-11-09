@@ -1,6 +1,7 @@
 const createActionWithName = (name) => `app/tasks/${name}`
 
 export const SAVE_APP_STATE = createActionWithName('SAVE_APP_STATE')
+export const RESET_APP_STATE = createActionWithName('RESET_APP_STATE')
 
 export const saveAppState = (appState) => {
     return {
@@ -9,10 +10,19 @@ export const saveAppState = (appState) => {
     }
 }
 
+export const resetAppState = () => {
+    return {
+        type: RESET_APP_STATE,
+    }
+}
+
 export default function reducer(state = {}, action = {}) {
     switch (action.type) {
         case SAVE_APP_STATE:
             return action.appState
+
+        case RESET_APP_STATE:
+            return {}
 
         //Object
         // app:

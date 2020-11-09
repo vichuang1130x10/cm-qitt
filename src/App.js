@@ -14,6 +14,7 @@ import RepairData from './Pages/RepairData'
 import ChooseFiles from './Pages/ChooseFiles'
 import SelectPrimary from './Pages/SelectPrimary'
 import DetailPage from './Pages/ModelDetail'
+import AppEntrance from './Pages/AppEntrance'
 /* Redux store */
 import { store, persistor } from './Data/createStore'
 
@@ -22,7 +23,8 @@ function App() {
         <Provider store={store}>
             <PersistGate loading={1} persistor={persistor}>
                 <Router>
-                    <ChooseFiles path="/" />
+                    {/* <ChooseFiles path="/" /> */}
+                    <AppEntrance path="/" />
                     <Dashboard path="/dashboard" />
                     <Models path="/models" />
                     <RepairData path="/repairs" />
