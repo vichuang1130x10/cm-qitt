@@ -1,5 +1,6 @@
 import {
     getWeek,
+    getWeekVersion2,
     MBKEYWORD,
     BPNKEYWORD,
     pickUpStationByCMVendor,
@@ -211,6 +212,209 @@ export function parseForYieldRate(updatedJson) {
     }
 }
 
+// another main parsing version for data from db
+export function parseForYieldRateFromDB(data) {
+    /* Start Parsing */
+    console.log('start parsing')
+
+    /* 1. Initial n ( new object ) for the output object format */
+    let n = {
+        vendor: data[0]['Vendor'],
+        startDate:
+            data.reduce((a, b) => (a.Date > b.Date ? b : a)).Date || new Date(),
+        endDate:
+            data.reduce((a, b) => (a.Date > b.Date ? a : b)).Date || new Date(),
+        MB: [],
+        BPN: [],
+        Other: [],
+    }
+
+    console.log('first step initial n', n)
+    // 2. loop through {YieldRate:[{...},....]}
+    // Date: Wed Jun 10 2020 00:00:00 GMT+0800 (台北標準時間) {}
+    // each obj would be: { Fail: 0,Line: "PD2-H",MO: "6005130-UG",Model: "2701-004240-00(BPN-SAS3-833A)",Month: 6,
+    // Pass: 44,Refail: 0,Repass: 0,Start_date: Sat Jun 06 2020 00:00:00 GMT+0800 (台北標準時間) {},
+    // Total: 44,Type: "ASM",Vendor: "USI",Version: 1, YR: 1  }
+    data.forEach((obj) => {
+        /* 
+      3.Seperate raw data for MB, BPN ,and Other groups 
+    */
+        const proName = extractModelName(obj.Vendor, obj.Model)
+
+        if (BPNKEYWORD.includes(proName.substring(0, 3).toUpperCase())) {
+            n.BPN.push(obj)
+        } else if (MBKEYWORD.includes(proName.substring(0, 3).toUpperCase())) {
+            n.MB.push(obj)
+        } else {
+            n.Other.push(obj)
+        }
+        /* 4. get the correspond station types by CM vendor  */
+        const station = pickUpStationByCMVendor(obj.Vendor)
+
+        /* 5. 
+          collect data for each model as 
+         "model name":{ Pass:int,Fail:int,Total:int,data:[],mo:[],weekly:[],monthly:[]}
+    */
+        if (n[obj.Model] === undefined || n[obj.Model] === null) {
+            n[obj.Model] = {}
+            // n[obj.Model]['RowData'] = [obj]
+
+            for (let s of station) {
+                // e.g. X11QPH+ : { SMT1:{Pass,Fail,....},SMT2:{...},ASM:{...},FCT:{...}}
+                // data:[{Date,Pass,Fail,Total},...] ,mo:[{MO,PASS,FAIL,TOTAL,STARTDATE},...]
+                // weekly:[{Week,PASS,FAIL,TOTAL},...],month:[{Month,PASS,FAIL,TOTAL},...]
+                n[obj.Model][s] = {
+                    Pass: 0,
+                    Fail: 0,
+                    Total: 0,
+                    data: [],
+                    mo: [],
+                    weekly: [],
+                    monthly: [],
+                }
+            }
+            if (
+                // if the station is what we need, grab it; Otherwise, ignore this row
+                station.includes(obj.Type)
+            ) {
+                n[obj.Model][obj.Type].Pass += obj.Pass
+                n[obj.Model][obj.Type].Fail += obj.Fail
+                n[obj.Model][obj.Type].Total += obj.Total
+                // forming data by Data(Date)/MO/Weekly/Monthly
+                const { Date, Pass, Fail, Total, MO, Start_date, Month } = obj
+                const weekNumber = getWeekVersion2(Date)
+
+                n[obj.Model][obj.Type].data = [{ Date, Pass, Fail, Total }]
+                n[obj.Model][obj.Type].mo = [
+                    { MO, Pass, Fail, Total, Start_date },
+                ]
+                n[obj.Model][obj.Type].weekly = [
+                    { weekNumber, Pass, Fail, Total },
+                ]
+                n[obj.Model][obj.Type].monthly = [{ Month, Pass, Fail, Total }]
+            }
+        } else {
+            // n[obj.Model]['RowData'].push(obj)
+            if (
+                // if the station is what we need, grab it; Otherwise, ignore this row
+                station.includes(obj.Type)
+            ) {
+                n[obj.Model][obj.Type].Pass += obj.Pass
+                n[obj.Model][obj.Type].Fail += obj.Fail
+                n[obj.Model][obj.Type].Total += obj.Total
+                const { Date, Pass, Fail, Total, MO, Start_date, Month } = obj
+                const weekNumber = getWeekVersion2(Date)
+                // gather same date/mo/weekly/monthly
+                // for same date:
+                const sameDateObje = n[obj.Model][obj.Type].data.find(
+                    (elem) => elem.Date.toString() === Date.toString()
+                )
+                if (sameDateObje) {
+                    sameDateObje.Pass += Pass
+                    sameDateObje.Fail += Fail
+                    sameDateObje.Total += Total
+                } else {
+                    n[obj.Model][obj.Type].data.push({
+                        Date,
+                        Pass,
+                        Fail,
+                        Total,
+                    })
+                }
+                // for same mo:
+                const sameMoObj = n[obj.Model][obj.Type].mo.find(
+                    (elem) => elem.MO === MO
+                )
+                if (sameMoObj) {
+                    sameMoObj.Pass += Pass
+                    sameMoObj.Fail += Fail
+                    sameMoObj.Total += Total
+                } else {
+                    n[obj.Model][obj.Type].mo.push({
+                        MO,
+                        Pass,
+                        Fail,
+                        Total,
+                        Start_date,
+                    })
+                }
+                // for same weekly:
+                const sameWeeklyObj = n[obj.Model][obj.Type].weekly.find(
+                    (elem) => elem.weekNumber === weekNumber
+                )
+                if (sameWeeklyObj) {
+                    sameWeeklyObj.Pass += Pass
+                    sameWeeklyObj.Fail += Fail
+                    sameWeeklyObj.Total += Total
+                } else {
+                    n[obj.Model][obj.Type].weekly.push({
+                        weekNumber,
+                        Pass,
+                        Fail,
+                        Total,
+                    })
+                }
+                // for same monthly:
+                const sameMonthObj = n[obj.Model][obj.Type].monthly.find(
+                    (elem) => elem.Month === Month
+                )
+                if (sameMonthObj) {
+                    sameMonthObj.Pass += Pass
+                    sameMonthObj.Fail += Fail
+                    sameMonthObj.Total += Total
+                } else {
+                    n[obj.Model][obj.Type].monthly.push({
+                        Month,
+                        Pass,
+                        Fail,
+                        Total,
+                    })
+                }
+            }
+        }
+    })
+
+    /* 6. YieldRate.ForEach completed, we have a handfull data of n ( our models data n) as below structure:
+  //{startDate: Wed Apr 01 2020 00:00:00 GMT+0800 (Taipei Standard Time), endDate: Thu Jun 04 2020 00:00:00 GMT+0800 (Taipei Standard Time), 2701-005240-60(X11DPG-SN): {…}, 2701-005280-61(X11DPG-OT-CPU): {…}, 2701-005222-61(X11DPFR-SN-LC019): {…}, …}
+  //2701-001520-65(AOC-STGN-i2S): {RowData: Array(312), SMT1: {…}, SMT2: {…}, ASM: {…}, FCT: {…}, …}
+  //ASM: {Pass: 5001, Fail: 0, Total: 5001, data: Array(10)}
+  */
+
+    const result = transformToArray(generateFTY(n))
+    /* 7. calling transformToArray to make all models into an array to be easily rendered in the list*/
+    // const result = transformToArray(n)
+
+    /* 8. 
+        Construct app state object
+  */
+
+    const { startDate, endDate, models, vendor, BPN, MB, Other } = result
+    const BPNData = calculateSMT2AndFctYieldByGroup(BPN, vendor)
+    const MBData = calculateSMT2AndFctYieldByGroup(MB, vendor)
+    const OtherData = calculateSMT2AndFctYieldByGroup(Other, vendor)
+    // const BPNSMT2Total = BPNData.SMT2.reduce((acc, elem) => acc + elem.Total, 0);
+    // const BPNSMT2Total = calculateTotal(BPNData, "SMT2");
+    const BPNFCTTotal = calculateTotal(BPNData, vendor)
+    // const MBSMT2Total = calculateTotal(MBData, "SMT2");
+    const MBFCTTotal = calculateTotal(MBData, vendor)
+    // const OtherSMT2Total = calculateTotal(OtherData, "SMT2");
+    const OtherFCTTotal = calculateTotal(OtherData, vendor)
+    // const smt2PieData = { BPNSMT2Total, MBSMT2Total, OtherSMT2Total };
+    // const fct2PieData = { BPNFCTTotal, MBFCTTotal, OtherFCTTotal };
+    const piesData = { BPNFCTTotal, MBFCTTotal, OtherFCTTotal }
+
+    return {
+        vendor,
+        startDate,
+        endDate,
+        models,
+        BPNData,
+        MBData,
+        OtherData,
+        piesData,
+    }
+}
+
 const calculateTotal = (obj, cm) => {
     const station = pickUpStationByCMVendorForPie(cm)
     return obj[station].monthly.reduce((acc, elem) => acc + elem.Total, 0)
@@ -241,7 +445,10 @@ const calculateData = (arr, type) => {
     const data = arr
         .filter((obj) => obj.Type === type)
         .map((obj) => ({
-            Week: getWeek(obj.Date),
+            Week:
+                typeof obj.Date === 'object'
+                    ? getWeek(obj.Date)
+                    : getWeekVersion2(obj.Date),
             Pass: obj.Pass,
             Total: obj.Total,
         }))

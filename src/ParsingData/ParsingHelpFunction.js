@@ -21,6 +21,16 @@ export function getWeek(d) {
     return weekNr
 }
 
+export function getWeekVersion2(d) {
+    const target = new Date(d)
+    const dayNr = (target.getDay() + 6) % 7
+    target.setDate(target.getDate() - dayNr + 3)
+    const jan4 = new Date(target.getFullYear(), 0, 4)
+    const dayDiff = (target - jan4) / 86400000
+    const weekNr = 1 + Math.ceil(dayDiff / 7)
+    return weekNr
+}
+
 export function getDateOfISOWeek(w, y) {
     var simple = new Date(y, 0, 1 + (w - 1) * 7)
     var dow = simple.getDay()
@@ -132,7 +142,7 @@ export function pickUpStationByCMVendorForPie(cm) {
 }
 
 export function generateLabelValueSelectionByCM(cm) {
-    return pickUpStationByCMVendor(cm).map(station => ({
+    return pickUpStationByCMVendor(cm).map((station) => ({
         value: station,
         label: station,
     }))
@@ -214,7 +224,7 @@ export function extractModelName(vendor, model) {
     }
 }
 
-export function parsingToQty(e, str, isFourteenDay,dEndDate){
+export function parsingToQty(e, str, isFourteenDay, dEndDate) {
     if (e === undefined || e === null) {
         return []
     }
@@ -222,10 +232,10 @@ export function parsingToQty(e, str, isFourteenDay,dEndDate){
 
     if (isFourteenDay) {
         const inTheSevenDaysData = e[str].ErorrDescriptions.filter(
-            obj => new Date(obj.date) > getSevenDayBoundary(dEndDate, 14)
+            (obj) => new Date(obj.date) > getSevenDayBoundary(dEndDate, 14)
         )
 
-        inTheSevenDaysData.forEach(defect => {
+        inTheSevenDaysData.forEach((defect) => {
             if (
                 allDefects[defect.description] === null ||
                 allDefects[defect.description] === undefined
@@ -236,7 +246,7 @@ export function parsingToQty(e, str, isFourteenDay,dEndDate){
             }
         })
     } else {
-        e[str].ErorrDescriptions.forEach(defect => {
+        e[str].ErorrDescriptions.forEach((defect) => {
             if (
                 allDefects[defect.description] === null ||
                 allDefects[defect.description] === undefined
@@ -253,13 +263,13 @@ export function parsingToQty(e, str, isFourteenDay,dEndDate){
         sortable.push([defect, allDefects[defect]])
     }
 
-    sortable.sort(function(a, b) {
+    sortable.sort(function (a, b) {
         return b[1] - a[1]
     })
     const totalDefects = sortable.reduce((acc, elem) => acc + elem[1], 0)
     const result = []
     let accumulate = 0
-    sortable.forEach(d => {
+    sortable.forEach((d) => {
         const indiv = parseInt((d[1] / totalDefects) * 100)
         accumulate += d[1]
         result.push({
@@ -273,25 +283,24 @@ export function parsingToQty(e, str, isFourteenDay,dEndDate){
     return result
 }
 
-export function parsingRootCause(failureName, e, str,isFourteenDay,dEndate){
-    if(!failureName) return
+export function parsingRootCause(failureName, e, str, isFourteenDay, dEndate) {
+    if (!failureName) return
     const result = []
     const rootCause = {}
-    const failures = isFourteenDay ? e[str].ErorrDescriptions.filter(
-        (obj) =>
-            new Date(obj.date) > getSevenDayBoundary(dEndate)
-    ) : e[str].ErorrDescriptions
+    const failures = isFourteenDay
+        ? e[str].ErorrDescriptions.filter(
+              (obj) => new Date(obj.date) > getSevenDayBoundary(dEndate)
+          )
+        : e[str].ErorrDescriptions
 
-    const f = failures.filter(
-        failure => failure.description === failureName
-    )
-    f.forEach(reason => {
+    const f = failures.filter((failure) => failure.description === failureName)
+    f.forEach((reason) => {
         result.push(`${reason.reasons[0].reason}/${reason.reasons[0].item}`)
     })
 
     console.log(result)
 
-    result.forEach(item => {
+    result.forEach((item) => {
         if (rootCause[item] === null || rootCause[item] === undefined) {
             rootCause[item] = 1
         } else {
@@ -304,14 +313,14 @@ export function parsingRootCause(failureName, e, str,isFourteenDay,dEndate){
         sortable.push([defect, rootCause[defect]])
     }
 
-    sortable.sort(function(a, b) {
+    sortable.sort(function (a, b) {
         return b[1] - a[1]
     })
 
     const totalDefects = sortable.reduce((acc, elem) => acc + elem[1], 0)
     const rootCauseResult = []
     let accumulate = 0
-    sortable.forEach(d => {
+    sortable.forEach((d) => {
         const indiv = parseInt((d[1] / totalDefects) * 100)
         accumulate += d[1]
         rootCauseResult.push({
