@@ -111,6 +111,8 @@ const VENDOR_CODE_WITH_STATION = {
     CPW: CPWTYPE,
 }
 
+export const VENDOR_NAME = Object.keys(VENDOR_CODE_WITH_STATION)
+
 // const VENDOR_CODE_WITH_STATION_FUNCTION = {
 //     USI: 'FCT',
 //     WZS: 'DIP_AOI',

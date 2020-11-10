@@ -535,7 +535,7 @@ function sortByWeek(a, b) {
 }
 
 function sortByMonth(a, b) {
-    if (a.Month > b.Month) {
+    if (parseInt(a.Month) > parseInt(b.Month)) {
         return 1
     } else {
         return -1

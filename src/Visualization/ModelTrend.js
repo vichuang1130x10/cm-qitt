@@ -1,4 +1,4 @@
-import React, {  Component } from 'react'
+import React, { Component } from 'react'
 import * as d3 from 'd3'
 import { translateToMonthCharater } from '../ParsingData/ParsingHelpFunction'
 const width = 600
@@ -37,7 +37,7 @@ const sortWeek = (a, b) => {
 }
 
 const sortMonth = (a, b) => {
-    if (a.Month > b.Month) {
+    if (parseInt(a.Month) > parseInt(b.Month)) {
         return 1
     } else {
         return -1
@@ -82,28 +82,28 @@ class ModelTrendChart extends Component {
             sortUnit = sortMo
         }
         const updateData = trimData
-            .filter(d => d.Pass > 5 && d.Total > 5)
+            .filter((d) => d.Pass > 5 && d.Total > 5)
             .sort(sortUnit)
-            .map(d => ({
+            .map((d) => ({
                 unit: mappingUnit(d, unit),
                 total: d.Total,
                 yield: parseFloat(((d.Pass / d.Total) * 100).toFixed(1)),
             }))
 
         /* find the x axis scale */
-        const x = updateData.map(d => d.unit)
+        const x = updateData.map((d) => d.unit)
         const xScale = d3
             .scaleBand()
             .domain(x)
             .range([margin.left, width - margin.left])
         /* find the y axis scale */
-        const [min] = d3.extent(updateData, d => d.yield)
+        const [min] = d3.extent(updateData, (d) => d.yield)
         const yScale = d3
             .scaleLinear()
             .domain([Math.min(min, 90), 100])
             .range([height - margin.bottom, margin.top])
         /* find the right y axis scale */
-        const [yMin, yMax] = d3.extent(updateData, d => d.total)
+        const [yMin, yMax] = d3.extent(updateData, (d) => d.total)
         const yScaleRight = d3
             .scaleLinear()
             .domain([Math.min(100, yMin), yMax + 200])
@@ -111,13 +111,13 @@ class ModelTrendChart extends Component {
         /* calculate the path data by using d3 line() */
         const trend = d3
             .line()
-            .x(d => xScale(d.unit) + 20)
-            .y(d => yScale(d.yield))
+            .x((d) => xScale(d.unit) + 20)
+            .y((d) => yScale(d.yield))
 
         const line = trend(updateData)
 
         /* calculate yield rate text */
-        const labels = updateData.map(d => ({
+        const labels = updateData.map((d) => ({
             x: xScale(d.unit) + 20,
             y: yScale(d.yield),
             fill: '#6eae3e',
@@ -125,14 +125,14 @@ class ModelTrendChart extends Component {
         }))
 
         /* calculate production output total text */
-        const textLabels = updateData.map(d => ({
+        const textLabels = updateData.map((d) => ({
             x: xScale(d.unit) + 7 - barPadding,
             y: yScaleRight(d.total),
             text: d.total,
         }))
 
         /* calculate the bar for plotting*/
-        const bars = updateData.map(d => {
+        const bars = updateData.map((d) => {
             return {
                 x: xScale(d.unit) + 7,
                 y: yScaleRight(d.total),
@@ -170,11 +170,11 @@ class ModelTrendChart extends Component {
         let xAxisD3 = d3.axisBottom()
         let yAxisD3 = d3
             .axisLeft()
-            .tickFormat(d => `${d}%`)
+            .tickFormat((d) => `${d}%`)
             .ticks(5)
         let yAxisRight = d3
             .axisRight()
-            .tickFormat(d => d)
+            .tickFormat((d) => d)
             .ticks(5)
 
         xAxisD3.scale(this.state.xScale)
