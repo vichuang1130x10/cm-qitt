@@ -1,11 +1,12 @@
 import React from 'react'
 import styled from 'styled-components'
+import { navigate } from '@reach/router'
 import connect from './connect'
 import ModelCardForPrimary from '../ModelCardForPrimary'
 import { pickUpStationByCMVendor } from '../../ParsingData/ParsingHelpFunction'
 
 const CardContainer = styled.div`
-    padding: 0 10px;
+    padding: 20px 10px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -62,6 +63,28 @@ const HeaderBlock = styled.div`
 
 const ModelWrapper = styled.div``
 
+const HeadTitleWrapper = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px;
+    & > button {
+        padding: 4px 8px;
+        margin-bottom: 14px;
+        outline: none;
+        background-color: #6fa4e3;
+        color: white;
+        border: 1px solid white;
+        border-radius: 5px;
+        transition: 0.3s all;
+        &:hover {
+            background-color: white;
+            color: #6fa4e3;
+            border: 1px solid #333;
+        }
+    }
+`
+
 function App({ appData, primaryState }) {
     const { vendor, models } = appData
     const stations = pickUpStationByCMVendor(vendor)
@@ -69,10 +92,20 @@ function App({ appData, primaryState }) {
         primaryState.includes(model.model)
     )
 
+    const handleOnclick = () => {
+        navigate(`/selectPrimary`)
+    }
+
     return (
         <CardContainer>
             <StickHead>
-                <h4>Primary Model:</h4>
+                <HeadTitleWrapper>
+                    <h4>Primary Model:</h4>
+                    <button onClick={() => handleOnclick()}>
+                        Customize Primary Model
+                    </button>
+                </HeadTitleWrapper>
+
                 <Header>
                     <HeaderBlock>
                         <p>Model</p>

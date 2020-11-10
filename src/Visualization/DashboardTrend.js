@@ -154,7 +154,7 @@ class DashboardTrend extends Component {
                         key={i}
                         x={d.x + 4}
                         y={d.y + 8}
-                        stroke="#123abc"
+                        stroke="#ccc"
                         fontSize="8px"
                         fontFamily="sans-serif"
                     >
