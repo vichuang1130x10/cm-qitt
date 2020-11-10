@@ -34,6 +34,7 @@ const CountWrapper = styled.div`
     color: #123abc;
 
     & button {
+        cursor: pointer;
         padding: 4px 8px;
         width: 100%;
         background-color: #6fa4e3;
@@ -45,6 +46,7 @@ const CountWrapper = styled.div`
         &:hover {
             background-color: white;
             color: #6fa4e3;
+            border: 1px solid #ccc;
         }
     }
 `
@@ -75,10 +77,12 @@ const Form = styled.div`
         border-radius: 5px;
         border: 1px solid transparent;
         outline: none;
+        cursor: pointer;
         transition: 0.3s all;
         &:hover {
             background-color: white;
             color: #6fa4e3;
+            border: 1px solid #ccc;
         }
     }
 `
@@ -92,6 +96,16 @@ const SpinnerWrapper = styled.div`
     > h3 {
         color: #123abc;
     }
+`
+
+const CardWrapper = styled.div`
+    background-color: white;
+    padding: 20px 40px;
+    border-radius: 12px;
+    width: 60%;
+    margin: 0 auto;
+    height: 400px;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.3);
 `
 
 function App(props) {
@@ -181,61 +195,67 @@ function App(props) {
         <>
             <MainSection>
                 <Container>
-                    <FormWrapper>
-                        <h2>Select One CM </h2>
-                        <h2>To Entry The QA-DASHBOARD</h2>
-                        <Form>
-                            <label htmlFor="vendor">
-                                CM:
-                                <select
-                                    id="vendor"
-                                    value={vendor}
-                                    onChange={(e) => {
-                                        setVendor(e.target.value)
-                                        setFetchedData(false)
-                                    }}
-                                    onBlur={(e) => {
-                                        setVendor(e.target.value)
-                                        setFetchedData(false)
-                                    }}
-                                >
-                                    <option />
+                    <CardWrapper>
+                        <FormWrapper>
+                            <h2>Select One CM </h2>
+                            <h2>To Entry The QA-DASHBOARD</h2>
+                            <Form>
+                                <label htmlFor="vendor">
+                                    CM:
+                                    <select
+                                        id="vendor"
+                                        value={vendor}
+                                        onChange={(e) => {
+                                            setVendor(e.target.value)
+                                            setFetchedData(false)
+                                        }}
+                                        onBlur={(e) => {
+                                            setVendor(e.target.value)
+                                            setFetchedData(false)
+                                        }}
+                                    >
+                                        <option />
 
-                                    {VENDOR_NAME.map((v) => (
-                                        <option key={v} value={v}>
-                                            {v}
-                                        </option>
-                                    ))}
-                                </select>
-                            </label>
-                            <button onClick={() => handleClicked()}>
-                                Fetch Data
-                            </button>
-                        </Form>
-
-                        {isFetchedData ? (
-                            <CountWrapper>
-                                <h6>{`Date Range: ${dataCount.stardDate} ~ ${dataCount.endDate}`}</h6>
-                                <h6>{`Yield Rate Record: ${dataCount.yCount}`}</h6>
-                                <h6>{`Error List Record: ${dataCount.eCount}`}</h6>
-                                <h6>{`Repair List Record :${dataCount.rCount}`}</h6>
-                                <button onClick={() => handleGoNextButton()}>
-                                    Go To DASHBOARD
+                                        {VENDOR_NAME.map((v) => (
+                                            <option key={v} value={v}>
+                                                {v}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </label>
+                                <button onClick={() => handleClicked()}>
+                                    Fetch Data
                                 </button>
-                            </CountWrapper>
-                        ) : null}
-                    </FormWrapper>
+                            </Form>
 
-                    {isLoading ? (
-                        <SpinnerWrapper>
-                            <RotateLoader
-                                size={25}
-                                color={'#123abc'}
-                                loading={isLoading}
-                            />
-                            <h3 style={{ marginTop: '40px' }}>Loading...</h3>
-                        </SpinnerWrapper>
-                    ) : null}
+                            {isFetchedData ? (
+                                <CountWrapper>
+                                    <h6>{`Date Range: ${dataCount.stardDate} ~ ${dataCount.endDate}`}</h6>
+                                    <h6>{`Yield Rate Record: ${dataCount.yCount}`}</h6>
+                                    <h6>{`Error List Record: ${dataCount.eCount}`}</h6>
+                                    <h6>{`Repair List Record :${dataCount.rCount}`}</h6>
+                                    <button
+                                        onClick={() => handleGoNextButton()}
+                                    >
+                                        Go To DASHBOARD
+                                    </button>
+                                </CountWrapper>
+                            ) : null}
+                        </FormWrapper>
+
+                        {isLoading ? (
+                            <SpinnerWrapper>
+                                <RotateLoader
+                                    size={25}
+                                    color={'#123abc'}
+                                    loading={isLoading}
+                                />
+                                <h3 style={{ marginTop: '40px' }}>
+                                    Loading...
+                                </h3>
+                            </SpinnerWrapper>
+                        ) : null}
+                    </CardWrapper>
                 </Container>
             </MainSection>
             <Footer />
