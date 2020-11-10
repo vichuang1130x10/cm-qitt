@@ -111,6 +111,15 @@ const VENDOR_CODE_WITH_STATION = {
     CPW: CPWTYPE,
 }
 
+export const PRIMARY_MODEL = {
+    USI: [
+        '2701-005400-64(X11QPH+)',
+        '2701-005570-62(H12DSG-O-CPU)',
+        '2701-005200-64(X11DPG-QT)',
+        '2701-005560-61(H12DSU-iN)',
+    ],
+}
+
 export const VENDOR_NAME = Object.keys(VENDOR_CODE_WITH_STATION)
 
 // const VENDOR_CODE_WITH_STATION_FUNCTION = {
