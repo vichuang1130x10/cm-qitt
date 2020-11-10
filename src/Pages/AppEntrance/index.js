@@ -99,13 +99,13 @@ const SpinnerWrapper = styled.div`
 `
 
 const CardWrapper = styled.div`
-    background-color: white;
+    /* background-color: white;
     padding: 20px 40px;
     border-radius: 12px;
     width: 60%;
     margin: 0 auto;
     height: 400px;
-    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.3); */
 `
 
 function App(props) {
