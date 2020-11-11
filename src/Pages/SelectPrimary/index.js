@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import RotateLoader from 'react-spinners/RotateLoader'
+// import RotateLoader from 'react-spinners/RotateLoader'
 import SearchHeader from '../../Components/SearchHeader'
 import { Container, Row } from 'react-bootstrap'
 import {
@@ -27,38 +27,37 @@ const ListContainer = styled.div`
     background-color: #fefefe;
 `
 
-const SpinnerWrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin-top: 300px;
-    > h3 {
-        color: #123abc;
-    }
-`
+// const SpinnerWrapper = styled.div`
+//     display: flex;
+//     flex-direction: column;
+//     justify-content: center;
+//     align-items: center;
+//     margin-top: 300px;
+//     > h3 {
+//         color: #123abc;
+//     }
+// `
 
 function App(props) {
-   
     const { models, vendor, startDate, endDate } = props.appState
     const stations = pickUpStationByCMVendor(vendor)
-    const mBModelList = models.filter(model => model.productType === 'MB')
+    const mBModelList = models.filter((model) => model.productType === 'MB')
     const [modelList, setModelList] = useState([])
     const [sortModelNameFlag, setSortModelNameFlag] = useState(false)
     const [sortStation0Flag, setSortStation0Flag] = useState(false)
     const [sortStation1Flag, setSortStation1Flag] = useState(false)
     const [sortStation2Flag, setSortStation2Flag] = useState(false)
     const [sortStation3Flag, setSortStation3Flag] = useState(false)
-    const [isLoading, setIsLoading] = useState(true)
+    // const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
         setModelList(mBModelList)
-        setIsLoading(false)
+        // setIsLoading(false)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [models])
 
-    const keywordSearch = value => {
-        const searchList = mBModelList.filter(model =>
+    const keywordSearch = (value) => {
+        const searchList = mBModelList.filter((model) =>
             model.model.toLowerCase().includes(value.toLowerCase())
         )
         setModelList(searchList)
@@ -154,7 +153,7 @@ function App(props) {
         navigate(`/dashboard`)
     }
 
-    return !isLoading ? (
+    return (
         <Wrapper>
             <SearchHeader
                 completeSelection={() => completeSelection()}
@@ -164,14 +163,14 @@ function App(props) {
                 setSortStation1={() => setSortStation1()}
                 setSortStation2={() => setSortStation2()}
                 setSortStation3={() => setSortStation3()}
-                searchBarOnchanged={v => keywordSearch(v)}
+                searchBarOnchanged={(v) => keywordSearch(v)}
                 date={`${outputDate(startDate)} ~ ${outputDate(endDate)}`}
             />
             <ListContainer>
                 <Container>
                     <Row>
                         <div className="model-list-container">
-                            {modelList.map(model => (
+                            {modelList.map((model) => (
                                 <ModelCards
                                     key={model.model}
                                     modelObj={model}
@@ -183,11 +182,6 @@ function App(props) {
                 </Container>
             </ListContainer>
         </Wrapper>
-    ) : (
-        <SpinnerWrapper>
-            <RotateLoader size={25} color={'#123abc'} loading={isLoading} />
-            <h3>Loading...</h3>
-        </SpinnerWrapper>
     )
 }
 export default connect(App)

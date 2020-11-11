@@ -118,6 +118,21 @@ export const PRIMARY_MODEL = {
         '2701-005200-64(X11DPG-QT)',
         '2701-005560-61(H12DSU-iN)',
     ],
+    OSE: [
+        'MBD-X11DPU',
+        'MBD-X11DPT-PS',
+        'X10DRW-i',
+        'MBD-X12DDW-A6',
+        'MBD-X12DPFR-AN6',
+    ],
+    WIH: [
+        'H11SSL-I 2.00 (B/S) MB W/O DIMM',
+        'H11DSI 2.00 (B/S) MB W/O DIMM',
+        'X11SSW-LN4F-II008 1.00(B/S)MB W/O CPU',
+        'H12DST-B 1.00A (B/S) MB W/O DIMM',
+        'H12SSL-i 1.01 (B/S) MB W/O DIMM DIP',
+        'H12SSW-NT 1.01 (B/S) MB W/O DIMM',
+    ],
 }
 
 export const VENDOR_NAME = Object.keys(VENDOR_CODE_WITH_STATION)

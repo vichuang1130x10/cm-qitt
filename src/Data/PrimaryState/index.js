@@ -2,6 +2,7 @@ const createActionWithName = (name) => `app/tasks/${name}`
 
 export const TOGGLE_PRIMARY_MODEL = createActionWithName('TOGGLE_PRIMARY_MODEL')
 export const RESET_PRIMARY_MODEL = createActionWithName('RESET_PRIMARY_MODEL')
+export const SET_PRIMARY_MOEDELS = createActionWithName('SET_PRIMARY_MOEDELS')
 
 export const togglePrimaryModel = (modelName) => {
     return {
@@ -13,6 +14,13 @@ export const togglePrimaryModel = (modelName) => {
 export const resetPrimaryModel = () => {
     return {
         type: RESET_PRIMARY_MODEL,
+    }
+}
+
+export const setPrimaryModels = (modelNames) => {
+    return {
+        type: SET_PRIMARY_MOEDELS,
+        modelNames,
     }
 }
 
@@ -29,6 +37,8 @@ export default function reducer(state = initialState, action = {}) {
             }
 
             return updatePrimaryState
+        case SET_PRIMARY_MOEDELS:
+            return [...action.modelNames]
 
         case RESET_PRIMARY_MODEL:
             return []

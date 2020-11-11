@@ -10,12 +10,17 @@ import {
     parseForYieldRateFromDB,
 } from '../../ParsingData/ParsingCMData'
 import { mappingErrorListAndRepairListVersion2 } from '../../ParsingData/MappingErrorListAndRepairList'
-import { VENDOR_NAME, outputDate } from '../../ParsingData/ParsingHelpFunction'
+import {
+    VENDOR_NAME,
+    outputDate,
+    PRIMARY_MODEL,
+} from '../../ParsingData/ParsingHelpFunction'
 import Footer from '../../Components/Footer'
 import connect from './connect'
 
 import { SetFilters } from '../../Data/SetHeaderLink'
 import { VisibilityFilters } from '../../Data/SetVisiblityFilter'
+import { setPrimaryModels } from '../../Data/PrimaryState'
 
 const MainSection = styled.div`
     display: flex;
@@ -178,6 +183,20 @@ function App(props) {
             parsedErrorList = parsingErrorList(udpatedErrorList)
         } else {
             parsedErrorList = parsingErrorList(rawErrorList)
+        }
+
+        switch (yieldRate.vendor) {
+            case 'USI':
+                props.setPrimaryModels(PRIMARY_MODEL.USI)
+                break
+            case 'OSE':
+                props.setPrimaryModels(PRIMARY_MODEL.OSE)
+                break
+            case 'WIH':
+                props.setPrimaryModels(PRIMARY_MODEL.WIH)
+                break
+            default:
+                break
         }
 
         props.setHeaderLinkFilters(SetFilters.SELECT_DASHBOARD)
