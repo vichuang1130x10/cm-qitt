@@ -2,6 +2,7 @@ export const VisibilityFilters = {
     SHOW_SEVEM_DAYS: 'SHOW_SEVEM_DAYS',
     SHOW_FOURTEEN_DAYS: 'SHOW_FOURTEEN_DAYS',
     SHOW_ALL: 'SHOW_ALL',
+    SHOW_CUSTOMIZE: 'SHOW_CUSTOMIZE',
 }
 
 const initialState = VisibilityFilters.SHOW_SEVEM_DAYS

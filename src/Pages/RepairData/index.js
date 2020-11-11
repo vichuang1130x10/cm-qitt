@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
 import { BsSearch } from 'react-icons/bs'
 import Header from '../../Components/Header'
 import Footer from '../../Components/Footer'
@@ -132,6 +134,50 @@ const HeaderBlock = styled.div`
     }
 `
 
+const PickUpDateWrapper = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    margin: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 12px;
+    height: 60px;
+    padding: 4px 8px;
+    & h6 {
+        flex: 20%;
+    }
+    & .date-picker {
+        flex: 20%;
+        margin: 0 auto;
+    }
+
+    & .date-label {
+        border-radius: 3px;
+        border: 1px solid transparent;
+        background-color: green;
+        margin-right: 5px;
+        color: white;
+        padding: 2px 4px;
+    }
+
+    & button {
+        outline: none;
+        flex: 20%;
+        color: white;
+        border-radius: 5px;
+        border: 1px solid transparent;
+        background-color: #6fa4e3;
+        transition: 0.3s all;
+        &:hover {
+            color: #6fa4e3;
+            background-color: white;
+            border: 1px solid #ccc;
+        }
+    }
+`
+
 const getNElement = (arr) => (arr.length > 10 ? 10 : arr.length)
 
 const getUpdateRepairData = (repairData, dateRange, eDate) => {
@@ -152,6 +198,7 @@ const getUpdateRepairData = (repairData, dateRange, eDate) => {
         case VisibilityFilters.SHOW_ALL:
             updateRepairData = repairData
             break
+
         default:
             updateRepairData = repairData
     }
@@ -162,6 +209,9 @@ const getUpdateRepairData = (repairData, dateRange, eDate) => {
 function App({ repairData, dateRange }) {
     const [startDate, setStartDate] = useState(new Date())
     const [endDate, setEndDate] = useState(new Date())
+    const [pickStartDate, setPickStartDate] = useState(new Date())
+    const [pickEndDate, setPickEndDate] = useState(new Date())
+
     const [value, setValue] = useState('')
 
     const [sRepairList, setRepairList] = useState([])
@@ -169,6 +219,7 @@ function App({ repairData, dateRange }) {
     const [sRepairListByReason, setsRepairListByReason] = useState([])
     const [detailRawData, setDetailRawData] = useState([])
     const [selectPn, setSelectPn] = useState('')
+
     const onValueChanged = (v) => {
         const updateRepairData = getUpdateRepairData(
             repairData,
@@ -243,6 +294,16 @@ function App({ repairData, dateRange }) {
         })
     }
 
+    const handlePickDate = (date, isStart) => {
+        if (isStart) {
+            setPickStartDate(date)
+            console.log('change start date to: ', date)
+        } else {
+            setPickEndDate(date)
+            console.log('change end date to: ', date)
+        }
+    }
+
     return (
         <>
             <Header />
@@ -261,7 +322,6 @@ function App({ repairData, dateRange }) {
                                     value={value}
                                     onValueChanged={onValueChanged}
                                 />
-
                                 <ButtonContainer>
                                     <FilterLink
                                         filter={
@@ -284,6 +344,31 @@ function App({ repairData, dateRange }) {
                                     </FilterLink>
                                 </ButtonContainer>
                             </HeaderContainer>
+                            <PickUpDateWrapper>
+                                <h6>User Define Date:</h6>
+                                <p className="date-label">Start </p>
+                                <div className="date-picker">
+                                    <DatePicker
+                                        selected={pickStartDate}
+                                        onChange={(date) =>
+                                            handlePickDate(date, true)
+                                        }
+                                    />
+                                </div>
+
+                                <p className="date-label">End </p>
+                                <div className="date-picker">
+                                    <DatePicker
+                                        selected={pickEndDate}
+                                        onChange={(date) =>
+                                            handlePickDate(date, false)
+                                        }
+                                    />
+                                </div>
+
+                                <button>Go</button>
+                            </PickUpDateWrapper>
+
                             <h6>Top 10 Failures:</h6>
                             <ContentContainer>
                                 <HeaderForWrapper>
