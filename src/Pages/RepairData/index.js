@@ -263,6 +263,7 @@ function App({ repairData, dateRange }) {
     }, [repairData, dateRange])
 
     const handleRepairCardClick = (index) => {
+        setDetailRawData([])
         const reparListForModel = parsingRepairListForModels(sRepairList[index])
         const reparListForReason = parsingRepairListForReason(
             sRepairList[index]
@@ -297,11 +298,21 @@ function App({ repairData, dateRange }) {
     const handlePickDate = (date, isStart) => {
         if (isStart) {
             setPickStartDate(date)
-            console.log('change start date to: ', date)
         } else {
             setPickEndDate(date)
-            console.log('change end date to: ', date)
         }
+    }
+
+    const updateRepairDataByUserSelectedDate = () => {
+        console.log(pickStartDate)
+        console.log(pickEndDate)
+        const updateRepairList = repairData.filter(
+            (obj) =>
+                new Date(obj.Date) >= pickStartDate &&
+                new Date(obj.Date) <= pickEndDate
+        )
+        console.log(updateRepairList)
+        setRepairList(parsingRepairList(updateRepairList))
     }
 
     return (
@@ -366,7 +377,11 @@ function App({ repairData, dateRange }) {
                                     />
                                 </div>
 
-                                <button>Go</button>
+                                <button
+                                    onClick={updateRepairDataByUserSelectedDate}
+                                >
+                                    Go
+                                </button>
                             </PickUpDateWrapper>
 
                             <h6>Top 10 Failures:</h6>
