@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import CardTrend from '../Visualization/CardTrend'
 import { navigate } from '@reach/router'
+import { shrinkString } from '../ParsingData/ParsingHelpFunction'
 
 const Card = styled.div`
     height: 180px;
@@ -61,7 +62,7 @@ const CardTendContainer = styled.div`
 `
 
 const FTYNumber = styled.p`
-    color: ${props => (props.fty < 98 ? '#d00213' : '#6fa4e3')};
+    color: ${(props) => (props.fty < 98 ? '#d00213' : '#6fa4e3')};
 `
 
 const App = ({ model, stations }) => {
@@ -75,10 +76,10 @@ const App = ({ model, stations }) => {
             <h5>{model.model}+</h5>
             <div className="dummy"></div>
             <StationInfo>
-                <p>{stations[0]}</p>
-                <p>{stations[1]}</p>
-                <p>{stations[2]}</p>
-                <p>{stations[3]}</p>
+                <p>{shrinkString(stations[0])}</p>
+                <p>{shrinkString(stations[1])}</p>
+                <p>{shrinkString(stations[2])}</p>
+                <p>{shrinkString(stations[3])}</p>
             </StationInfo>
             <StationInfo>
                 <FTYNumber fty={model.station0FTY}>

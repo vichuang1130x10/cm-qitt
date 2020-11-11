@@ -81,10 +81,9 @@ function App({ appData }) {
     const stations = pickUpStationByCMVendor(vendor)
     const monthlyMBData = MBData[stations[3]].monthly
     const latestMonthData = monthlyMBData[monthlyMBData.length - 1]
-    const latestMonthFty = (
-        (latestMonthData.Pass / latestMonthData.Total) *
-        100
-    ).toFixed(1)
+    const latestMonthFty = latestMonthData
+        ? ((latestMonthData.Pass / latestMonthData.Total) * 100).toFixed(1)
+        : 0
     const fullYearPass = monthlyMBData.reduce((accu, ele) => accu + ele.Pass, 0)
     const fullYearTotal = monthlyMBData.reduce(
         (accu, ele) => accu + ele.Total,
@@ -111,7 +110,11 @@ function App({ appData }) {
                     <div className="small-tag">MB</div>
                     <BoxContent>
                         <h2>{`${latestMonthFty}%`}</h2>
-                        <h6>{`${latestMonthData.Pass}/${latestMonthData.Total}`}</h6>
+                        <h6>
+                            {latestMonthData
+                                ? `${latestMonthData.Pass}/${latestMonthData.Total}`
+                                : 0}
+                        </h6>
                     </BoxContent>
                 </BoxContainer>
                 <div className="dummy-line"></div>

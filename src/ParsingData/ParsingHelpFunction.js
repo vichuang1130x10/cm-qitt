@@ -2,6 +2,14 @@ export function outputDate(date) {
     return new Date(date).toLocaleDateString('en-US')
 }
 
+export function shrinkString(str) {
+    if (str.length < 7) {
+        return str
+    } else {
+        return `${str.substr(0, 5)}...`
+    }
+}
+
 export function shrinkDateString(str) {
     const [month, day] = str.split('/')
     return `${month}/${day}`
@@ -111,6 +119,7 @@ const VENDOR_CODE_WITH_STATION = {
     CPW: CPWTYPE,
 }
 
+// The primary model list from QA team, will update it to DB in the future
 export const PRIMARY_MODEL = {
     USI: [
         '2701-005400-64(X11QPH+)',
