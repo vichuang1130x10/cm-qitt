@@ -219,6 +219,8 @@ function App({ repairData, dateRange }) {
     const [sRepairListByReason, setsRepairListByReason] = useState([])
     const [detailRawData, setDetailRawData] = useState([])
     const [selectPn, setSelectPn] = useState('')
+    const [selectReason, setSelectReason] = useState('')
+    const [selectModel, setSelectModel] = useState('')
 
     const onValueChanged = (v) => {
         const updateRepairData = getUpdateRepairData(
@@ -258,8 +260,10 @@ function App({ repairData, dateRange }) {
             eDate
         )
         const parsedRepairList = parsingRepairList(updateRepairData)
-        console.log(parsedRepairList)
         setRepairList(parsedRepairList)
+        setSelectPn('')
+        setsRepairListByModel([])
+        setsRepairListByReason([])
     }, [repairData, dateRange])
 
     const handleRepairCardClick = (index) => {
@@ -273,6 +277,8 @@ function App({ repairData, dateRange }) {
         setSelectPn(sRepairList[index].pn)
         setsRepairListByModel(reparListForModel)
         setsRepairListByReason(reparListForReason)
+        setSelectModel('')
+        setSelectReason('')
         window.scrollTo({
             top: 400,
             behavior: 'smooth',
@@ -281,6 +287,8 @@ function App({ repairData, dateRange }) {
 
     const handleModelClick = (index) => {
         setDetailRawData(sRepairListByModel[index].data)
+        setSelectModel(sRepairListByModel[index].model)
+        setSelectReason('')
         window.scrollTo({
             top: 600,
             behavior: 'smooth',
@@ -289,6 +297,9 @@ function App({ repairData, dateRange }) {
 
     const handleReasonClick = (index) => {
         setDetailRawData(sRepairListByReason[index].data)
+        setSelectReason(sRepairListByReason[index].reason)
+        setSelectModel('')
+
         window.scrollTo({
             top: 600,
             behavior: 'smooth',
@@ -408,6 +419,7 @@ function App({ repairData, dateRange }) {
                                             key={obj.pn}
                                             partNumber={obj.pn}
                                             qty={obj.qty}
+                                            isSelected={selectPn === obj.pn}
                                         />
                                     ))}
                             </ContentContainer>
@@ -456,6 +468,9 @@ function App({ repairData, dateRange }) {
                                                 key={obj.model}
                                                 partNumber={obj.model}
                                                 qty={obj.qty}
+                                                isSelected={
+                                                    selectModel === obj.model
+                                                }
                                             />
                                         ))}
                                 </Col>
@@ -474,7 +489,7 @@ function App({ repairData, dateRange }) {
                                             <p>RANK</p>
                                         </HeaderBlock>
                                         <HeaderBlock>
-                                            <p>Part Number</p>
+                                            <p>Reason</p>
                                         </HeaderBlock>
                                         <HeaderBlock>
                                             <p>Failed QTY</p>
@@ -494,6 +509,9 @@ function App({ repairData, dateRange }) {
                                                 key={obj.reason}
                                                 partNumber={obj.reason}
                                                 qty={obj.qty}
+                                                isSelected={
+                                                    selectReason === obj.reason
+                                                }
                                             />
                                         ))}
                                 </Col>

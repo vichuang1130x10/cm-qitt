@@ -11,7 +11,8 @@ const ModelContainer = styled.div`
     border: 1px solid rgba(0, 0, 0, 0.0975);
     border-radius: 5px;
     transition: all 0.3s;
-
+    background-color: ${(props) => (props.isSelected ? '#123abc' : 'none')};
+    color: ${(props) => (props.isSelected ? 'white' : '#000')};
     &:hover {
         color: #fff;
         background-color: #fee4c4;
@@ -33,9 +34,18 @@ const ModelBlock = styled.div`
         font-style: italic;
     }
 `
-export default function App({ index, partNumber, qty, handleRepairCardClick }) {
+export default function App({
+    index,
+    partNumber,
+    qty,
+    handleRepairCardClick,
+    isSelected,
+}) {
     return (
-        <ModelContainer onClick={() => handleRepairCardClick(index)}>
+        <ModelContainer
+            onClick={() => handleRepairCardClick(index)}
+            isSelected={isSelected}
+        >
             <ModelBlock>{index + 1}</ModelBlock>
             <ModelBlock>
                 <h6>{partNumber}</h6>
