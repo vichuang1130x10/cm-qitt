@@ -20,7 +20,6 @@ import connect from './connect'
 
 import { SetFilters } from '../../Data/SetHeaderLink'
 import { VisibilityFilters } from '../../Data/SetVisiblityFilter'
-import { setPrimaryModels } from '../../Data/PrimaryState'
 
 const MainSection = styled.div`
     display: flex;
