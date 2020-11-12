@@ -136,6 +136,7 @@ function App(props) {
             .get(`http://10.163.56.143:5050/api/${vendor}`)
             .then((response) => response.data)
             .then((data) => parsingData(data))
+
             .catch((err) => {
                 console.error(err)
                 setLoadingProgress(false)
@@ -181,7 +182,7 @@ function App(props) {
             })
             parsedErrorList = parsingErrorList(udpatedErrorList)
         } else {
-            parsedErrorList = parsingErrorList(rawErrorList)
+            parsedErrorList = parsingErrorList(rawRepairList)
         }
 
         switch (yieldRate.vendor) {
@@ -204,8 +205,6 @@ function App(props) {
 
         setFetchedData(true)
         setLoadingProgress(false)
-        console.log('end loading', isLoading)
-
         // navigate(`/dashboard`)
     }
 
@@ -252,6 +251,7 @@ function App(props) {
                                     <h6>{`Yield Rate Record: ${dataCount.yCount}`}</h6>
                                     <h6>{`Error List Record: ${dataCount.eCount}`}</h6>
                                     <h6>{`Repair List Record :${dataCount.rCount}`}</h6>
+
                                     <button
                                         onClick={() => handleGoNextButton()}
                                     >

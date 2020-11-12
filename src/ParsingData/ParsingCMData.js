@@ -560,6 +560,7 @@ function sortByMonth(a, b) {
 // Version: 1.01
 // item: "C218"
 
+/* parsingRepairList, parsingRepairListForModels, parsingRepairListForReason are for RepairData page*/
 export function parsingRepairList(repairList) {
     let n = {}
     const updateRepairList = repairList.map((rep) => {
