@@ -23,7 +23,7 @@ import RepairTable from '../../Components/RepairTabel'
 
 const DataWrapper = styled.div`
     width: 100%;
-    height: 100vh;
+    height: 1400px;
     margin-top: 80px;
 
     background-color: #fefefe;
@@ -206,7 +206,7 @@ const getUpdateRepairData = (repairData, dateRange, eDate) => {
     return updateRepairData
 }
 
-function App({ repairData, dateRange }) {
+function App({ repairData, dateRange, setLinkFilters }) {
     const [startDate, setStartDate] = useState(new Date())
     const [endDate, setEndDate] = useState(new Date())
     const [pickStartDate, setPickStartDate] = useState(new Date())
@@ -324,6 +324,7 @@ function App({ repairData, dateRange }) {
         )
         console.log(updateRepairList)
         setRepairList(parsingRepairList(updateRepairList))
+        setLinkFilters(VisibilityFilters.SHOW_CUSTOMIZE)
     }
 
     return (
