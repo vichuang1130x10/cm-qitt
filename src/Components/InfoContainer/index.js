@@ -120,7 +120,7 @@ function App({ appData }) {
                 <div className="dummy-line"></div>
                 <BoxContainer>
                     <BoxTitle>
-                        <h6>{getCurrentYear()}</h6>
+                        <h6>{getCurrentYear(new Date(endDate))}</h6>
                     </BoxTitle>
                     <div className="small-tag">MB</div>
                     <BoxContent>

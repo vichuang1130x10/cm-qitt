@@ -183,8 +183,8 @@ export function generateLabelValueSelectionByCM(cm) {
     }))
 }
 
-export function getCurrentYear() {
-    return new Date().toLocaleDateString().split('/')[0]
+export function getCurrentYear(d = new Date()) {
+    return d.toLocaleDateString().split('/')[0]
 }
 
 export function getCurrentMonth(d = new Date()) {
