@@ -183,7 +183,7 @@ function App(props) {
         console.log('start loading', isLoading)
         axios
             // .get(`http://10.163.56.143:5050/api/${vendor}`)
-            .get(`http://localhost:5050/api/${vendor}`)
+            .get(`http://10.163.56.143:5050/api/${vendor}`)
             .then((response) => response.data)
             .then((data) => parsingData(data))
 
@@ -203,7 +203,7 @@ function App(props) {
         console.log('start loading', isLoading)
         axios
             // .get(`http://10.163.56.143:5050/api/${vendor}`)
-            .get(`http://localhost:5050/api/UserDefineDate/${vendor}`, {
+            .get(`http://10.163.56.143:5050/api/UserDefineDate/${vendor}`, {
                 params: {
                     startDate: outputDate(pickStartDate),
                     endDate: outputDate(pickEndDate),
