@@ -182,9 +182,32 @@ function App(props) {
         props.resetAppState()
         console.log('start loading', isLoading)
         axios
-            .get(`http://10.163.56.143:5050/api/${vendor}`, {
-                pickStartDate,
-                pickEndDate,
+            // .get(`http://10.163.56.143:5050/api/${vendor}`)
+            .get(`http://localhost:5050/api/${vendor}`)
+            .then((response) => response.data)
+            .then((data) => parsingData(data))
+
+            .catch((err) => {
+                console.error(err)
+                setLoadingProgress(false)
+            })
+    }
+
+    const fetchDataByDate = () => {
+        if (!vendor.length) {
+            return
+        }
+        setLoadingProgress(true)
+        props.resetPrimaryModel()
+        props.resetAppState()
+        console.log('start loading', isLoading)
+        axios
+            // .get(`http://10.163.56.143:5050/api/${vendor}`)
+            .get(`http://localhost:5050/api/UserDefineDate/${vendor}`, {
+                params: {
+                    startDate: outputDate(pickStartDate),
+                    endDate: outputDate(pickEndDate),
+                },
             })
             .then((response) => response.data)
             .then((data) => parsingData(data))
@@ -200,7 +223,6 @@ function App(props) {
     }
 
     const handleClicked = () => {
-        console.log('fetch')
         fetchData()
     }
 
@@ -212,6 +234,7 @@ function App(props) {
         const rawErrorList = data.errorList.recordset
         const rawRepairList = data.repairList.recordset
         const rawYieldRate = data.yieldRate.recordset
+        console.log(data.reqBody)
         const yieldRate = parseForYieldRateFromDB(rawYieldRate)
         setDataCount({
             yCount: rawYieldRate.length,
@@ -274,9 +297,7 @@ function App(props) {
             setPickEndDate(new Date())
             setPickStartDate(new Date())
         } else {
-            console.log('pickstart date', pickStartDate)
-            console.log('pickend date', pickStartDate)
-            fetchData()
+            fetchDataByDate()
         }
     }
 
