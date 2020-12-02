@@ -4,6 +4,7 @@ import connect from './connect'
 // import { separateString } from '../ParsingData/ParsingHelpFunction'
 
 const ModelContainer = styled.div`
+
     width: 100%;
     height: 62px;
     display: grid;
