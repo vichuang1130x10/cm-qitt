@@ -4,6 +4,10 @@ import { Container } from 'react-bootstrap'
 import { navigate } from '@reach/router'
 import axios from 'axios'
 import RotateLoader from 'react-spinners/RotateLoader'
+
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
+
 /* From Helper & Components */
 import {
     parsingErrorList,
@@ -75,7 +79,7 @@ const Form = styled.div`
 
     & button {
         padding: 4px 8px;
-        width: 160px;
+        width: 360px;
         background-color: #6fa4e3;
         color: white;
         border-radius: 5px;
@@ -111,10 +115,55 @@ const CardWrapper = styled.div`
     height: 400px;
     box-shadow: 0 2px 2px rgba(0, 0, 0, 0.3); */
 `
+const PickUpDateWrapper = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    margin: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 12px;
+    height: 60px;
+    padding: 4px 8px;
+    & h6 {
+        flex: 20%;
+    }
+    & .date-picker {
+        flex: 20%;
+        margin: 0 auto;
+    }
+
+    & .date-label {
+        border-radius: 3px;
+        border: 1px solid transparent;
+        background-color: green;
+        margin-right: 5px;
+        color: white;
+        padding: 2px 4px;
+    }
+
+    & button {
+        outline: none;
+        flex: 20%;
+        color: white;
+        border-radius: 5px;
+        border: 1px solid transparent;
+        background-color: #6fa4e3;
+        transition: 0.3s all;
+        &:hover {
+            color: #6fa4e3;
+            background-color: white;
+            border: 1px solid #ccc;
+        }
+    }
+`
 
 function App(props) {
     const [isLoading, setLoadingProgress] = useState(false)
     const [isFetchedData, setFetchedData] = useState(false)
+    const [pickStartDate, setPickStartDate] = useState(new Date())
+    const [pickEndDate, setPickEndDate] = useState(new Date())
     const [vendor, setVendor] = useState('')
     const [dataCount, setDataCount] = useState({
         yCount: 0,
@@ -133,7 +182,10 @@ function App(props) {
         props.resetAppState()
         console.log('start loading', isLoading)
         axios
-            .get(`http://10.163.56.143:5050/api/${vendor}`)
+            .get(`http://10.163.56.143:5050/api/${vendor}`, {
+                pickStartDate,
+                pickEndDate,
+            })
             .then((response) => response.data)
             .then((data) => parsingData(data))
 
@@ -208,6 +260,31 @@ function App(props) {
         // navigate(`/dashboard`)
     }
 
+    const handlePickDate = (date, isStart) => {
+        if (isStart) {
+            setPickStartDate(date)
+        } else {
+            setPickEndDate(date)
+        }
+    }
+
+    const fetchDataByUserDefineDate = () => {
+        if (differenceInDays(pickStartDate, pickEndDate) > 365) {
+            alert(`The Seleceted Date Exceeds a Year`)
+            setPickEndDate(new Date())
+            setPickStartDate(new Date())
+        } else {
+            console.log('pickstart date', pickStartDate)
+            console.log('pickend date', pickStartDate)
+            fetchData()
+        }
+    }
+
+    const differenceInDays = (start, end) => {
+        const differenceInTime = end.getTime() - start.getTime()
+        return differenceInTime / (1000 * 3600 * 24)
+    }
+
     return (
         <>
             <MainSection>
@@ -241,10 +318,43 @@ function App(props) {
                                     </select>
                                 </label>
                                 <button onClick={() => handleClicked()}>
-                                    Fetch Data
+                                    Fetch Data( 2020/01/01 ~ current )
                                 </button>
                             </Form>
+                            <h5>Or</h5>
+                            <PickUpDateWrapper>
+                                <h6>User Define Date:</h6>
+                                <p className="date-label">Start </p>
+                                <div className="date-picker">
+                                    <DatePicker
+                                        selected={pickStartDate}
+                                        onChange={(date) =>
+                                            handlePickDate(date, true)
+                                        }
+                                    />
+                                </div>
 
+                                <p className="date-label">End </p>
+                                <div className="date-picker">
+                                    <DatePicker
+                                        selected={pickEndDate}
+                                        onChange={(date) =>
+                                            handlePickDate(date, false)
+                                        }
+                                    />
+                                </div>
+
+                                <button
+                                    onClick={() => fetchDataByUserDefineDate()}
+                                >
+                                    {`Fetch Data( ${outputDate(
+                                        pickStartDate
+                                    )} ~ ${outputDate(pickEndDate)} )`}
+                                </button>
+                            </PickUpDateWrapper>
+                            <h6 style={{ textAlign: 'center' }}>
+                                Selected Date Range Can Not Exceed One Year
+                            </h6>
                             {isFetchedData ? (
                                 <CountWrapper>
                                     <h6>{`Date Range: ${dataCount.stardDate} ~ ${dataCount.endDate}`}</h6>
