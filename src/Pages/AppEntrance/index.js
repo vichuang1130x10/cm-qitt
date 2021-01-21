@@ -25,6 +25,8 @@ import connect from './connect'
 import { SetFilters } from '../../Data/SetHeaderLink'
 import { VisibilityFilters } from '../../Data/SetVisiblityFilter'
 
+import { config } from '../../Config'
+
 const MainSection = styled.div`
     display: flex;
     flex-direction: column;
@@ -183,7 +185,8 @@ function App(props) {
         console.log('start loading', isLoading)
         axios
             // .get(`http://10.163.56.143:5050/api/${vendor}`)
-            .get(`http://10.163.56.143:5050/api/${vendor}`)
+            // .get(`http://10.163.56.143:5050/api/${vendor}`)
+            .get(`http://${config.server}:5050/api/${vendor}`)
             .then((response) => response.data)
             .then((data) => parsingData(data))
 
@@ -203,7 +206,7 @@ function App(props) {
         console.log('start loading', isLoading)
         axios
             // .get(`http://10.163.56.143:5050/api/${vendor}`)
-            .get(`http://10.163.56.143:5050/api/UserDefineDate/${vendor}`, {
+            .get(`http://${config.server}:5050/api/UserDefineDate/${vendor}`, {
                 params: {
                     startDate: outputDate(pickStartDate),
                     endDate: outputDate(pickEndDate),
