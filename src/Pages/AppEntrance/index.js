@@ -342,7 +342,7 @@ function App(props) {
                                     </select>
                                 </label>
                                 <button onClick={() => handleClicked()}>
-                                    Fetch Data( 2020/01/01 ~ current )
+                                    Fetch Data( 2021/01/01 ~ current )
                                 </button>
                             </Form>
                             <h5>Or</h5>
