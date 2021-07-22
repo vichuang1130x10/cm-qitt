@@ -33,7 +33,7 @@
         "redux-persist": "^6.0.0",
         "redux-persist-transform-compress": "^4.2.0",
         "styled-components": "^5.1.1",
-        "xlsx": "^0.16.4"
+        "xlsx": "^0.17.0"
     },
     "scripts": {
         "start": "react-scripts start",
